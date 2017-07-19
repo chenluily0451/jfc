@@ -1,0 +1,90 @@
+<!--债权信息-->
+<form class="my-4" [formGroup]="repaymentListForm" (ngSubmit)="getBridgeRepayment()">
+    <div class="row">
+        <h6 class="col-3">还款信息</h6>
+        <!--<div class="col-9 text-right">-->
+            <!--<a class="btn btn-blue px-4 mr-5" [routerLink]="['/repayAdd' ]">发起还款</a>-->
+        <!--</div>-->
+    </div>
+
+    <div class="form-group row pb-2">
+        <div class="col-2 text-right">还款状态</div>
+        <div class="col-3">
+            <select class="form-control" formControlName="status">
+                <option value="">全部</option>
+                <option value="100">核心企业已收到下游回款 等待还款给资金方</option>
+                <option value="8">核心企业已放款 等待资金方确认收到回款</option>
+                <option value="9">资金方已收到回款 流程结束</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row pb-2">
+        <div class="col-2 text-right">申请日期</div>
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" placeholder="请选择"  ngbDatepicker #beginDate="ngbDatepicker" formControlName="beginDate" (click)="beginDate.toggle()">
+                <div class="input-group-addon" (click)="beginDate.toggle()" >
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+        </div>
+        至
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" placeholder="请选择"  ngbDatepicker #endDate="ngbDatepicker" formControlName="endDate" (click)="endDate.toggle()" [minDate]="repaymentListForm.get('beginDate').value">
+                <div class="input-group-addon" (click)="endDate.toggle()" >
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col-2 offset-2">
+            <button class="btn btn-blue px-5" type="submit">查询</button>
+        </div>
+    </div>
+
+</form>
+
+<div class="pr-3">
+    <table class="tableCss mb-5">
+        <thead>
+        <tr>
+            <th class="text-center">编号</th>
+            <th class="text-center">付款日期</th>
+            <th class="text-center">所属业务编号</th>
+            <th class="text-center">还款企业名称</th>
+            <th class="text-center">收款企业</th>
+            <!--<th class="text-center">收款金额(元)</th>-->
+            <th class="text-center w20">申请状态</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of repaymentList?.items">
+            <td class="text-center">{{item._id | substringId}}</td>
+            <td class="text-center">{{item.payInfo.payDate}}</td>
+            <td class="text-center">{{item.businessId | substringId}}</td>
+            <td class="text-center">{{item.payInfo.payCompanyName || '--'}}</td>
+            <td class="text-center">{{item.recvInfo.recvCompanyName|| '--'}}</td>
+            <!--<td class="text-center">{{item.recvInfo.recvAmount|| '&#45;&#45;'}}</td>-->
+            <td class="text-center">{{item.status | repaymentStatus}} </td>
+            <td class="text-center">
+                <a *ngIf="userIdentity === 'capital'" [routerLink]="['/business', item.businessId, 'repayment', item._id]" class="btn btn-blue btn-sm">{{item.status === 8 ? '确认' : '查看'}}</a>
+                <a *ngIf="userIdentity !== 'capital'" [routerLink]="['/business', item.businessId, 'repayment', item._id]" class="btn btn-blue btn-sm">查看</a>
+            </td>
+        </tr>
+        <tr *ngIf="repaymentList.items.length === 0">
+            <td class="text-center" colspan="8">
+                <i class="fa fa-times"></i>
+                暂无数据
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row col-5 offset-6">
+        <ngb-pagination [collectionSize]="page.total" [(page)]="page.currentPageNo" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="getBridgeRepayment()"></ngb-pagination>
+    </div>
+</div>
+

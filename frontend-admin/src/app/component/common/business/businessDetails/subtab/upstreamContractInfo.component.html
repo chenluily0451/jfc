@@ -1,0 +1,143 @@
+<!--业务基本信息-->
+<div>
+    <h6 class="my-4">业务基本信息</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right w20" >上游供货商</th>
+            <td class="text-left" >{{business.upstreamCompanyName}}</td>
+            <th class="text-right w20" >收货单位</th>
+            <td class="text-left" >{{business.upstreamBusiness.receiveCompanyName}}</td>
+        </tr>
+
+        <tr>
+            <th class="text-right" >煤源提供方一</th>
+            <td colspan="3" class="text-left" >{{business.upstreamBusiness.provider[0]}}</td>
+        </tr>
+        <tr *ngIf="business.upstreamBusiness.provider[1]">
+            <th class="text-right" >煤源提供方二</th>
+            <td colspan="3" class="text-left" >{{business.upstreamBusiness.provider[1]}}</td>
+        </tr>
+        <tr *ngIf="business.upstreamBusiness.provider[2]">
+            <th class="text-right" >煤源提供方三</th>
+            <td colspan="3" class="text-left" >{{business.upstreamBusiness.provider[2]}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >煤种</th>
+            <td class="text-left" >{{business.upstreamBusiness.coalIndex.coalType}}</td>
+            <th class="text-right" >供货期间</th>
+            <td class="text-left" >{{business.upstreamBusiness.trafficInfo.deliveryBegin}}至{{business.upstreamBusiness.trafficInfo.deliveryEnd}}</td>
+        </tr>
+
+        <tr>
+            <th class="text-right" >煤炭产地</th>
+            <td colspan="3" class="text-left" >{{business.upstreamBusiness.coalIndex.coalPlace.province}}-{{business.upstreamBusiness.coalIndex.coalPlace.city}}</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<!--业务主体信息-->
+<div >
+    <h6 class="py-3">业务主体信息</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right w20" >合同量</th>
+            <td class="text-left" >{{business.upstreamBusiness.payInfo.contractAmount}}吨</td>
+            <th class="text-right w20" >合同单价</th>
+            <td class="text-left" >{{business.upstreamBusiness.payInfo.contractUnitPrice}}元/吨</td>
+
+        </tr>
+        <tr *ngIf="business.upstreamBusiness.payInfo.hasDeposit">
+            <th class="text-right" >有无保证金</th>
+            <td class="text-left" >有</td>
+            <th class="text-right" >保证金金额</th>
+            <td class="text-left" >{{business.upstreamBusiness.payInfo.depositAmount}}元</td>
+        </tr>
+        <tr *ngIf="!business.upstreamBusiness.payInfo.hasDeposit">
+            <th class="text-right" >有无保证金</th>
+            <td colspan="3" class="text-left" >无</td>
+        </tr>
+        <tr>
+            <th class="text-right" >付款方式</th>
+            <td class="text-left" colspan="3">{{business.upstreamBusiness.payInfo.payMode | payMode}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >开户行</th>
+            <td class="text-left" >{{business.upstreamBusiness.payInfo.openAccountBank}}</td>
+            <th class="text-right" >账户</th>
+            <td class="text-left" >{{business.upstreamBusiness.payInfo.bankAccountNo}}</td>
+        </tr>
+        <!--<tr>-->
+            <!--<th class="text-right" >付款节点</th>-->
+            <!--<td colspan="3" class="text-left" >{{business.upstreamBusiness.payInfo.payNode}}</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+            <!--<th class="text-right" >供货考核</th>-->
+            <!--<td colspan="3" class="text-left" >{{business.upstreamBusiness.payInfo.provisionAssess}}</td>-->
+        <!--</tr>-->
+        <tr>
+            <th class="text-right verticalMiddle" >保证金付款凭证</th>
+            <td class="text-left"  colspan="3">
+                <span *ngIf="!business.upstreamBusiness.payInfo?.payCertificatePic">无</span>
+                <image-show   [sourcePath]="business.upstreamBusiness.payInfo.payCertificatePic"></image-show>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right verticalMiddle" >合同影印件</th>
+            <td class="text-left pb-0"  colspan="3">
+                <span *ngIf="!business.upstreamBusiness.contractInfo">无</span>
+                <image-show *ngFor="let file of business.upstreamBusiness.contractInfo?.contractFile"  [sourcePath]="file" [class]="'pb-3'"></image-show>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right verticalMiddle" >其他附件</th>
+            <td class="text-left pb-0"  colspan="3" *ngIf="business.upstreamBusiness.contractInfo?.otherContractFile">
+                <ul class="otherContract" >
+                    <li *ngFor="let otherContractFile of business.upstreamBusiness.contractInfo?.otherContractFile" class="px-2 py-1 mb-2">
+                        <a target="_blank" [href]="aliOss.host + otherContractFile?.filePath"><i class="fa fa-paperclip mr-3"></i>{{otherContractFile.fileName}}</a>
+                    </li>
+                </ul>
+            </td>
+            <td class="text-left"  colspan="3" *ngIf="!business.upstreamBusiness.contractInfo?.otherContractFile">
+                无
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+<!--煤炭指标-->
+<coal-index [coal]="coal"></coal-index>
+
+<!--运输交货信息-->
+<div>
+    <h6 class="py-3">运输交货信息</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right w20" >运输方式</th>
+            <td class="text-left" >{{business.upstreamBusiness.trafficInfo.trafficMode | trafficMode}}</td>
+            <th class="text-right w20" >发运站</th>
+            <td class="text-left" >{{business.upstreamBusiness.trafficInfo.sendStation}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >运费</th>
+            <td class="text-left" >{{business.upstreamBusiness.trafficInfo.freightPrice}}元</td>
+            <th class="text-right" >交货站</th>
+            <td class="text-left" >{{business.upstreamBusiness.trafficInfo.receiveStation}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >运费承担方</th>
+            <td class="text-left" >{{business.upstreamBusiness.trafficInfo.freightPayer}}</td>
+            <th class="text-right" >其他杂费</th>
+            <td class="text-left" >
+                <span *ngIf="business.upstreamBusiness.trafficInfo.otherMiscFee">{{business.upstreamBusiness.trafficInfo.otherMiscFee}}元</span>
+                <span *ngIf="!business.upstreamBusiness.trafficInfo.otherMiscFee">无</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

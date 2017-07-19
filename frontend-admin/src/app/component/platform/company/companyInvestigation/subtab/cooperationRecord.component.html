@@ -1,0 +1,81 @@
+
+<!--合作记录-->
+<form [formGroup]="cooperationRecordForm">
+    <div>
+        <h6 class="p-2 my-4 bg-f8">合作记录</h6>
+        <div class="row mb-3">
+            <label class="col-3 text-right">合作时间</label>
+            <div class="col-3">
+                <div class="input-group">
+                    <input class="form-control"   ngbDatepicker #operationBegin="ngbDatepicker" (click)="operationBegin.toggle()" formControlName="time" [maxDate]="cooperationDate">
+                    <div class="input-group-addon" (click)="operationBegin.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+                <!--<input type="text" class="form-control" formControlName="time">-->
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">合作单位</label>
+            <div class="col-3">
+                <input type="text" class="form-control"  formControlName="name">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">合作量(吨)</label>
+            <div class="col-3">
+                <input type="text" class="form-control"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="quantity">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">保证金(万元)</label>
+            <div class="col-3">
+                <input type="text" class="form-control" onkeyup="value=value.replace(/[^\-?\d.]/g,'')"  formControlName="bail">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">完成量(吨)</label>
+            <div class="col-3">
+                <input type="text" class="form-control" onkeyup="value=value.replace(/[^\-?\d.]/g,'')"  formControlName="completion">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">运输方式</label>
+            <div class="col-3">
+                <select class="form-control" formControlName="traffic" >
+                    <option value="" >请选择</option>
+                    <option *ngFor="let mode of trafficMode" value="{{mode.id}}"  >{{mode.value}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">是否结清</label>
+            <div class="col-3">
+                <input type="checkbox"  formControlName="settled">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">有无纠纷</label>
+            <div class="col-3">
+                <input type="checkbox"  formControlName="disputed">
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-7 offset-3">
+            <button class="btn btn-blue px-5" (click)="saveCooperationSurvey()">保存</button>
+        </div>
+    </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

@@ -1,0 +1,116 @@
+
+<!--实际控制人-->
+<form [formGroup]="actualControllerForm">
+    <div>
+        <h6 class="p-2 my-4 bg-f8">企业股东组成</h6>
+        <div class="row mb-3">
+            <label class="col-3 text-right">姓名</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="name" >
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">年龄</label>
+            <div class="col-3">
+                <input type="text" class="form-control" pattern="^[1-9]\d*$" formControlName="age">
+            </div>
+            <div [hidden]="!formErrors.age" class="col-3 alert alert-danger mb-0 py-0 alertLineH">
+                {{formErrors.age}}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">性别</label>
+            <div class="col-3">
+                <!--<input type="text" class="form-control" formControlName="sex">-->
+                <select class="form-control" formControlName="sex">
+                    <option value="">请选择</option>
+                    <option value="{{type.id}}" *ngFor="let type of sexType">{{type.value}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">联系方式</label>
+            <div class="col-3">
+                <input type="text" class="form-control" pattern="^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$" formControlName="phone">
+            </div>
+            <div [hidden]="!formErrors.phone" class="col-3 alert alert-danger mb-0 py-0 alertLineH">
+                {{formErrors.phone}}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">现居住地</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="residence">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">家庭成员情况</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="family">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">自有资金情况(元)</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="ownedCapital">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">主业务情况</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="major">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">其他业务情况</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="minor">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">关联企业情况</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="relatedCompany">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">有无不良纠纷及诉讼或者长期账款</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="badInfo">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-3 text-right">其他说明</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="otherInfo">
+            </div>
+        </div>
+
+        <!--<div class="row mb-3">-->
+            <!--<label class="col-3 text-right">实际业务操作人(对接人)</label>-->
+            <!--<div class="col-2">-->
+                <!--<input type="text" class="form-control">-->
+            <!--</div>-->
+        <!--</div>-->
+
+    </div>
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-7 offset-3">
+            <button class="btn btn-blue px-5" (click)="saveControlPerson()" [disabled]="!actualControllerForm.valid">保存</button>
+        </div>
+    </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

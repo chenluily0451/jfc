@@ -1,0 +1,120 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">融资管理</li>
+    <li class="breadcrumb-item active">融资列表</li>
+</ol>
+<div class="font14">
+
+    <form [formGroup]="loanListForm" (ngSubmit)="getFinancingList()">
+
+        <div class="form-group row">
+            <h6 class="mainContentTitle">融资管理</h6>
+        </div>
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right">所属业务编号</label>
+            <div class="col-3">
+                <input type="text" class="form-control" name="coreCompanyName" formControlName="businessId">
+                <div *ngIf="formErrors.businessId"
+                     class="alert alert-danger mt-1 mb-0 py-0 alertLineH">
+                    {{formErrors.businessId}}
+                </div>
+            </div>
+            <label class="col-2 col-form-label text-right">上游企业名称</label>
+            <div class="col-3">
+                <input type="text" class="form-control" name="upCompanyName" formControlName="upstreamCompanyName">
+                <div *ngIf="formErrors.upstreamCompanyName"
+                     class="alert alert-danger mt-1 mb-0 py-0 alertLineH">
+                    {{formErrors.upstreamCompanyName}}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right">申请日期</label>
+            <div class="col-3">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #beginDate="ngbDatepicker" formControlName="beginDate" (click)="beginDate.toggle()">
+                    <div class="input-group-addon" (click)="beginDate.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+                至
+            <div class="col-3">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #endDate="ngbDatepicker" formControlName="endDate" (click)="endDate.toggle()">
+                    <div class="input-group-addon" (click)="endDate.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right">融资状态</label>
+            <div class="col-3">
+                <select class="form-control" formControlName="status">
+                    <option value="">全部</option>
+                    <option *ngFor="let status of financingStatusList" [value]="status.id">{{status.name}}</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group row pb-3">
+            <label class="col-2 col-form-label text-right"></label>
+            <div class="col-2">
+                <button type="submit" class="btn btn-blue px-5">查询</button>
+            </div>
+        </div>
+    </form>
+    <div class="pr-5">
+        <table class="tableCss mb-5">
+            <thead>
+            <tr>
+                <th class="text-center" >融资编号</th>
+                <th class="text-center" >申请日期</th>
+                <th class="text-center" >放款日期</th>
+                <th class="text-center" >所属业务编号</th>
+                <th class="text-center" >上游企业名称</th>
+                <th class="text-center" >放款企业</th>
+                <th class="text-center" >融资金额(元)</th>
+                <th class="text-center w20" >申请状态</th>
+                <th class="text-center" >操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of financingList.items">
+                <td class="text-center" >{{item._id | substringId}}</td>
+                <td class="text-center" >{{item.createDate}}</td>
+                <td class="text-center" >{{item.capitalRaisingBegin}}至<br/>{{item.capitalRaisingEnd}}</td>
+                <td class="text-center" >{{item.businessId | substringId}}</td>
+                <td class="text-center" >{{item.upstreamCompanyName}}</td>
+                <td class="text-center" >{{item.capitalCompanyName}}</td>
+                <td class="text-center" >{{item.capitalRaisingAmount}}</td>
+                <td class="text-center" >{{item.status | financingStatus}}</td>
+                <td class="text-center" >
+                    <a *ngIf="userIdentity === 'platform' && item.status === 1" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-orange btn-sm mb-2">审核</a>
+                    <a *ngIf="userIdentity === 'platform' && item.status !== 1" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-blue btn-sm mb-2">查看</a>
+                    <a *ngIf="userIdentity === 'capital' && item.status === 3" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-orange btn-sm mb-2">审核</a>
+                    <a *ngIf="userIdentity === 'capital' && item.status === 5" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-orange btn-sm mb-2">放款</a>
+                    <a *ngIf="userIdentity === 'capital' && item.status !== 3 && item.status !== 5" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-blue btn-sm mb-2">查看</a>
+                    <a *ngIf="userIdentity === 'bridge' && item.status !== 2 && item.status !== 4 " [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-blue btn-sm mb-2">查看</a>
+                    <a *ngIf="userIdentity === 'bridge' && item.status === 2 || userIdentity === 'bridge' && item.status === 4 " [routerLink]="['/business', item.businessId,'financing','edit', item._id]"  class="btn btn-orange btn-sm mb-2">编辑</a>
+                    <!--<a *ngIf="userIdentity !== 'platform'" [routerLink]="['/business', item.businessId, 'financing', item._id]" class="btn btn-blue btn-sm">查看</a>-->
+                </td>
+            </tr>
+            <tr *ngIf="financingList.items.length === 0">
+                <td class="text-center" colspan="9">
+                    <i class="fa fa-times"></i>
+                    暂无数据
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <div class="row col-5 offset-6">
+            <ngb-pagination [collectionSize]="page.total" [(page)]="page.currentPageNo" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="getFinancingList()"></ngb-pagination>
+        </div>
+    </div>
+
+</div>

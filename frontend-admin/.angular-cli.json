@@ -1,0 +1,325 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "project": {
+    "name": "fengkong"
+  },
+  "apps": [
+    {
+      "name":"upstreamLogin",
+      "root": "src",
+      "outDir": "dist/upstream/login",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/upstream/upstreamLogin.html",
+      "main": "./app/page/upstream/upstreamLogin.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "upstream",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/mainUpstream.scss",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"upstreamRegistration",
+      "root": "src",
+      "outDir": "dist/upstream/registration",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/upstream/upstreamRegistration.html",
+      "main": "./app/page/upstream/upstreamRegistration.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "upstream",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/mainUpstream.scss",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"upstreamHome",
+      "root": "src",
+      "outDir": "dist/upstream/home",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/upstream/upstreamHome.html",
+      "main": "./app/page/upstream/upstreamHome.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "upstream",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/mainUpstream.scss",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"platformLogin",
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "./app/page/platform/platformLogin.html",
+      "main": "./app/page/platform/platformLogin.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "platform",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/mainUpstream.scss",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"platformHome",
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+        "index": "./app/page/platform/platformHome.html",
+        "main": "./app/page/platform/platformHome.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "platform",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.css",
+          "../node_modules/font-awesome/scss/font-awesome.scss",
+          "./sass/page/platform/adminHome.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"bridgeLogin",
+      "root": "src",
+      "outDir": "dist/bridge/login",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/bridge/bridgeLogin.html",
+      "main": "./app/page/bridge/bridgeLogin.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "bridge",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"bridgeRegistration",
+      "root": "src",
+      "outDir": "dist/bridge/registration",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/bridge/bridgeRegistration.html",
+      "main": "./app/page/bridge/bridgeRegistration.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "bridge",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"capitalLogin",
+      "root": "src",
+      "outDir": "dist/bridge/login",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/capital/capitalLogin.html",
+      "main": "./app/page/capital/capitalLogin.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "bridge",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"capitalRegistration",
+      "root": "src",
+      "outDir": "dist/bridge/registration",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/capital/capitalRegistration.html",
+      "main": "./app/page/capital/capitalRegistration.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "bridge",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"downstreamLogin",
+      "root": "src",
+      "outDir": "dist/downstream/login",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/downstream/downstreamLogin.html",
+      "main": "./app/page/downstream/downstreamLogin.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "bridge",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name":"downstreamRegistration",
+      "root": "src",
+      "outDir": "dist/downstream/registration",
+      "assets": [
+          "assets",
+          "favicon.ico"
+      ],
+      "index": "./app/page/downstream/downstreamRegistration.html",
+      "main": "./app/page/downstream/downstreamRegistration.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "bridge",
+      "styles": [
+          "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "./sass/page/upstream/registration.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+          "dev": "environments/environment.ts",
+          "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "lint": [
+    {
+      "project": "src/tsconfig.app.json"
+    },
+    {
+      "project": "src/tsconfig.spec.json"
+    },
+    {
+      "project": "e2e/tsconfig.e2e.json"
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "scss",
+    "component": {
+    }
+  }
+}

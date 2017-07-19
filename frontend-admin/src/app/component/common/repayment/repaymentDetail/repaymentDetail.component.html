@@ -1,0 +1,71 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">还款管理</li>
+    <li class="breadcrumb-item active">还款详情</li>
+</ol>
+<div class="font14" *ngIf="repayment">
+    <h6 class="py-3">回款信息</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right font-weight-normal w20" >还款企业名称</th>
+            <td class="text-left" >{{repayment.payInfo.payCompanyName || '无'}}</td>
+            <th class="text-right font-weight-normal w20" >还款公司开户行</th>
+            <!--<td class="text-left" >{{repayment.payInfo.payCompanyBankName || '无'}}</td>-->
+            <td class="text-left" >
+                <span>{{repayment.payInfo.payCompanyBankProvince}} {{repayment.payInfo.payCompanyBankCity}} {{repayment.payInfo.payCompanyBankDistrict}} {{repayment.payInfo.payCompanyBankName}}</span>
+                <span *ngIf="!repayment.payInfo.payCompanyBankProvince && !repayment.payInfo.payCompanyBankCit && !repayment.payInfo.payCompanyBankDistrict && !repayment.payInfo.payCompanyBankName">无</span>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >还款金额(元)</th>
+            <td class="text-left" >{{repayment.payInfo.payAmount}}</td>
+            <th class="text-right font-weight-normal" >还款日期</th>
+            <td class="text-left" >{{repayment.payInfo.payDate}}</td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >还款账号</th>
+            <td class="text-left" >{{repayment.payInfo.payAccount || '无'}}</td>
+            <th class="text-right font-weight-normal" >还款方式</th>
+            <td class="text-left" >{{repayment.payInfo.payMode | payMode}}</td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >付款凭证</th>
+            <td class="text-left pb-0" colspan="3">
+                <image-show  [sourcePath]="repayment.payInfo.payCertificatePic" [class]="'pb-3'"></image-show>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right font-weight-normal w20" >收款企业名称</th>
+            <td class="text-left" >{{repayment.recvInfo.recvCompanyName || '无'}}</td>
+            <th class="text-right font-weight-normal w20" >收款公司开户行</th>
+            <td class="text-left" >{{repayment.recvInfo.recvBankName || '无'}}</td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >收款账号</th>
+            <td class="text-left" >{{repayment.recvInfo.recvAccount || '无'}}</td>
+            <th class="text-right font-weight-normal" >收款公司开户行地址</th>
+            <!--<td class="text-left" >{{repayment.recvInfo.recvBankAddr || '无'}}</td>-->
+            <td class="text-left" >
+                <span>{{repayment.recvInfo.recvBankProvince}} {{repayment.recvInfo.recvBankName}} {{repayment.recvInfo.recvBankDistrict}} {{repayment.recvInfo.recvBankAddr}}</span>
+                <span *ngIf="repayment.recvInfo.recvBankAddr === '' && !repayment.recvInfo.recvBankProvince && !repayment.recvInfo.recvBankDistrict && repayment.recvInfo.recvBankName === ''">无</span>
+            </td>
+        </tr>
+        <!--<tr>-->
+            <!--<th class="text-right font-weight-normal" >收款金额(元)</th>-->
+            <!--<td class="text-left" colspan="3">{{repayment.recvInfo.recvAmount || '无'}}</td>-->
+        <!--</tr>-->
+        </tbody>
+    </table>
+
+    <h6 class="py-3">对应融资</h6>
+    <p *ngFor="let financing of repayment.capitalRaiseIds">{{financing}} </p>
+</div>
+
+<div class="row ml-5" *ngIf="repayment.status === 8 && userIdentity === 'capital'">
+    <button class="btn btn-blue px-5 py-2" (click)="confirm()">确认回款</button>
+</div>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

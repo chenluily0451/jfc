@@ -1,0 +1,71 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">账户管理</li>
+    <li class="breadcrumb-item active">更换管理员</li>
+</ol>
+
+<div class="companyAdminWrap">
+    <!--<div class="mainContentTitle">更换管理员</div>-->
+    <form [formGroup]="companyAdminForm" *ngIf="stepOne">
+        <div class="form-group row">
+            <label class="col-2">当前管理员:</label>
+            <div class="col-6">{{ userName }}</div>
+            <div class="col-4"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-2">手机号:</label>
+            <div class="col-6">{{ phone | hidePartialMobile}}</div>
+            <div class="col-4"></div>
+        </div>
+        <div class="form-group" class="{{companyAdminFormErrors['verifyCode']?'form-group row has-danger':'form-group row'}}">
+            <label for="verifyCode" class="col-2 col-form-label">图形验证码:</label>
+            <div class="col-4">
+                <input type="text" [readonly]="disablePhoneInput" class="{{companyAdminFormErrors['verifyCode']?'form-control form-control-danger':'form-control '}}" name="verifyCode" formControlName="verifyCode" id="verifyCode">
+            </div>
+            <div class="col-2 h38">
+                <img [src]="imageSrcCaptcha" alt="" class="CaptchaImage" width="100%" (click)="changeCaptchaImage($event)" >
+            </div>
+            <div class="col-4">
+                <div class="form-control-feedback">{{ companyAdminFormErrors['verifyCode'] }}</div>
+            </div>
+        </div>
+        <div class="form-group" class="{{companyAdminFormErrors['code']?'form-group row has-danger':'form-group row'}}">
+            <label for="code" class="col-2 col-form-label" >短信验证码:</label>
+            <div class="col-4">
+                <input type="text" class="{{companyAdminFormErrors['code']?'form-control form-control-danger':'form-control '}}" name="code" id="code" formControlName="code">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn clickBtn" [disabled]="companyAdminForm.get('verifyCode').status!='VALID' || disablePhoneInput" (click)="getSmsCode('old')">{{ countDownTimer ? countDownTimer + 's后重新获取' : '获取验证码' }} </button>
+            </div>
+            <div class="col-4">
+                <div class="form-control-feedback red">{{ companyAdminFormErrors['code'] }}</div>
+                <div class="form-control-feedback red">{{ codeMessage }}</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="code" class="col-2 col-form-label" >新管理员:</label>
+            <div class="col-4">
+                <select id="" class="form-control" name="adminName" formControlName="adminName">
+                    <option value="">请选择新管理员</option>
+                    <option *ngFor="let user of userList" [value]="user._id">{{user.loginName}}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <div class="form-control-feedback">{{ companyAdminFormErrors['code'] }}</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="code" class="col-2 col-form-label" ></label>
+            <div class="col-4">
+                <button type="submit" class="btn clickBtn" [disabled]='!companyAdminForm.valid' (click)="save()">保存</button>
+            </div>
+            <div class="col-6">
+                <div class="form-control-feedback" class="red">{{ errMessage }}</div>
+            </div>
+        </div>
+    </form>
+
+    <div *ngIf="stepTwo" class="successWrap">
+        <i class="fa fa-check"></i>您已失去管理员权限！
+        <a (click)="reLogin()" href="javascript:void(0)" >重新登录</a>
+    </div>
+</div>

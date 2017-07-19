@@ -1,0 +1,63 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">企业信息管理</li>
+    <li class="breadcrumb-item active">企业信息认证</li>
+</ol>
+
+<!--<div class="mainContentTitle">企业信息认证</div>-->
+<div class="mx-3">
+
+    <div class="row" *ngIf="status === -1 && !showAddCompany" >
+        <div class="col-8 status py-4">
+            <h1><i class="fa fa-exclamation-circle"></i>{{ company.companyStatus || 0 | companyInfoStatus}}, 您还未填写企业信息</h1>
+        </div>
+        <div class="col-4 py-4">
+            <button class="btn btn-blue px-3 py-1" (click)="goToAdd()">立即认证</button>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="status === 0 && !showAddCompany" >
+        <div class="col-8 status py-4">
+            <h1><i class="fa fa-exclamation-circle"></i>{{ company.companyStatus || 0 | companyInfoStatus}}, 请核实企业的信息后, 提交审核</h1>
+        </div>
+        <div class="col-4 py-4">
+            <button class="btn btn-blue px-3 py-1" (click)="goToAdd()">编辑</button>
+        </div>
+    </div>
+
+
+    <div class="row" *ngIf="status === 1 && !showAddCompany" >
+        <div class="col-8 status py-4">
+            <h1><i class="fa fa-exclamation-circle"></i>{{ company.companyStatus || 0 | companyInfoStatus}}, 请等待工作人员审核，审核结果会第一时间通知您。</h1>
+        </div>
+    </div>
+
+
+    <div class="row" *ngIf="status === 2 && !showAddCompany" >
+        <div class="col-8 status py-4">
+            <h1><i class="fa fa-exclamation-circle"></i>{{ company.companyStatus || 0 | companyInfoStatus}}, 请修改后再次提交</h1>
+            <h1 class="my-4 ml-5">不通过原因: {{ company.auditList ? company.auditList[company.auditList.length -1 ].auditContent : "无"}}</h1>
+        </div>
+        <div class="col-4 py-4">
+            <button class="btn btn-blue px-3 py-1" (click)="goToAdd()">编辑</button>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="status === 3 && !showAddCompany" >
+        <div class="col-8 status py-4">
+            <h1><i class="fa fa-exclamation-circle"></i>{{ company.companyStatus || 0 | companyInfoStatus}}, 企业信息认证不通过。</h1>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="status === 4 && !showAddCompany" >
+        <div class="col-8 status py-4">
+            <h1><i class="fa fa-check-circle"></i>{{ company.companyStatus || 0 | companyInfoStatus}}, 企业信息认证已通过。</h1>
+
+        </div>
+    </div>
+
+
+    <company-info-add *ngIf="showAddCompany" [company]="company" (save)="previewCompanyInfo()"></company-info-add>
+
+    <company-info-detail  *ngIf="status === 0 && !showAddCompany || status === 4 && !showAddCompany" [company]="company"></company-info-detail>
+
+</div>

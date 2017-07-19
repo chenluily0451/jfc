@@ -1,0 +1,93 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">企业信息管理</li>
+    <li class="breadcrumb-item active">审核列表</li>
+</ol>
+
+<div class="font14">
+
+    <form [formGroup]="companyQueryForm" (ngSubmit)="getCompanyList()">
+
+        <h5 class="py-4">企业信息审核管理</h5>
+
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right" for="unionLicense">企业注册号</label>
+            <div class="col-3">
+                <input type="text" class="form-control" id="unionLicense" formControlName="unionLicenseCode">
+                <div [hidden]="!formErrors.unionLicenseCode" class="alert alert-danger mt-1 mb-0 py-0 alertLineH"> {{formErrors.unionLicenseCode}} </div>
+            </div>
+
+            <label class="col-2 col-form-label text-right" for="companyName">企业名称</label>
+            <div class="col-3">
+                <input type="text" class="form-control" id="companyName" formControlName="companyName">
+                <div [hidden]="!formErrors.companyName" class="alert alert-danger mt-1 mb-0 py-0 alertLineH"> {{formErrors.companyName}} </div>
+            </div>
+        </div>
+
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right">审核状态</label>
+            <div class="col-3">
+                <select  class="form-control" formControlName="companyStatus">
+                    <option value="">请选择</option>
+                    <option  *ngFor="let status of companyStatusDictionary" [value]="status.id">{{ status.value}}</option>
+                </select>
+            </div>
+            <label class="col-2 col-form-label text-right">参与方</label>
+            <div class="col-3">
+                <select  class="form-control" formControlName="systemType">
+                    <option value="">请选择</option>
+                    <option  *ngFor="let type of systemType" [value]="type.id">{{ type.id | systemType}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right"></label>
+            <div class="col-2">
+                <button type="submit" class="btn btn-blue px-5" >查询</button>
+            </div>
+        </div>
+
+    </form>
+
+
+    <div class="">
+        <table class="tableCss">
+            <thead>
+                <tr>
+                    <th class="text-center verticalTop" >企业注册号</th>
+                    <th class="text-center verticalTop" >参与方</th>
+                    <th class="text-center verticalTop" >企业名称</th>
+                    <th class="text-center verticalTop" >创建时间</th>
+                    <th class="text-center verticalTop" >审核通过时间</th>
+                    <th class="text-center verticalTop width16" >企业类型</th>
+                    <th class="text-center verticalTop" >审核状态</th>
+                    <th class="text-center verticalTop width16" >操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let company of companyList">
+                    <td class="text-center" >{{company.license.unionLicenseCode}}</td>
+                    <td class="text-center" >{{company.systemId | systemType}}</td>
+                    <td class="text-center" ><a [routerLink]="['/company', company._id]" routerLinkActive="active"> {{company.companyName}} </a></td>
+                    <td class="text-center" >{{company.createDate}}</td>
+                    <td class="text-center" >{{ company.auditList ? company.auditList[0].createDate : '-'}}</td>
+                    <td class="text-center" >{{company.companyType | companyType}}</td>
+                    <td class="text-center" >{{ company.companyStatus | companyInfoStatus  }}</td>
+                    <td class="text-center" >
+                        <a [routerLink]="['/company', company._id]" routerLinkActive="active" class="btn btn-sm btn-orange my-1" *ngIf="company.companyStatus === 1">审核</a>
+                        <a [routerLink]="['/company', company._id]" routerLinkActive="active" class="btn btn-sm btn-blue my-1" *ngIf="company.companyStatus !== 1">查看</a>
+                        <a [routerLink]="['/company/companyInvestigation', company._id]" routerLinkActive="active" class="btn btn-sm btn-orange my-1" *ngIf="company.companyStatus === 4">准入审查</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row col-5 offset-6 mt-5">
+        <ngb-pagination [collectionSize]="page.total" [(page)]="page.currentPageNo" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"></ngb-pagination>
+        <span class="mt-2 ml-4">共 <b class="main-orange">{{page.total}}</b> 条</span>
+    </div>
+
+
+</div>

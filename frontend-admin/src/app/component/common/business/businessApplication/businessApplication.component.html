@@ -1,0 +1,645 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">业务管理</li>
+    <li class="breadcrumb-item active">业务申请</li>
+</ol>
+<form class="companyInfoAddForm" [formGroup]="businessApplicationForm">
+    <!--<div class="mainContentTitle">业务申请</div>-->
+    <!--交易主体项-->
+    <div>
+        <h5 class="p-2 mb-5 bg-f8">交易主体项（<span class="main-orange mx-2 font-weight-bold">*</span>为必填项）</h5>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>买受方</div>
+            <div class="col-3 text-left">
+                <select class="form-control" required formControlName="receiveCompanyId">
+                    <option value="">选择收货方</option>
+                    <option *ngFor="let company of bridgeCompanies" [value]="company._id">{{company.companyName}}</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.receiveCompanyId" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.receiveCompanyId}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">煤炭供货方一</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  formControlName="providerOne" />
+                <div [hidden]="!formErrors.providerOne" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                {{formErrors.providerOne}}
+                </div>
+            </div>
+            <div class="col-3 addProvider">
+                <i class="fa fa-plus-circle" (click)="addProviderTwo()"></i>
+                <span class="">最多可添加3个煤炭提供方</span>
+            </div>
+        </div>
+        <div class="row mb-4" *ngIf="addProvider">
+            <div class="col-2 text-right">煤炭供货方二</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="providerTwo" />
+                <div [hidden]="!formErrors.providerTwo" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.providerTwo}}
+                </div>
+            </div>
+            <div class="col-3 addProvider"><i class="fa fa-minus-circle" (click)="deleteProviderTwo()"></i></div>
+        </div>
+        <div class="row mb-4" *ngIf="addLastProvider">
+            <div class="col-2 text-right">煤炭供货方{{addLastProvider === false || addProvider === true ? '三':'二'}}</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="providerThree" />
+                <div [hidden]="!formErrors.providerThree" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.providerThree}}
+                </div>
+            </div>
+            <div class="col-3 addProvider"><i class="fa fa-minus-circle" (click)="deleteProviderThree()"></i></div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>煤种</div>
+            <div class="col-3 text-left">
+                <input type="text" class="form-control" formControlName="coalType">
+                <!--<select class="form-control" required formControlName="coalType">-->
+                    <!--<option value="">选择煤种</option>-->
+                    <!--<option value="烟煤">烟煤</option>-->
+                    <!--<option value="无烟煤">无烟煤</option>-->
+                    <!--<option value="褐煤">褐煤</option>-->
+                <!--</select>-->
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.coalType" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.coalType}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right">煤源产地</div>
+            <div class="col-9 text-left row" province-dropdown [isShowDistrict]="false" [province]="submitData.coalIndex.coalPlace.province" [city]="submitData.coalIndex.coalPlace.city" (onChange)="chooseProvince($event)"></div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right">供货期间</div>
+            <div class="col-3 text-left">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #deliveryBegin="ngbDatepicker" formControlName="deliveryBegin" (click)="deliveryBegin.toggle()">
+                    <div class="input-group-addon" (click)="deliveryBegin.toggle(); openDatepicker(deliveryBegin)">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            至
+            <div class="col-3 text-left">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #deliveryEnd="ngbDatepicker" formControlName="deliveryEnd" (click)="deliveryEnd.toggle()" [minDate]="businessApplicationForm.get('deliveryBegin').value">
+                    <div class="input-group-addon" (click)="deliveryEnd.toggle(); openDatepicker(deliveryEnd)">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--煤炭指标-->
+    <div >
+        <h6 class="p-2 my-5 bg-f8">煤炭指标</h6>
+        <div class="row mb-2">
+            <label class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>低位热值</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-7500之间的整数"  required  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="NCVBegin">
+
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control"  placeholder="1-7500之间的整数" required  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="NCVEnd">
+            </div>
+            kcal/kg
+
+            <div class="col-3" *ngIf="formErrors.NCVBegin || formErrors.NCVEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.NCVBegin || formErrors.NCVEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.NCVBegin && !formErrors.NCVEnd && businessApplicationForm.hasError('NCVEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">空干基挥发分</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADVBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADVEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.ADVBegin || formErrors.ADVEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.ADVBegin || formErrors.ADVEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.ADVBegin && !formErrors.ADVEnd && businessApplicationForm.hasError('ADVEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">灰分</label>
+            <div class="col-3">
+                <input type="text" class="form-control"  placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ASHBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control"  placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ASHEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.ASHBegin || formErrors.ASHEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.ASHBegin || formErrors.ASHEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.ASHBegin && !formErrors.ASHEnd && businessApplicationForm.hasError('ASHEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2 text-right">收到基挥发分</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-50之间的值"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RVBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-50之间的值"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RVEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.RVBegin || formErrors.RVEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.RVBegin || formErrors.RVEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.RVBegin && !formErrors.RVEnd && businessApplicationForm.hasError('RVEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2 text-right">全水分</label>
+            <div class="col-3">
+                <input type="text" class="form-control"  placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="TMBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="TMEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.TMBegin || formErrors.TMEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.TMBegin || formErrors.TMEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.TMBegin && !formErrors.TMEnd && businessApplicationForm.hasError('TMEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2 text-right">收到基硫分</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RSBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RSEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.RSBegin || formErrors.RSEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.RSBegin || formErrors.RSEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.RSBegin && !formErrors.RSEnd && businessApplicationForm.hasError('RSEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">内水分</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="IMBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="IMEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.IMBegin || formErrors.IMEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.IMBegin || formErrors.IMEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.IMBegin && !formErrors.IMEnd && businessApplicationForm.hasError('IMEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2 text-right">空干基硫分</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADSBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADSEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.ADSBegin || formErrors.ADSEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.ADSBegin || formErrors.ADSEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.ADSBegin && !formErrors.ADSEnd && businessApplicationForm.hasError('ADSEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">固定碳</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="FCBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="FCEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.FCBegin || formErrors.FCEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.FCBegin || formErrors.FCEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.FCBegin && !formErrors.FCEnd && businessApplicationForm.hasError('FCEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-2 text-right">G值</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="GVBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control"  placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="GVEnd">
+            </div>
+            <div class="col-3" *ngIf="formErrors.GVBegin || formErrors.GVEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.GVBegin || formErrors.GVEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.GVBegin && !formErrors.GVEnd && businessApplicationForm.hasError('GVEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">灰熔点≥</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="900-1600之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="AFTBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="900-1600之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="AFTEnd">
+            </div>
+            ℃
+            <div class="col-3" *ngIf="formErrors.AFTBegin || formErrors.AFTEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.AFTBegin || formErrors.AFTEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.AFTBegin && !formErrors.AFTEnd && businessApplicationForm.hasError('AFTEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">Y值</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="YVBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="YVEnd">
+            </div>
+            mm
+            <div class="col-3" *ngIf="formErrors.YVBegin || formErrors.YVEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.YVBegin || formErrors.YVEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.YVBegin && !formErrors.YVEnd && businessApplicationForm.hasError('YVEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">哈氏可磨≥</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="0-99之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="HGIBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="0-99之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="HGIEnd">
+            </div>
+            <div class="col-3" *ngIf="formErrors.HGIBegin || formErrors.HGIEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.HGIBegin || formErrors.HGIEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.HGIBegin && !formErrors.HGIEnd && businessApplicationForm.hasError('HGIEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">焦渣特征</label>
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="0-100之间的值"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="CRCBegin">
+            </div>
+            至
+            <div class="col-3">
+                <input type="text" class="form-control" placeholder="0-100之间的值"   onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="CRCEnd">
+            </div>
+            %
+            <div class="col-3" *ngIf="formErrors.CRCBegin || formErrors.CRCEnd">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.CRCBegin || formErrors.CRCEnd}}
+                </div>
+            </div>
+            <div class="col-3" *ngIf="!formErrors.CRCBegin && !formErrors.CRCEnd && businessApplicationForm.hasError('CRCEnd') ">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    <div class="red">请输入正确的区间范围</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-2 text-right">颗粒度</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="PS">
+            </div>
+            <div class="col-3" *ngIf="formErrors.PS">
+                <div class="alert alert-danger mb-0 py-0 alertLineH">
+                    {{formErrors.PS}}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--运输交货信息项-->
+    <div>
+        <h5 class="p-2 my-5 bg-f8">运输交货信息项</h5>
+        <div class="row mb-4">
+            <div class="col-2 text-right">运输方式</div>
+            <div class="col-3 text-left">
+                <select class="form-control"  formControlName="trafficMode">
+                    <option value="">选择运输方式</option>
+                    <option *ngFor="let mode of trafficMode" [value]="mode.id">{{mode.value}}</option>
+                </select>
+                <div [hidden]="!formErrors.trafficMode" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.trafficMode}}
+                </div>
+            </div>
+            <div class="col-2 text-right">发运站</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  formControlName="sendStation">
+                <div [hidden]="!formErrors.sendStation" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.sendStation}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">交货站</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  formControlName="receiveStation">
+                <div [hidden]="!formErrors.receiveStation" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.receiveStation}}
+                </div>
+            </div>
+            <div class="col-2 text-right">运费承担方</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  formControlName="freightPayer">
+                <div [hidden]="!formErrors.freightPayer" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.freightPayer}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">运费</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="freightPrice">
+                <div [hidden]="!formErrors.freightPrice" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.freightPrice}}
+                </div>
+            </div>
+            元
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right">其他杂费</div>
+            <div class="col-3 text-left">
+                <input class="form-control" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="otherMiscFee">
+                <div [hidden]="!formErrors.otherMiscFee" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.otherMiscFee}}
+                </div>
+            </div>
+            元
+        </div>
+    </div>
+
+    <!--价格及付款信息项-->
+    <div>
+        <h5 class="p-2 my-5 bg-f8">价格及付款信息项</h5>
+        <div class="row mb-4">
+            <div class="col-2 text-right">合同量</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="contractAmount">
+                <div [hidden]="!formErrors.contractAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.contractAmount}}
+                </div>
+            </div>
+            吨
+            <div class="col-2 text-right">合同单价</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="contractUnitPrice">
+                <div [hidden]="!formErrors.contractUnitPrice" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.contractUnitPrice}}
+                </div>
+            </div>
+            元/吨
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right">开户行</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  formControlName="openAccountBank">
+                <div [hidden]="!formErrors.openAccountBank" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.openAccountBank}}
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="col-2 text-right">账户号</div>
+            <div class="col-3 text-left">
+                <input class="form-control"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="bankAccountNo">
+                <div [hidden]="!formErrors.bankAccountNo" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.bankAccountNo}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right">有无保证金</div>
+            <div class="col-3 text-left">
+                <input type="checkbox" class="form-control mt-2" formControlName="hasDeposit">
+
+                <div [hidden]="!formErrors.hasDeposit" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.hasDeposit}}
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="col-2 text-right" *ngIf="businessApplicationForm.value.hasDeposit">
+                保证金金额</div>
+            <div class="col-3 text-left" *ngIf="businessApplicationForm.value.hasDeposit">
+                <input class="form-control"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="depositAmount">
+                <div [hidden]="!formErrors.depositAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.depositAmount}}
+                </div>
+            </div>
+            <span *ngIf="businessApplicationForm.value.hasDeposit">元</span>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">付款方式</div>
+            <div class="col-3 text-left">
+                <select class="form-control" formControlName="payMode">
+                    <option value="">请选择</option>
+                    <option *ngFor="let mode of payMode" [value]="mode.id">{{mode.value}}</option>
+                </select>
+                <div [hidden]="!formErrors.payMode" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payMode}}
+                </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <!--<div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>付款金额</div>-->
+            <!--<div class="col-3 text-left">-->
+                <!--<input class="form-control" required onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="paymentAmount">-->
+                <!--<div [hidden]="!formErrors.paymentAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">-->
+                    <!--{{formErrors.paymentAmount}}-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--元-->
+        </div>
+
+        <!--<div class="row mb-4">-->
+            <!--<div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>付款节点</div>-->
+            <!--<div class="col-5 text-left">-->
+                <!--<textarea class="form-control" required rows="5" formControlName="payNode"></textarea>-->
+                <!--<div [hidden]="!formErrors.payNode" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">-->
+                    <!--{{formErrors.payNode}}-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row mb-4">-->
+            <!--<div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>供货考核</div>-->
+            <!--<div class="col-5 text-left">-->
+                <!--<textarea class="form-control" required rows="5" formControlName="provisionAssess"></textarea>-->
+                <!--<div [hidden]="!formErrors.provisionAssess" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">-->
+                    <!--{{formErrors.provisionAssess}}-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="row mb-4" *ngIf="businessApplicationForm.value.hasDeposit">
+            <div class="col-2 text-right">保证金付款凭证</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="submitData.payInfo?.payCertificatePic" [isShowDelButton]="true" (onDelete)="deleteFile('payInfo', 'payCertificatePic')"></image-show>
+                <file-upload (onFinished)="uploadFinished($event, 'payInfo', 'payCertificatePic')"></file-upload>
+            </div>
+        </div>
+
+    </div>
+
+    <!--合同影印件-->
+    <div>
+        <h5 class="p-2 my-5 bg-f8">合同影印件</h5>
+        <div class="row"  >
+            <div class="col-8 row offset-2 px-0 fileUpload">
+                <image-show *ngFor="let file of submitData?.contractInfo?.contractFile"  [sourcePath]="file" [isShowDelButton]="true" (onDelete)="deleteImg($event, 'contractInfo', 'contractFile')"></image-show>
+                <file-upload (onFinished)="uploadMoreFinished($event, 'contractInfo', 'contractFile')" ></file-upload>
+            </div>
+        </div>
+    </div>
+
+    <!--其他附件-->
+    <div>
+        <h5 class="p-2 my-5 bg-f8">其他附件&nbsp;&nbsp;(支持扩展名：.rar.zip.png .jpg .pdf .doc.docx.xls.xlsx等格式文件)</h5>
+        <div class="row"  >
+            <div class="col-10 offset-2 fileUpload px-0">
+                <file-upload (onFinished)="uploadMoreFinished($event, 'contractInfo', 'otherContractFile')"></file-upload>
+                <div class="mt-2" *ngFor="let otherContractFile of submitData.contractInfo?.otherContractFile">
+                    <p class="uploadDoc">
+                        <a [href]="aliOss.host + otherContractFile?.filePath">{{otherContractFile?.fileName}}</a>
+                        <i class="deleteDoc" (click)="deleteOtherContractFile(otherContractFile, 'contractInfo', 'otherContractFile')">×</i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-10 offset-3  mb-5">
+            <button class="btn btn-blue mr-5 px-5 py-1" (click)="upstreamSaveBusiness(successModal)">保存</button>
+            <button type="submit" class="btn btn-blue px-5 py-1" (click)="upstreamSubmitBusiness(successModal)">提交</button>
+            <span class="main-orange" *ngIf="submitAll">有未填的必填项或合同未上传</span>
+        </div>
+    </div>
+
+    <ng-template #successModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+        </div>
+        <div class="modal-body">
+            <p>提交成功</p>
+        </div>
+        <div class="modal-footer">
+            <a [routerLink]="['/business']" (click)="c('Close click')" class="btn btn-blue">确认</a>
+        </div>
+    </ng-template>
+
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

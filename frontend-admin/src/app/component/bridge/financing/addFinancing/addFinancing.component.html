@@ -1,0 +1,153 @@
+<div id="initiateNewFinancing">
+    <div class="financingWrap">
+        <div class="financingHeader">
+            <p>上游业务详情编号: {{businessObj._id}}</p>
+            <p>状态: {{businessObj.status | businessStatus }}</p>
+        </div>
+        <div class="financingBody">
+            <p class="financingBodyTtitle">融资申请</p>
+            <form [formGroup]="financingForm" class="financingForm">
+                <div class="{{financingFormErrors['actualVal']?'form-group row has-danger':'form-group row'}}">
+                    <label for="actualVal" class="col-2 col-form-label">债权实际货值(元):</label>
+                    <div class="col-4">
+                        <input type="text" class="{{financingFormErrors['actualVal']?'form-control form-control-danger':'form-control '}}" name="actualVal" id="actualVal" formControlName="actualVal">
+                    </div>
+                </div>
+                <div class="form-group" class="{{financingFormErrors['financingAmount']?'form-group row has-danger':'form-group row'}}">
+                    <label for="financingAmount" class="col-2 col-form-label">融资金额(元):</label>
+                    <div class="col-4">
+                        <input type="text" class="{{financingFormErrors['financingAmount']?'form-control form-control-danger':'form-control '}}" name="financingAmount" id="financingAmount" formControlName="financingAmount">
+                    </div>
+                    <!--<div class="financingInfo">-->
+                        <!--本次债权总金额为<span>50000000元</span>融资比例为<span>70%</span>-->
+                    <!--</div>-->
+                </div>
+
+                <div class="{{financingFormErrors['receiptsStartDate'] ?'form-group row has-danger':'form-group row'}}">
+                    <label class="col-2 col-form-label">融资周期:</label>
+                    <div class="col-4 input-group">
+                        <input class="form-control" formControlName="receiptsStartDate" placeholder="请选择融资周期" name="dp" #d1="ngbDatepicker" ngbDatepicker (click)="d1.toggle()">
+                        <div class="input-group-addon" (click)="d1.toggle()" >
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                    <label class="col-form-label">至</label>
+                    <div class="col-4 input-group">
+                        <input class="form-control" formControlName="receiptsEndDate" placeholder="请选择融资周期" name="dp" #d2="ngbDatepicker" ngbDatepicker (click)="d2.toggle()" [minDate]="financingForm.get('receiptsStartDate').value">
+                        <div class="input-group-addon" (click)="d2.toggle()" >
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="{{financingFormErrors['obtained']?'form-group row has-danger':'form-group row'}}">
+                    <label class="col-2 col-form-label">单据是否获取:</label>
+                    <div class="col-2 col-form-label">
+                        <label for="obtainedFalse">否</label>
+                        <input type="radio" value=0 id="obtainedFalse" name="obtained"  formControlName="obtained" [checked] = "financingDetail.receiptAcquired !== undefined && financingDetail.receiptAcquired === false">
+                    </div>
+                    <div class="col-2 col-form-label">
+                        <label for="obtainedTrue">是</label>
+                        <input type="radio" value=1 id="obtainedTrue" name="obtained"  formControlName="obtained" [checked] = "financingDetail.receiptAcquired !== undefined && financingDetail.receiptAcquired === true ">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label">货权转移证明:</label>
+                    <ul class="fileLists">
+                        <li *ngFor="let li of financingForm.get('transferPics').value ;let i = index" >
+                            <a [href] ="aliOss.host + li.filePath" target="_new">
+                                <img [src] = "aliOss.host + li.filePath" [alt]="li.fileName">
+                            </a>
+                            <i class="fa fa-times" (click)="deleteFile(i,'transferPics')" ></i>
+                        </li>
+                    </ul>
+                    <div class="listStyle">
+                        <file-upload (onFinished)="uploadFinished($event, 'transferPics')"></file-upload>
+                    </div>
+                </div>
+
+                <div class="invoiceWrap" >
+                    <div *ngFor="let num of invoiceArray;let i = index">
+                        <div class="form-group row ">
+                            <label class="col-2 col-form-label">发票号{{i + 1}}:</label>
+                            <div class="col-4">
+                                <input type="text" class="form-control" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" (blur)="getInvoceNumber($event, i)" [value] = "invoiceArray[i]">
+                            </div>
+                            <div class="col-6">
+                                <i class="fa fa-plus-circle" (click)="addInvoice(i)"></i>
+                                <i class="fa fa-minus-circle" (click)="minusInvoice(i)"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="{{financingFormErrors['invoiceCost']?'form-group row has-danger':'form-group row'}}">
+                        <label class="col-2 col-form-label">发票总金额:</label>
+                        <div class="col-4">
+                            <input type="text" class="{{financingFormErrors['invoiceCost']?'form-control form-control-danger':'form-control '}}" name="invoiceCost" id="invoiceCost" formControlName="invoiceCost">
+                        </div>
+                        <div class="col-6">
+                            <div class="form-control-feedback">{{financingFormErrors['invoiceCost'] }}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">发票扫描件:</label>
+                        <ul class="fileLists">
+                            <li *ngFor="let li of financingForm.get('invoiceScanPics').value ;let i = index" >
+                                <a [href] ="aliOss.host + li.filePath" target="_new">
+                                    <img [src] = "aliOss.host + li.filePath" [alt]="li.fileName">
+                                </a>
+                                <i class="fa fa-times" (click)="deleteFile(i,'invoiceScanPics')" ></i>
+                            </li>
+                        </ul>
+                        <div class="listStyle">
+                            <file-upload (onFinished)="uploadFinished($event, 'invoiceScanPics')"></file-upload>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="qualityTable">
+                    <thead>
+                    <tr>
+                        <td>债权编号</td>
+                        <td>创建日期</td>
+                        <td>所属业务编号</td>
+                        <td>上游企业名称</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let q of financingCreditorRightsListObj;">
+                        <td>
+                            {{q._id}}
+                        </td>
+                        <td>
+                            {{q.createDate}}
+                        </td>
+                        <td>
+                            {{q.businessId}}
+                        </td>
+                        <td>
+                            {{q.upstreamCompanyName}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="form-control-feedback red">{{financingFormErrors['financingAmount']}}</div>
+                <div class="form-control-feedback red">{{financingFormErrors['actualVal']}}</div>
+                <div class="form-control-feedback red">{{financingFormErrors['obtained']}}</div>
+                <div class="form-control-feedback red">{{errorMessage}}</div>
+                <div class="btnWrap">
+                    <button  [disabled]="!financingForm.valid" (click)="submit(successModal)">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-template #successModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+        </div>
+        <div class="modal-body">
+            <p>提交成功</p>
+        </div>
+        <div class="modal-footer">
+            <a [routerLink]="['/business', financingCreditorRightsListObj[0].businessId]" (click)="c('Close click')" class="btn btn-blue">确认</a>
+        </div>
+    </ng-template>
+</div>

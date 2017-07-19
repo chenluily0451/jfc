@@ -1,0 +1,14 @@
+<nav class="row header m-0">
+    <div class="col-sm-6  py-3 h-100">
+        <img src="/static/assets/upstreamHeader/upstreamHeader.png" alt="logo" class="logo px-2 pt-1">
+    </div>
+    <div class="col-sm-6 text-right  py-3">
+        <!--<i class="fa fa-envelope-o email mt-2 mr-4"></i>-->
+        <!--<i class="fa fa-bell-o bell mt-2 mr-5"><b class="badge">3</b></i>-->
+        <img src="/static/assets/personHead.png" alt="" class="personHead mb-2 mr-2">
+        <span class="name pr-5">{{ currentUser.userName}}</span>
+        <a (click)="quitLogin()" href="javascript:void(0)" class="mr-5">退出</a>
+    </div>
+</nav>
+
+

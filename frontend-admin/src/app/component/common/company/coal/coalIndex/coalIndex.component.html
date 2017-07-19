@@ -1,0 +1,43 @@
+<div>
+    <h6 class="py-3">煤炭指标</h6>
+    <table class="table coalTable">
+        <tr>
+            <th class="text-center" >热值</th>
+            <th class="text-center">收到基硫分</th>
+            <th class="text-center" >空干基挥发分</th>
+            <th class="text-center">全水分</th>
+            <th class="text-center">收到基挥发分</th>
+            <th class="text-center">空干基硫分</th>
+            <th class="text-center">内水分</th>
+            <th class="text-center">灰分</th>
+        </tr>
+        <tr>
+            <td class="text-center">{{coal.NCV?.begin}}-{{coal.NCV?.end}}</td>
+            <td class="text-center">{{coal.RS?.begin}}-{{coal.RS?.end}}</td>
+            <td class="text-center">{{coal.ADV?.begin}}-{{coal.ADV?.end}}</td>
+            <td class="text-center">{{coal.TM?.begin}}-{{coal.TM?.end}}</td>
+            <td class="text-center">{{coal.RV?.begin}}-{{coal.RV?.end}}</td>
+            <td class="text-center">{{coal.ADS?.begin}}-{{coal.ADS?.end}}</td>
+            <td class="text-center">{{coal.IM?.begin}}-{{coal.IM?.end}}</td>
+            <td class="text-center">{{coal.ASH?.begin}}-{{coal.ASH?.end}}</td>
+        </tr>
+        <tr>
+            <th class="text-center">G值</th>
+            <th class="text-center">灰熔点</th>
+            <th class="text-center">Y值</th>
+            <th class="text-center">固定碳</th>
+            <th class="text-center">焦渣特征</th>
+            <th class="text-center">颗粒度</th>
+            <th class="text-center" colspan="2">哈氏可磨指数</th>
+        </tr>
+        <tr>
+            <td class="text-center">{{coal.GV?.begin}}-{{coal.GV?.end}}</td>
+            <td class="text-center">{{coal.AFT?.begin}}-{{coal.AFT?.end}}</td>
+            <td class="text-center">{{coal.YV?.begin}}-{{coal.YV?.end}}</td>
+            <td class="text-center">{{coal.FC?.begin}}-{{coal.FC?.end}}</td>
+            <td class="text-center">{{coal.CRC?.begin}}-{{coal.CRC?.end}}</td>
+            <td class="text-center">{{coal.PS || '-'}}</td>
+            <td class="text-center" colspan="2">{{coal.HGI?.begin}}-{{coal.HGI?.end}}</td>
+        </tr>
+    </table>
+</div>

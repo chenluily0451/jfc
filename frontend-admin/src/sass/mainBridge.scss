@@ -1,0 +1,28 @@
+@import 'page/upstream/reset';
+@import 'page/upstream/container';
+@import 'page/upstream/upstreamHeader';
+@import 'page/upstream/upstreamFooter';
+
+@import "./components/_loading";
+@import "./components/_tab";
+@import "./components/_globle";
+@import "./components/_pagination";
+
+@import "./components/_fileUpload";
+
+
+// 分页
+@import 'components/pagination';
+
+// 账户模块
+@import 'components/account';
+
+// 更换管理员
+@import 'components/company';
+
+// 员工管理
+@import 'components/staff';
+
+
+//债权详情
+@import 'components/creditorRights';

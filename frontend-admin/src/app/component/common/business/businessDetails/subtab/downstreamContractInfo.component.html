@@ -1,0 +1,68 @@
+<!--业务基本信息-->
+<div>
+    <h6 class="my-4">合同信息项</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right" >资金方</th>
+            <td class="text-left">{{business.downstreamBusiness.capitalCompanyName}}</td>
+            <th class="text-right" >合同编号</th>
+            <td class="text-left">{{business.downstreamBusiness.businessId}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >供货单位</th>
+            <td class="text-left" >{{business.upstreamCompanyName}}</td>
+            <th class="text-right" >下游签约方</th>
+            <td class="text-left" >{{business.downstreamBusiness.downstreamCompanyName}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >合同量</th>
+            <td class="text-left" >{{business.downstreamBusiness.contractAmount}}</td>
+            <th class="text-right" >合同单价</th>
+            <td class="text-left" >{{business.downstreamBusiness.contractUnitPrice}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >供货期间</th>
+            <td class="text-left" >{{business.downstreamBusiness.deliveryBegin}}至{{business.downstreamBusiness.deliveryEnd}}</td>
+            <th class="text-right" >下游回款周期</th>
+            <td class="text-left" >{{business.downstreamBusiness.returnedMoneyPeriod}}</td>
+        </tr>
+        <tr *ngIf="business.downstreamBusiness?.hasDeposit">
+            <th class="text-right" >是否有保证金</th>
+            <td class="text-left" >是</td>
+            <th class="text-right" >保证金金额</th>
+            <td class="text-left" >{{business.downstreamBusiness.depositAmount}}</td>
+        </tr>
+        <tr *ngIf="!business.downstreamBusiness?.hasDeposit">
+            <th class="text-right" >是否有保证金</th>
+            <td class="text-left" colspan="3" >否</td>
+        </tr>
+        <tr>
+            <th class="text-right" >检测机构</th>
+            <td class="text-left" colspan="3">{{business.downstreamBusiness.detectionOrganization}}</td>
+        </tr>
+        <!--<tr>-->
+            <!--<th class="text-right" >数量考核</th>-->
+            <!--<td class="text-left" colspan="3">{{business.downstreamBusiness.numberInspection}}</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+            <!--<th class="text-right" >质量考核</th>-->
+            <!--<td class="text-left" colspan="3">{{business.downstreamBusiness.qualityInspection}}</td>-->
+        <!--</tr>-->
+        <tr>
+            <th class="text-right verticalMiddle" >保证金付款凭证</th>
+            <td class="text-left"  colspan="3">
+                <image-show  [sourcePath]="business.downstreamBusiness?.depositPayCertificatePic" ></image-show>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right verticalMiddle" >合同影印件</th>
+            <td class="text-left"  colspan="3">
+                <image-show *ngFor="let file of business.downstreamBusiness.contractFiles"  [sourcePath]="file" ></image-show>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+

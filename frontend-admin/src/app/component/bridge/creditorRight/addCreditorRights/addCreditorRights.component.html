@@ -1,0 +1,581 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item active">债权信息</li>
+</ol>
+<div id="creditorRights">
+    <div class="creditorInfo">
+        <div>
+            业务编号:<span>{{ business._id}}</span>
+        </div>
+        <div class="status">
+            状态:<span>{{ business.status | businessStatus}}</span>
+        </div>
+    </div>
+
+    <form [formGroup]="bondValuationForm" class="creditorRightsFormWrap" >
+        <div class="form-group row ">
+            <div class="{{bondValuationFormErrors['evaluationAmount'] ?'form-group row has-danger col-6':'form-group row  col-6'}}">
+                <label><span class="red">*</span>债权估值(元):</label>
+                <input type="text" class="{{bondValuationFormErrors['evaluationAmount']?'form-control form-control-danger':'form-control '}}"  name="evaluationAmount" id="evaluationAmount" formControlName="evaluationAmount">
+            </div>
+            <div class="{{bondValuationFormErrors['totalQuantity'] ?'form-group row has-danger col-6':'form-group row  col-6'}}">
+                <label>债权总吨数(吨):</label>
+                <input type="text" readonly class="form-control noborder" name="totalQuantity" id="totalQuantity" formControlName="totalQuantity">
+            </div>
+        </div>
+        <div class="form-control-feedback red">{{bondValuationFormErrors['evaluationAmount']}}</div>
+        <div class="form-control-feedback red">{{bondValuationFormErrors['totalQuantity']}}</div>
+    </form>
+
+
+
+    <!-- 数量单据显示-->
+    <div class="addMenu">
+        <div>货物数量单据</div>
+        <div class="btnWrap">
+            <a href="javascript:void(0)" class="addBtn" (click)="receiptControl('quantityInput','open')">添加</a>
+        </div>
+    </div>
+    <table class="quantityTable">
+        <thead>
+            <tr>
+                <td>单据日期</td>
+                <td>车/船数量</td>
+                <td>单据数量(吨)</td>
+                <td>单据图片</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="quantityDocumentLen < 1">
+                <td colspan="5">
+                    <i class="fa fa-times"></i> 暂无数据
+                </td>
+            </tr>
+            <tr *ngFor="let q of quantityDocument;let i =index">
+                <td>{{q.receiptsBeginDate}}至{{q.receiptsEndDate}}</td>
+                <td>{{q.carAmount}}</td>
+                <td> {{q.receiptAmount}}</td>
+                <td> <a *ngFor="let imgs of q.receiptFile" target="_new" [href]="aliOss.host + imgs.filePath" class="imageName">
+                        {{imgs.fileName}}
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" (click)="quantityDocumentEdit(i)">编辑</a>
+                    <a href="javascript:void(0)" (click)="open(content,'quantity',i)">删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!--添加货物数量单据-->
+    <div class="quantityInputWrap" *ngIf="quantityInput" >
+        <h4 class="modal-title">添加货物数量单据</h4>
+        <form [formGroup]="quantityForm" class="creditorRightsFormWrap" action="javascript:void(0)" >
+            <div class="form-group row">
+                <div class="form-group" class="{{quantityFormErrors['receiptsBeginDate'] ?'form-group row has-danger input-group  col-6':'form-group row input-group  col-6'}}">
+                    <label><span class="red">*</span>单据开始日期:</label>
+                    <input class="form-control w260" formControlName="receiptsBeginDate"  [(ngModel)]="quantityReceiptsBeginDate" placeholder="请选择" name="dp" #quantityBegin="ngbDatepicker" ngbDatepicker (click)="quantityBegin.toggle()">
+                    <div class="input-group-addon" (click)="quantityBegin.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+                <div class="form-group" class="{{quantityFormErrors['receiptsEndDate'] ?'form-group row has-danger input-group  col-6':'form-group row input-group  col-6'}}">
+                    <label><span class="red">*</span>单据结束日期:</label>
+                    <input class="form-control w260"  placeholder="请选择" formControlName="receiptsEndDate" name="dp" #quantityEnd="ngbDatepicker" ngbDatepicker (click)="quantityEnd.toggle()" [minDate]="quantityReceiptsBeginDate">
+                    <div class="input-group-addon" (click)="quantityEnd.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row ">
+                <div class="{{quantityFormErrors['carAmount'] ?'form-group row has-danger  col-6':'form-group row  col-6'}}">
+                    <label><span class="red">*</span>车/船数量:</label>
+                    <input type="text"  class="{{quantityFormErrors['carAmount']?'form-control form-control-danger':'form-control '}}"  name="carAmount"  formControlName="carAmount">
+                </div>
+                <div class="{{quantityFormErrors['receiptAmount'] ?'form-group row has-danger  col-6':'form-group row  col-6'}}">
+                    <label><span class="red">*</span>单据数量(吨):</label>
+                    <input type="text"  class="{{quantityFormErrors['receiptAmount']?'form-control form-control-danger':'form-control '}}" name="receiptAmount" formControlName="receiptAmount">
+                </div>
+            </div>
+
+            <div class="form-group" class="form-group row">
+                <label><span class="red">*</span>单据图片:</label>
+                <ul class="fileLists">
+                    <li *ngFor="let li of quantityForm.get('receiptFile').value ;let i = index" >
+                        <a [href] ="aliOss.host + li.filePath" target="_new">
+                            <img [src] = "aliOss.host + li.filePath" [alt]="li.fileName">
+                        </a>
+                        <i class="fa fa-times" (click)="deleteFile(i,'quantity')" ></i>
+                    </li>
+                </ul>
+                <div class="listStyle">
+                    <file-upload (onFinished)="uploadFinished($event, 'quantity')"></file-upload>
+                </div>
+            </div>
+            <div class="form-group" class="form-group row">
+                <label ></label>
+                <button type="submit" [disabled]="!quantityForm.valid" class="col-2 btn btn-primary btn-lg" (click)="quantityModalSubmit()">添加</button>
+                <button type="submit" class="col-2 btn btn-primary btn-lg ml30" (click)="receiptControl('quantityInput','close')">取消</button>
+            </div>
+            <div class="form-control-feedback red">{{quantityFormErrors['receiptsNo']}}</div>
+            <div class="form-control-feedback red">{{quantityFormErrors['receiptsBeginDate']}}</div>
+            <div class="form-control-feedback red">{{quantityFormErrors['receiptsEndDate']}}</div>
+            <div class="form-control-feedback red">{{quantityFormErrors['carAmount']}}</div>
+            <div class="form-control-feedback red">{{quantityFormErrors['receiptAmount']}}</div>
+            <div class="form-control-feedback red">{{quantityFormErrorMessage}}</div>
+        </form>
+    </div>
+
+    <!-- 质量单据显示-->
+    <div class="addMenu">
+        <div>货物质量单据</div>
+        <div class="btnWrap">
+            <a href="javascript:void(0)" class="addBtn" (click)="receiptControl('qualityInput','open')">添加</a>
+        </div>
+    </div>
+    <table class="qualityTable">
+        <thead>
+        <tr>
+            <td>单据日期</td>
+            <td>煤质报告呈现形式</td>
+            <td>验收数量(吨)</td>
+            <td>验收质量煤炭指标</td>
+            <td>单据图片</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="qualityDocumentLen < 1">
+                <td colspan="6">
+                    <i class="fa fa-times"></i> 暂无数据
+                </td>
+            </tr>
+            <tr *ngFor="let q of qualityDocument;let i =index">
+                <td>{{q.receiptsBeginDate}}至{{q.receiptsEndDate}}</td>
+                <td>{{q.coalReportPresetWay}}</td>
+                <td>{{q.isFromDownstreamObtain === false ? '否' : '是' }}</td>
+                <td>若干项</td>
+                <td>
+                    <a *ngFor="let imgs of q.receiptFile" target="_new" [href]="aliOss.host + imgs.filePath" class="imageName">
+                        {{imgs.fileName}}
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" (click)="qualityDocumentEdit(i)">编辑</a>
+                    <a href="javascript:void(0)" (click)="open(content,'quality', i)">删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <!--添加货物质量单据-->
+    <div class="quantityInputWrap" *ngIf="qualityInput" >
+        <h4 class="modal-title">添加货物质量单据</h4>
+        <form [formGroup]="qualityForm" class="creditorRightsFormWrap" action="javascript:void(0)">
+            <div class="form-group row">
+                <div class="form-group" class="{{qualityFormErrors['receiptsBeginDate'] ?'form-group row has-danger input-group  col-6':'form-group row input-group  col-6'}}">
+                    <label><span class="red">*</span>单据开始日期:</label>
+                    <input class="form-control w260" formControlName="receiptsBeginDate"  [(ngModel)]="qualityReceiptsBeginDate" placeholder="请选择" name="dp" #qualityBegin="ngbDatepicker" ngbDatepicker (click)="qualityBegin.toggle()">
+                    <div class="input-group-addon" (click)="qualityBegin.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+                <div class="form-group" class="{{qualityFormErrors['receiptsEndDate'] ?'form-group row has-danger input-group  col-6':'form-group row input-group  col-6'}}">
+                    <label><span class="red">*</span>单据结束日期:</label>
+                    <input class="form-control w260"  placeholder="请选择" formControlName="receiptsEndDate" name="dp" #qualityEnd="ngbDatepicker" ngbDatepicker (click)="qualityEnd.toggle()" [minDate]="qualityReceiptsBeginDate">
+                    <div class="input-group-addon" (click)="qualityEnd.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="{{qualityFormErrors['coalReportPresetWay'] ?'form-group input-group row has-danger  col-6':'form-group input-group row  col-6'}}">
+                    <label><span class="red">*</span>煤质报告呈现形式:</label>
+                    <select name="" id="" class="form-control fd" formControlName="coalReportPresetWay">
+                        <option value="" selected>请选择</option>
+                        <option value="电话告知">电话告知</option>
+                        <option value="微信通知">微信通知</option>
+                        <option value="邮件通知">邮件通知</option>
+                        <option value="系统截屏">系统截屏</option>
+                        <option value="短信通知">短信通知</option>
+                        <option value="口头告知">口头告知</option>
+                        <option value="纸质文件">纸质文件</option>
+                        <option value="其他方式">其他方式</option>
+                    </select>
+                </div>
+                <div class="{{qualityFormErrors['isFromDownstreamObtain'] ?'form-group row has-danger  col-6':'form-group row  col-6'}}">
+                    <label>是否从下游获取</label>
+                    <input type="checkbox" [value] = "true" class="form-group" name="isFromDownstreamObtain" formControlName="isFromDownstreamObtain">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="{{qualityFormErrors['calculateAmount'] ?'form-group row has-danger  col-6':'form-group row  col-6'}}">
+                    <label>计量数量(吨):</label>
+                    <input type="text"  class="{{qualityFormErrors['calculateAmount']?'form-control form-control-danger':'form-control '}}"  name="calculateAmount" id="calculateAmount" formControlName="calculateAmount">
+                </div>
+                <div class="{{qualityFormErrors['checkAmount'] ?'form-group row has-danger  col-6':'form-group row  col-6'}}">
+                    <label>验收数量(吨):</label>
+                    <input type="text"  class="{{qualityFormErrors['checkAmount']?'form-control form-control-danger':'form-control '}}"  name="checkAmount" id="checkAmount" formControlName="checkAmount">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label><span class="red">*</span>单据图片:</label>
+                <ul class="fileLists">
+                    <li *ngFor="let li of qualityForm.get('receiptFile').value ;let i = index" >
+                        <a [href] ="aliOss.host + li.filePath" target="_new">
+                            <img [src] = "aliOss.host + li.filePath" [alt]="li.fileName">
+                        </a>
+                        <i class="fa fa-times" (click)="deleteFile(i,'quality')" ></i>
+                    </li>
+                </ul>
+                <div class="listStyle">
+                    <file-upload (onFinished)="uploadFinished($event, 'quality')"></file-upload>
+                </div>
+            </div>
+            <!--煤炭指标-->
+            <div class="form-group row">
+                <label>煤炭指标:</label>
+            </div>
+            <div class="lh38">
+                <div class="row mb-2">
+                    <label class="m120"><span class="red">*</span>低位热值:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-7500之间的整数"  required  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="NCVBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control"  placeholder="1-7500之间的整数" required  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="NCVEnd">
+                    </div>
+                    kcal/kg
+
+                    <div class="col-3" *ngIf="qualityFormErrors.NCVBegin || qualityFormErrors.NCVEnd">
+                        <div class="red">
+                            {{qualityFormErrors.NCVBegin || qualityFormErrors.NCVEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf="!qualityFormErrors.NCVBegin && !qualityFormErrors.NCVEnd && qualityForm.hasError('NCVEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">空干基挥发分:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADVBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADVEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.ADVBegin || qualityFormErrors.ADVEnd">
+                        <div class="red">
+                            {{qualityFormErrors.ADVBegin || qualityFormErrors.ADVEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.ADVBegin && !qualityFormErrors.ADVEnd && qualityForm.hasError('ADVEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">灰分:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control"  placeholder="0.1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ASHBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control"  placeholder="0.1-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ASHEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.ASHBegin || qualityFormErrors.ASHEnd">
+                        <div class="red">
+                            {{qualityFormErrors.ASHBegin || qualityFormErrors.ASHEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.ASHBegin && !qualityFormErrors.ASHEnd && qualityForm.hasError('ASHEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="m120">收到基挥发分:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-50之间的值"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RVBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-50之间的值"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RVEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.RVBegin || qualityFormErrors.RVEnd">
+                        <div class="red">
+                            {{qualityFormErrors.RVBegin || qualityFormErrors.RVEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.RVBegin && !qualityFormErrors.RVEnd && qualityForm.hasError('RVEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="m120">全水分:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control"  placeholder="0.01-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="TMBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="TMEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.TMBegin || qualityFormErrors.TMEnd">
+                        <div class="red">
+                            {{qualityFormErrors.TMBegin || qualityFormErrors.TMEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.TMBegin && !qualityFormErrors.TMEnd && qualityForm.hasError('TMEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="m120">收到基硫分:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RSBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="RSEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.RSBegin || qualityFormErrors.RSEnd">
+                        <div class="red">
+                            {{qualityFormErrors.RSBegin || qualityFormErrors.RSEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.RSBegin && !qualityFormErrors.RSEnd && qualityForm.hasError('RSEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">内水分:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="IMBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-50之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="IMEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.IMBegin || qualityFormErrors.IMEnd">
+                        <div class="red">
+                            {{qualityFormErrors.IMBegin || qualityFormErrors.IMEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.IMBegin && !qualityFormErrors.IMEnd && qualityForm.hasError('IMEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="m120">空干基硫分:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADSBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0.01-10之间的值" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="ADSEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.ADSBegin || qualityFormErrors.ADSEnd">
+                        <div class="red">
+                            {{qualityFormErrors.ADSBegin || qualityFormErrors.ADSEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.ADSBegin && !qualityFormErrors.ADSEnd && qualityForm.hasError('ADSEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">固定碳:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="FCBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="FCEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.FCBegin || qualityFormErrors.FCEnd">
+                        <div class="red">
+                            {{qualityFormErrors.FCBegin || qualityFormErrors.FCEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.FCBegin && !qualityFormErrors.FCEnd && qualityForm.hasError('FCEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="m120">G值:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="GVBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control"  placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="GVEnd">
+                    </div>
+                    <div class="col-3" *ngIf="qualityFormErrors.FCBegin || qualityFormErrors.GVEnd">
+                        <div class="red">
+                            {{qualityFormErrors.GVBegin || qualityFormErrors.GVEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.GVBegin && !qualityFormErrors.GVEnd && qualityForm.hasError('GVEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">灰熔点≥:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="900-1600之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="AFTBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="900-1600之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="AFTEnd">
+                    </div>
+                    ℃
+                    <div class="col-3" *ngIf="qualityFormErrors.AFTBegin || qualityFormErrors.AFTEnd">
+                        <div class="red">
+                            {{qualityFormErrors.AFTBegin || qualityFormErrors.AFTEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.AFTBegin && !qualityFormErrors.AFTEnd && qualityForm.hasError('AFTEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">Y值:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="YVBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-100之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="YVEnd">
+                    </div>
+                    mm
+                    <div class="col-3" *ngIf="qualityFormErrors.YVBegin || qualityFormErrors.YVEnd">
+                        <div class="red">
+                            {{qualityFormErrors.YVBegin || qualityFormErrors.YVEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.YVBegin && !qualityFormErrors.YVEnd && qualityForm.hasError('YVEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">哈氏可磨≥</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-99之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="HGIBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="1-99之间的整数" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="HGIEnd">
+                    </div>
+                    <div class="col-3" *ngIf="qualityFormErrors.HGIBegin || qualityFormErrors.HGIEnd">
+                        <div class="red">
+                            {{qualityFormErrors.HGIBegin || qualityFormErrors.HGIEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.HGIBegin && !qualityFormErrors.HGIEnd && qualityForm.hasError('HGIEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">焦渣特征:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0-100之间的值"  onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="CRCBegin">
+                    </div>
+                    至
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="0-100之间的值"   onkeyup="value=value.replace(/[^\-?\d.]/g,'')" formControlName="CRCEnd">
+                    </div>
+                    %
+                    <div class="col-3" *ngIf="qualityFormErrors.CRCBegin || qualityFormErrors.CRCEnd">
+                        <div class="red">
+                            {{qualityFormErrors.CRCBegin || qualityFormErrors.CRCEnd}}
+                        </div>
+                    </div>
+                    <div class="col-3" *ngIf=" !qualityFormErrors.CRCBegin && !qualityFormErrors.CRCEnd && qualityForm.hasError('CRCEnd') ">
+                        <div class="red">请输入正确的区间范围</div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="m120">颗粒度:</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control"  formControlName="PS">
+                    </div>
+                    <div class="col-3" *ngIf="qualityFormErrors.PS">
+                        <div class="red">
+                            {{qualityFormErrors.PS}}
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="form-group" class="form-group row">
+                <button type="submit" [disabled]="!qualityForm.valid" class="col-2 btn btn-primary btn-lg" (click)="qualityModalSubmit()">添加</button>
+                <button type="submit" class="col-2 btn btn-primary btn-lg ml30" (click)="receiptControl('qualityInput','close')">取消</button>
+            </div>
+            <div class="form-control-feedback red">{{qualityFormErrors['receiptsNo']}}</div>
+            <div class="form-control-feedback red">{{qualityFormErrors['receiptsDate']}}</div>
+            <div class="form-control-feedback red">{{qualityFormErrors['calculateAmount']}}</div>
+            <div class="form-control-feedback red">{{qualityFormErrors['checkAmount']}}</div>
+            <div class="form-control-feedback red">{{qualityFormErrorMessage}}</div>
+        </form>
+    </div>
+
+    <div class="btnWrap">
+        <div class="red">{{submitError}}</div>
+        <a href="javascript:void(0)" (click)="submitAll(successModal)">保存</a>
+    </div>
+
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>你确认要删除该条数据</p>
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:void(0)" class="btn btn-primary" (click)="documentDelete(deleteDocument,deleteDocumentIndex)">确认</a>
+            <button type="button" class="btn btn-secondary" (click)="c('Close click')">取消</button>
+        </div>
+    </ng-template>
+
+
+    <ng-template #successModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+        </div>
+        <div class="modal-body">
+            <p>保存成功</p>
+        </div>
+        <div class="modal-footer">
+            <a [routerLink]="['/business', business._id ]" [queryParams]="{tab: 'creditorRightList'}" class="btn btn-blue" (click)="c('Close click')">确认</a>
+        </div>
+    </ng-template>
+
+
+
+</div>

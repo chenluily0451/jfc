@@ -1,0 +1,250 @@
+<!--下游回款信息-->
+
+<div class="my-4 " *ngIf="!isShowDetail && !isShowAdd">
+
+    <div class="row mb-4">
+        <h6 class="col-3">下游回款信息列表</h6>
+        <div class="col-9 text-right" *ngIf="userIdentity === 'bridge'">
+            <button class="btn btn-blue px-5" *ngIf="business.status == 13" (click)="showAddForm()">创建新回款</button>
+        </div>
+    </div>
+
+    <table class="tableCss mb-5" >
+        <thead>
+        <tr>
+            <th class="text-center">编号</th>
+            <th class="text-center">付款日期</th>
+            <th class="text-center">付款金额(元)</th>
+            <th class="text-center">付款企业名称</th>
+            <th class="text-center">收款企业名称</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of downstreamRepaymentList">
+            <td class="text-center"> {{ item._id | substringId}}</td>
+            <td class="text-center"> {{ item.payDate }} </td>
+            <td class="text-center"> {{ item.payAmount }} </td>
+            <td class="text-center"> {{ item.payCompanyName || '--' }} </td>
+            <td class="text-center"> {{ item.recvCompanyName || '--'  }} </td>
+            <td class="text-center">
+                <a href="javascript:void(0)" class="btn btn-blue btn-sm" (click)="showDetail($event, item)">查看</a>
+            </td>
+        </tr>
+        <tr *ngIf="downstreamRepaymentList.length === 0">
+            <td class="text-center" colspan="8">
+                <i class="fa fa-times"></i> 暂无数据
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<div class="" *ngIf="isShowDetail" >
+    <h5 class="py-3">下游回款信息</h5>
+
+
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right w20" >回款企业名称</th>
+            <td class="text-left" >{{currentDownstreamRepayment.payCompanyName || '无'}}</td>
+            <th class="text-right w20" >回款公司开户行</th>
+            <td class="text-left" >
+                <span>{{currentDownstreamRepayment.payCompanyBankProvince}} {{currentDownstreamRepayment.payCompanyBankCity}} {{currentDownstreamRepayment.payCompanyBankDistrict}} {{currentDownstreamRepayment.payCompanyBankName}}</span>
+                <span *ngIf="!currentDownstreamRepayment.payCompanyBankProvince && !currentDownstreamRepayment.payCompanyBankCit && !currentDownstreamRepayment.payCompanyBankDistrict && !currentDownstreamRepayment.payCompanyBankName">无</span>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right" >回款金额</th>
+            <td class="text-left" >{{currentDownstreamRepayment.payAmount}}</td>
+            <th class="text-right" >回款日期</th>
+            <td class="text-left" >{{currentDownstreamRepayment.payDate}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >回款账号</th>
+            <td class="text-left" >{{currentDownstreamRepayment.payAccount || '无'}}</td>
+            <th class="text-right" >回款方式</th>
+            <td class="text-left" >{{currentDownstreamRepayment.payMode | payMode}}</td>
+        </tr>
+        <tr>
+            <th class="text-right" >回款凭证</th>
+            <td class="text-left pb-0" colspan="3">
+                <image-show  [sourcePath]="currentDownstreamRepayment.payCertificatePic" [class]="'pb-3'"></image-show>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right w20" >收款企业名称</th>
+            <td class="text-left" >{{currentDownstreamRepayment.recvCompanyName || '无'}}</td>
+            <th class="text-right w20" >收款公司开户行</th>
+            <td class="text-left" > {{currentDownstreamRepayment.recvBankName || '无'}}</td>
+        </tr>
+
+        <tr>
+            <th class="text-right" >收款账号</th>
+            <td class="text-left" >{{currentDownstreamRepayment.recvAccount || '无'}}</td>
+            <th class="text-right" >收款公司开户行地址</th>
+            <td class="text-left" >
+                <span>{{currentDownstreamRepayment.recvBankProvince}} {{currentDownstreamRepayment.recvBankName}} {{currentDownstreamRepayment.recvBankDistrict}} {{currentDownstreamRepayment.recvBankAddr}}</span>
+                <span *ngIf="currentDownstreamRepayment.recvBankAddr === '' && !currentDownstreamRepayment.recvBankProvince && !currentDownstreamRepayment.recvBankDistrict && currentDownstreamRepayment.recvBankName === ''">无</span>
+            </td>
+        </tr>
+        <!--<tr>-->
+            <!--<th class="text-right" >收款金额</th>-->
+            <!--<td class="text-left" colspan="3">{{currentDownstreamRepayment.recvAmount || '无'}}</td>-->
+        <!--</tr>-->
+        </tbody>
+    </table>
+
+
+    <button class="btn btn-blue px-5" (click)="isShowDetail = false">返回列表</button>
+</div>
+
+
+
+
+
+<form *ngIf="isShowAdd" [formGroup]="newDownstreamRepaymentForm">
+
+    <h1 class="my-3">创建回款信息（<span class="main-orange mx-2 font-weight-bold">*</span>为必填项）</h1>
+    <div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>付款金额(元)</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="payAmount" />
+                <div [hidden]="!formErrors.payAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payAmount}}
+                </div>
+            </div>
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>付款日期</div>
+            <div class="col-3 text-left">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #payDate="ngbDatepicker" formControlName="payDate" (click)="payDate.toggle()">
+                    <div class="input-group-addon" (click)="payDate.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">付款公司名称</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="payCompanyName" />
+                <div [hidden]="!formErrors.payCompanyName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payCompanyName}}
+                </div>
+            </div>
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>付款方式</div>
+            <div class="col-3 text-left">
+                <select class="form-control" required formControlName="payMode">
+                    <option value="">请选择</option>
+                    <option *ngFor="let mode of payMode" [value]="mode.id">{{mode.value}}</option>
+                </select>
+                <div [hidden]="!formErrors.payMode" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payMode}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">付款公司开户行</div>
+            <div class="col-6 text-left pr-0 row" province-dropdown [province]="submitData.payCompanyBankProvince" [city]="submitData.payCompanyBankCity" [district]="submitData.payCompanyBankDistrict" (onChange)="choosePayBankProvince($event)"></div>
+            <div class="col-3">
+                <input class="form-control" formControlName="payCompanyBankName" />
+                <div [hidden]="!formErrors.payCompanyBankName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payCompanyBankName}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">付款账号</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="payAccount" />
+                <div [hidden]="!formErrors.payAccount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payAccount}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>付款凭证</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="submitData.payCertificatePic" [isShowDelButton]="true" (onDelete)="deleteFile('payCertificatePic')"></image-show>
+                <file-upload (onFinished)="uploadFinished($event, 'payCertificatePic')"></file-upload>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款公司名称</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="recvCompanyName" />
+                <div [hidden]="!formErrors.recvCompanyName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvCompanyName}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款公司开户行</div>
+            <div class="col-6 text-left pr-0 row" province-dropdown [province]="submitData.recvBankProvince" [city]="submitData.recvBankCity" [district]="submitData.recvBankDistrict" (onChange)="chooseRecvBankProvince($event)"></div>
+            <div class="col-3">
+                <input class="form-control" formControlName="recvBankName" />
+                <div [hidden]="!formErrors.recvBankName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvBankName}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款公司开户行地址</div>
+            <div class="col-3">
+                <input class="form-control" formControlName="recvBankAddr" />
+                <div [hidden]="!formErrors.recvBankAddr" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvBankAddr}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款账号</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="recvAccount" />
+                <div [hidden]="!formErrors.recvAccount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvAccount}}
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="row mb-4">-->
+            <!--<div class="col-2 text-right">收款金额</div>-->
+            <!--<div class="col-3 text-left">-->
+                <!--<input class="form-control" formControlName="recvAmount" />-->
+                <!--<div [hidden]="!formErrors.recvAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">-->
+                    <!--{{formErrors.recvAmount}}-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+    </div>
+
+    <div class="row">
+        <div class="col-5 offset-2" >
+            <button class="btn btn-blue px-5 py-2" [disabled]="!newDownstreamRepaymentForm.valid" (click)="createNewDownstreamRepayment()">提交</button>
+            <span class="main-orange" *ngIf="ifUpload">请上传付款凭证</span>
+        </div>
+    </div>
+
+</form>

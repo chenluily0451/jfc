@@ -1,0 +1,6 @@
+<div class="imgShow" *ngIf="aliOss.host">
+    <i class="deleteImg" *ngIf="sourcePath && isShowDelButton" (click)="deleteFile()">×</i>
+    <a [href]="aliOss.host + sourcePath?.filePath" target="_blank">
+        <img *ngIf="sourcePath?.filePath" [src]="aliOss.host + sourcePath?.filePath"   class="uploadImg {{class}}">
+    </a>
+</div>

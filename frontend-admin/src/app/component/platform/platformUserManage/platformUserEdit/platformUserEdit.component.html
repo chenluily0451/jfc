@@ -1,0 +1,61 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">平台用户管理</li>
+    <li class="breadcrumb-item active">用户编辑</li>
+</ol>
+
+<div id="staff">
+    <div class="staffWrap">
+        <form [formGroup]="platformEditUsersForm" class="accountManage" *ngIf="stepOne">
+            <div class="form-group row"  class="form-group row">
+                <label class="col-2 col-form-label">用户名:</label>
+                <label class="col-4 col-form-label">{{userName}}</label>
+                <div class="col-6"></div>
+            </div>
+            <div class="form-group row"  class="{{platformEditUsersFormErrors['loginName'] ?'form-group row has-danger':'form-group row'}}">
+                <label for="loginName" class="col-2 col-form-label" >姓名:</label>
+                <div class="col-4">
+                    <input type="text" [(ngModel)]="loginName" class="{{platformEditUsersFormErrors['loginName']?'form-control form-control-danger':'form-control '}}" name="loginName" id="loginName" formControlName="loginName">
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ platformEditUsersFormErrors['loginName'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row"  class="{{platformEditUsersFormErrors['mobile'] ?'form-group row has-danger':'form-group row'}}">
+                <label for="mobile" class="col-2 col-form-label" >手机号:</label>
+                <div class="col-4">
+                    <input type="text" [(ngModel)]="mobile" class="{{platformEditUsersFormErrors['mobile']?'form-control form-control-danger':'form-control '}}" name="mobile" id="mobile" formControlName="mobile">
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ platformEditUsersFormErrors['mobile'] }}</div>
+                </div>
+            </div>
+
+            <div class="form-group row"  class="{{platformEditUsersFormErrors['userType'] ?'form-group row has-danger':'form-group row'}}">
+                <label for="userType" class="col-2 col-form-label" >用户类型:</label>
+                <div class="col-4">
+                    <select formControlName="userType" class="form-control"[(ngModel)]="userType" >
+                        <option value="">请选择用户类型</option>
+                        <option value="4" [selected]="userType==4">平台客服</option>
+                        <option value="5" [selected]="userType==5">平台管理员</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ platformEditUsersFormErrors['userType'] }}</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-2 col-form-label" ></label>
+                <div class="col-2">
+                    <button type="submit" class="btn clickBtn" [disabled]='!platformEditUsersForm.valid' (click)="save()">保存</button>
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback red">{{ errMessage }}</div>
+                </div>
+            </div>
+        </form>
+        <div *ngIf="stepTwo" class="successWrap">
+            <i class="fa fa-check"></i>保存成功！
+        </div>
+    </div>
+</div>

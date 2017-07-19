@@ -1,0 +1,70 @@
+#creditorRightsDetail{
+    .creditorRightsWrap{
+        padding:10px;
+        .creditorRightsHeader{
+            color:#333;
+            p{
+                font-size: 18px;
+                display: inline-block;
+                width:50%;
+                font-size: 16px;
+            }
+            ul{
+                width:100%;
+                font-size: 0;
+                margin-top: 20px;
+
+                li{
+                    font-size: 16px;
+                    display: inline-block;
+                    width:25%;
+                    margin-bottom: 10px;
+                }
+            }
+        }
+        .creditorRightsBody{
+
+            p{font-size:22px;text-align: center;}
+            table{
+                border:1px solid #ccc;
+                border-bottom:none;
+                width:100%;
+                border-collapse: collapse;
+                color:#999;
+                margin-top:10px;
+                margin-bottom:60px;
+                td{
+                    height:45px;
+                    text-align: center;
+                    a.imageName{
+                        display: block;
+                    }
+                    &.txtleft{text-align: left;}
+                    &.thead{background: #f8f9fa;}
+                }
+                tr{
+                    border-bottom:1px solid #ccc;
+                    .coalIndex{
+                        width:100%;
+                        font-size: 0;
+                        margin-top: 10px;
+                        li{
+                            width:25%;
+                            display: inline-block;
+                            font-size: 14px;
+                            margin-bottom: 10px;
+                            text-align: left;
+                            padding-left: 10px;
+                        }
+                    }
+                    &.btnone{
+                        border-bottom:none;
+                    }
+                }
+                thead{
+                    background:#f8f9fa;
+                }
+            }
+        }
+    }
+}

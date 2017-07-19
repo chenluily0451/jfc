@@ -1,0 +1,97 @@
+<!--债权查看-->
+<div class="mainContentTitle">债权详情</div>
+<div id="creditorRightsDetail">
+    <div class="creditorRightsWrap">
+        <div class="creditorRightsHeader">
+            <p>上游业务详情 - 编号 {{businessObj._id}}</p><p>状态：{{businessObj.status | businessStatus}}</p>
+            <ul>
+                <li>债权编号：{{creditorRightsObj._id}}</li>
+                <li>债权估值(元)：{{creditorRightsObj.evaluationAmount || '--'}}</li>
+                <li>债权总吨数(吨)：{{creditorRightsObj.totalQuantity || '--'}}</li>
+                <li>融资状态：<span *ngIf="creditorRightsObj.status ===0">未融资</span><span *ngIf="creditorRightsObj.status ===1">已融资</span></li>
+                <li *ngIf="creditorRightsObj.status ===1">对应融资编号：{{ creditorRightsObj.capitalRaiseId || '--' }}</li>
+            </ul>
+        </div>
+        <div class="creditorRightsBody">
+            <p>货物数量单据</p>
+            <table *ngFor="let bq of creditorRightsObj.quantity">
+                <thead>
+                    <tr>
+                        <td>单据日期</td>
+                        <td>车/船数量</td>
+                        <td>单据数量(吨)</td>
+                        <td>单据图片</td>
+                    </tr>
+                </thead>
+                <tr >
+                    <td>{{bq.receiptsBeginDate}}至{{bq.receiptsEndDate}}</td>
+                    <td>{{bq.carAmount}}</td>
+                    <td>
+                        {{bq.receiptAmount}}
+                    </td>
+                    <td>
+                        <a [href]="aliOss.host + pic.filePath" target="_new" *ngFor="let pic of bq.receiptFile">
+                            {{pic.fileName}}
+                        </a>
+                    </td>
+                </tr>
+            </table>
+
+            <p>货物质量单据</p>
+            <table *ngFor="let bq of creditorRightsObj.quality;let i = index">
+                <thead>
+                <tr>
+                    <td>单据日期</td>
+                    <td>煤炭报告呈现形式</td>
+                    <td>是否从下游获取</td>
+                    <td>计量数量(吨)</td>
+                    <td>验收数量(吨)</td>
+                    <td>煤炭指标</td>
+                    <td>单据图片</td>
+                </tr>
+                </thead>
+                <tr>
+                    <td>{{bq.receiptsBeginDate}}至{{bq.receiptsEndDate}}</td>
+                    <td>{{bq.coalReportPresetWay}}</td>
+                    <td>{{bq.isFromDownstreamObtain === false ? '否' : '是'}}</td>
+                    <td>{{bq.calculateAmount}}</td>
+                    <td>{{bq.checkAmount}}</td>
+                    <td (click)="foldedToggle(i)"><a href="javascript:void(0)">{{!bq.foldedStatus ? '折叠' : '展开'}}</a></td>
+                    <td>
+                        <a [href]="aliOss.host + pic.filePath" target="_new" *ngFor="let pic of bq.receiptFile">
+                            {{pic.fileName}}
+                        </a>
+                    </td>
+                </tr>
+                <tr class="btnone" *ngIf="bq.foldedStatus">
+                    <td colspan="7">
+                        验收质量煤炭指标
+                    </td>
+                </tr>
+                <tr *ngIf="bq.foldedStatus">
+                    <td colspan="7" class="txtleft">
+                        <ul class="coalIndex">
+                            <li>低位热值: {{bq.coalIndex.NCV.begin}}-{{bq.coalIndex.NCV.end}}kcal/kg</li>
+                            <li>空干基挥发分: {{bq.coalIndex.ADV.begin}}-{{bq.coalIndex.ADV.end}} %</li>
+                            <li>灰分: {{bq.coalIndex.ASH.begin}}-{{bq.coalIndex.ASH.end}} %</li>
+                            <li>收到基挥发分: {{bq.coalIndex.RV.begin}}-{{bq.coalIndex.RV.end}} %</li>
+                            <li>全水分: {{bq.coalIndex.TM.begin}}-{{bq.coalIndex.TM.end}} %</li>
+                            <li>收到基硫分: {{bq.coalIndex.RS.begin}}-{{bq.coalIndex.RS.end}} %</li>
+                            <li>内水分: {{bq.coalIndex.IM.begin}}-{{bq.coalIndex.IM.end}} %</li>
+                            <li>空干基硫分: {{bq.coalIndex.ADS.begin}}-{{bq.coalIndex.ADS.end}} %</li>
+                            <li>固定碳: {{bq.coalIndex.FC.begin}}-{{bq.coalIndex.FC.end}} %</li>
+                            <li>G值: {{bq.coalIndex.GV.begin}}-{{bq.coalIndex.GV.end}} </li>
+                            <li>灰熔点≥ {{bq.coalIndex.AFT.begin}}-{{bq.coalIndex.AFT.end}} ℃</li>
+                            <li>Y值: {{bq.coalIndex.YV.begin}}-{{bq.coalIndex.YV.end}} mm</li>
+                            <li>哈氏可磨≥: {{bq.coalIndex.HGI.begin}}-{{bq.coalIndex.HGI.end}} </li>
+                            <li>焦渣特征: {{bq.coalIndex.CRC.begin}}-{{bq.coalIndex.CRC.end}} %</li>
+                            <li>颗粒度: {{bq.coalIndex.PS}}</li>
+                            <li></li>
+                        </ul>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>

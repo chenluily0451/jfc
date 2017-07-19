@@ -1,0 +1,97 @@
+<form [formGroup]="industryInfoForm">
+    <!--工商注册基本信息-->
+    <div>
+        <h6 class="p-2 my-4 bg-f8">工商注册基本信息</h6>
+        <div class="row mb-3">
+            <div class="col-3 text-right">公司全称</div>
+            <div class="col-3 text-left">{{company.companyName}}</div>
+            <div class="col-3 text-right">注册地址</div>
+            <div class="col-3 text-left">{{company.registerAddress}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3 text-right">注册号(统一社会信用代码)</div>
+            <div class="col-3 text-left">{{company.license.unionLicenseCode}}</div>
+            <div class="col-3 text-right">注册资本</div>
+            <div class="col-3 text-left">{{company.registerCapital}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3 text-right">企业性质</div>
+            <div class="col-3 text-left">{{ company.companyType || 0 |  companyType}}</div>
+            <div class="col-3 text-right">成立时间</div>
+            <div class="col-3 text-left">{{company.founded}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3 text-right">营业期限</div>
+            <div class="col-3 text-left" *ngIf="company.license.operationType === 1">{{company.license.operationBegin}}&nbsp;至&nbsp;{{company.license.operationEnd}}</div>
+            <div class="col-3 text-left" *ngIf="company.license.operationType === 2">无期限</div>
+            <div class="col-3 text-right">登记机关</div>
+            <div class="col-3 text-left">{{company.license.registerOrgan}}</div>
+        </div>
+        <!--<div class="row mb-3">-->
+            <!--<div class="col-3 text-right">最近年检</div>-->
+            <!--<div class="col-3 text-left">{{company.license.lastCheck}}</div>-->
+        <!--</div>-->
+        <div class="row mb-3">
+            <div class="col-3 text-right">经营范围</div>
+            <div class="col-8 text-left">{{company.scope}}</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-3 text-right">工商注册信息审查意见</div>
+            <div class="col-4">
+                <textarea name="" rows="5" class="form-control" formControlName="registerAuditOpinion"></textarea>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3 text-right">经营范围审查意见</div>
+            <div class="col-4">
+                <textarea name="" rows="5" class="form-control" formControlName="scopeAuditOpinion"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--企业注册资本与实缴意见-->
+    <div>
+        <h6 class="p-2 my-5 bg-f8">企业注册资本与实缴意见</h6>
+        <div class="row mb-3">
+            <div class="col-3 text-center">
+                实缴资本
+            </div>
+            <div class="col-2">
+                <input type="number" class="form-control" formControlName="registerCapital" (blur)="getPercentage()" >
+                <div [hidden]="!formErrors.registerCapital" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.registerCapital}}
+                </div>
+            </div>
+            <div class="col-3">
+                万元 / 注册资本：<span class="main-orange">{{company.registerCapital}}</span>万元
+            </div>
+            <div class="col-4 row" *ngIf="percentage">
+                <div class="col-11 bg lineH36">
+                    <i class="fa fa-exclamation-circle main-orange"></i>
+                    出缴比例 <span class="main-orange px-2">{{percentage}}%</span><span class="main-orange" *ngIf="percentage < 50.00">出缴比例较少</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-3 text-center">
+                注册资本审查意见
+            </div>
+            <div class="col-4">
+                <textarea name=""  class="form-control" rows="5" formControlName="registerCapitalAuditOpinion"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-7 offset-3">
+            <button class="btn btn-blue px-5" (click)="saveBusinessRegisterSurvey()">保存</button>
+        </div>
+    </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

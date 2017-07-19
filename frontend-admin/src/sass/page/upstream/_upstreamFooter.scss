@@ -1,0 +1,20 @@
+#upstreamFooter{
+    .upstreamFootWrap{
+        background: #323647;
+        font-size: 0px;
+        color:#999;
+        text-align: center;
+        padding:45px 0;
+        ul{padding-top: 4px;}
+        ul li{
+            display: inline-block;
+            font-size: 16px;
+            padding:0 10px;
+
+            &.borderR{
+                background: url("../../../assets/upstreamHeader/borderR.png") no-repeat right center;
+            }
+            a{color:#999;}
+        }
+    }
+}

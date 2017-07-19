@@ -1,0 +1,32 @@
+<!--审核信息-->
+
+<div *ngIf="financing.capitalRaise?.auditList">
+
+
+    <div class="px-5 font14" *ngFor="let audit of financing.capitalRaise?.auditList">
+        <div class="row mb-3">
+            <h6 class="col-3">{{ audit.systemId | systemType}}审核意见</h6>
+            <div class="col-9 text-right">操作用户:{{audit.checkPersonName}} - 操作时间:{{audit.createDate}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">审核结果</div>
+            <div class="col-8">{{audit.checkResult | auditStatus}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">审核意见</div>
+            <div class="col-8">{{audit.opinion || '无'}}</div>
+        </div>
+
+        <div class="row mb-3" *ngIf="audit.dataDeviation">
+            <div class="col-2 text-right">获取渠道</div>
+            <div class="col-8"> {{audit.dataDeviation || '无'}} </div>
+        </div>
+        <div class="row mb-3" *ngIf="audit.infoCollectChannel ">
+            <div class="col-2 text-right">数据偏差</div>
+            <div class="col-8"> {{audit.infoCollectChannel || '无'}}</div>
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,254 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">业务管理</li>
+    <li class="breadcrumb-item active">业务列表</li>
+</ol>
+<div class="font14">
+
+    <div class="row mb-3" *ngIf="userIdentity === 'upstream' || userIdentity === 'capital'">
+        <!--<h6 class="col-5"><div class="mainContentTitle">业务管理</div></h6>-->
+        <div class="col-2 offset-10" *ngIf="userIdentity === 'upstream'">
+            <a [routerLink]="['/businessAdd']"  class="btn btn-blue px-4 mt-4"  >业务申请</a>
+        </div>
+    </div>
+    <div class="row mb-3" *ngIf="userIdentity === 'bridge'">
+        <h6 class="col-5"><div class="mainContentTitle">上游业务管理</div></h6>
+    </div>
+
+    <div class="row mb-3" *ngIf="userIdentity === 'platform'">
+        <h6 class="col-5"><div class="mainContentTitle">上游与核心企业 - 业务管理</div></h6>
+    </div>
+
+    <form [formGroup]="businessQueryForm" (ngSubmit)="searchBusinessQuery()">
+
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right">申请状态</label>
+            <div class="col-3">
+                <select name="" class="form-control" formControlName="status">
+                    <option value="">请选择</option>
+                    <option  *ngFor="let status of businessStatusList" [value]="status.id">{{ status.text}}</option>
+                </select>
+            </div>
+
+            <label class="col-2 col-form-label text-right" *ngIf="userIdentity === 'bridge' || userIdentity === 'platform' || userIdentity === 'capital'">上游企业名称</label>
+            <div class="col-3" *ngIf="userIdentity === 'bridge' || userIdentity === 'platform' || userIdentity === 'capital'">
+                <select name="" class="form-control" formControlName="upStreamCompanyId">
+                    <option value="">全部</option>
+                    <option *ngFor="let company of upstreamCompanies" [value]="company._id">{{company.companyName}}</option>
+                </select>
+            </div>
+
+            <label class="col-2 col-form-label text-right" *ngIf="userIdentity === 'upstream'">收货单位</label>
+            <div class="col-3" *ngIf="userIdentity === 'upstream'">
+                <select name="" class="form-control" formControlName="bridgeCompanyId">
+                    <option value="">全部</option>
+                    <option *ngFor="let company of bridgeCompanies" [value]="company._id">{{company.companyName}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row pb-2" *ngIf="userIdentity === 'platform' ">
+            <label class="col-2 col-form-label text-right" >核心企业名称</label>
+            <div class="col-3">
+                <select name="" class="form-control" formControlName="bridgeCompanyId">
+                    <option value="">全部</option>
+                    <option *ngFor="let company of bridgeCompanies" [value]="company._id">{{company.companyName}}</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="form-group row pb-2">
+            <label class="col-2 col-form-label text-right">申请日期</label>
+            <div class="col-3">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #applicationBegin="ngbDatepicker" (click)="applicationBegin.toggle()" formControlName="beginDate">
+                    <div class="input-group-addon" (click)="applicationBegin.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            至
+            <div class="col-3">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #applicationEnd="ngbDatepicker"  (click)="applicationEnd.toggle()" formControlName="endDate" [minDate]="businessQueryForm.get('beginDate').value">
+                    <div class="input-group-addon" (click)="applicationEnd.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-blue px-5" >查询</button>
+            </div>
+        </div>
+
+
+
+    </form>
+
+
+
+
+    <div class="pl-3 pr-5 font14" *ngIf="userIdentity === 'upstream'">
+        <table class="tableCss mb-5">
+            <thead>
+            <tr>
+                <th class="text-center" >编号</th>
+                <th class="text-center" >申请日期</th>
+                <th class="text-center" >收货单位</th>
+                <th class="text-center" >供货量(吨)</th>
+                <th class="text-center" >合同单价(元/吨)</th>
+                <th class="text-center w20" >申请状态</th>
+                <th class="text-center" >操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let business of businessList?.items">
+                <td class="text-center" >{{business._id | substringId}}</td>
+                <td class="text-center" >{{business.createDate}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.receiveCompanyName || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.payInfo?.contractAmount || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.payInfo?.contractUnitPrice || '-'}}</td>
+                <td class="text-center" >{{ business.status | businessStatus}}</td>
+                <td class="text-center" >
+                    <a [routerLink]="['/business', 'edit', business._id ]" routerLinkActive="active" class="btn btn-blue btn-sm " *ngIf="business.status === 1">编辑</a>
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status !== 1">查看</a>
+                    <a [routerLink]="['/business', 'edit', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status === 3">编辑</a>
+                </td>
+            </tr>
+            <tr *ngIf="businessList?.items.length === 0">
+                <td class="text-center" colspan="8">
+                    <i class="fa fa-times"></i>
+                    暂无数据
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="pl-3 pr-5 font14" *ngIf="userIdentity === 'bridge'">
+        <table class="tableCss mb-5">
+            <thead>
+            <tr>
+                <th class="text-center" >编号</th>
+                <th class="text-center" >申请日期</th>
+                <th class="text-center" >上游企业名称</th>
+                <th class="text-center" >煤种</th>
+                <th class="text-center" >供货量(吨)</th>
+                <th class="text-center" >合同单价(元/吨)</th>
+                <th class="text-center w20" >申请状态</th>
+                <th class="text-center" >操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let business of businessList?.items">
+                <td class="text-center" >{{business._id.substring(12)}}</td>
+                <td class="text-center" >{{business.createDate}}</td>
+                <td class="text-center" >{{business.upstreamCompanyName || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.coalIndex.coalType || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.payInfo?.contractAmount || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.payInfo?.contractUnitPrice || '-'}}</td>
+                <td class="text-center" >{{ business.status | businessStatus}}</td>
+                <td class="text-center" >
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm " *ngIf="business.status !== 2 && business.status !== 5 && business.status !== 10 && business.status !== 12">查看</a>
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status === 2">审核</a>
+                    <a [routerLink]="['/businessDownstreamAdd', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status === 5">补充下游信息</a>
+                    <a [routerLink]="['/businessDownstreamAdd', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status === 7 || business.status === 9 ">编辑</a>
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status === 10 || business.status === 12">上传</a>
+
+                </td>
+            </tr>
+            <tr *ngIf="businessList?.items.length === 0">
+                <td class="text-center" colspan="8">
+                    <i class="fa fa-times"></i>
+                    暂无数据
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="pl-3 pr-5 font14" *ngIf="userIdentity === 'platform'">
+        <table class="tableCss mb-5 ">
+            <thead>
+            <tr>
+                <th class="text-center verticalTop" >编号</th>
+                <th class="text-center verticalTop" >申请日期</th>
+                <th class="text-center verticalTop" >上游企业名称</th>
+                <th class="text-center verticalTop" >核心企业名称</th>
+                <th class="text-center verticalTop" >供货量<br/>(吨)</th>
+                <th class="text-center verticalTop" >合同单价<br/>(元/吨)</th>
+                <th class="text-center verticalTop w20" >申请状态</th>
+                <th class="text-center verticalTop" >操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let business of businessList?.items">
+                <td class="text-center" >{{business._id.substring(12)}}</td>
+                <td class="text-center" >{{business.createDate}}</td>
+                <td class="text-center" >{{business.upstreamCompanyName || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.receiveCompanyName || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.payInfo?.contractAmount || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.payInfo?.contractUnitPrice || '-'}}</td>
+                <td class="text-center" >{{ business.status | businessStatus}}</td>
+                <td class="text-center" >
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm " *ngIf="business.status !== 4 && business.status !== 6 && business.status !== 11">查看</a>
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status === 4 || business.status === 6 || business.status === 11">审核</a>
+                </td>
+            </tr>
+            <tr *ngIf="businessList?.items.length === 0">
+                <td class="text-center" colspan="8">
+                    <i class="fa fa-times"></i>
+                    暂无数据
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="pl-3 pr-5 font14" *ngIf="userIdentity === 'capital'">
+
+        <table class="tableCss mb-5">
+            <tr>
+                <th class="text-center verticalTop" >编号</th>
+                <th class="text-center verticalTop" >申请日期</th>
+                <th class="text-center verticalTop" >借款企业名称</th>
+                <th class="text-center verticalTop" >合同单价<br/>(元/吨)</th>
+                <th class="text-center verticalTop w20" >业务状态</th>
+                <th class="text-center verticalTop" >操作</th>
+            </tr>
+            <tr *ngFor="let business of businessList?.items">
+                <td class="text-center" >{{business._id.substring(12)}}</td>
+                <td class="text-center" >{{business.createDate}}</td>
+                <td class="text-center" >{{business.upstreamCompanyName || '-'}}</td>
+                <td class="text-center" >{{business.upstreamBusiness.payInfo?.contractUnitPrice || '-'}}</td>
+                <td class="text-center" >{{ business.status | businessStatus}}</td>
+                <td class="text-center" >
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm " *ngIf="business.status !== 8">查看</a>
+                    <a [routerLink]="['/business', business._id]" routerLinkActive="active" class="btn btn-blue btn-sm" *ngIf="business.status === 8">审核</a>
+                </td>
+            </tr>
+            <tr *ngIf="businessList?.items.length === 0">
+                <td class="text-center" colspan="6">
+                    <i class="fa fa-times"></i>
+                    暂无数据
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <div class="row col-5 offset-6">
+        <ngb-pagination [collectionSize]="page.total" [(page)]="page.currentPageNo" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="searchBusinessQuery()"></ngb-pagination>
+    </div>
+
+
+</div>

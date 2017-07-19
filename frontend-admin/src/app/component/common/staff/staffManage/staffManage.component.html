@@ -1,0 +1,83 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">员工管理</li>
+    <li class="breadcrumb-item active">列表</li>
+</ol>
+<!--<div class="mainContentTitle">员工管理</div>-->
+<div id="staff">
+    <div class="staffWrap">
+        <form action="" class="searchform">
+            <label for="">用户名：</label>
+            <input type="text" name="loginName" [(ngModel)]="loginName" >
+            <label for="">手机号：</label>
+            <input type="text" name="phone" [(ngModel)]="phone">
+            <a href="javascript:void(0)" class="searchBtn" (click)="searchStaff()" >查询</a>
+            <a routerLink ="staffCreate" class="createBtn">创建新员工</a>
+        </form>
+        <table class="staffTable">
+            <thead>
+                <tr>
+                    <td>用户名</td>
+                    <td>姓名</td>
+                    <td>手机号</td>
+                    <td>部门</td>
+                    <td>用户类型</td>
+                    <td>账号状态</td>
+                    <td>创建时间</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody>
+            <!--无数据-->
+                <tr *ngIf="employeesLens < 1">
+                    <td colspan="8">
+                        <i class="fa fa-times"></i> 暂无数据
+                    </td>
+                </tr>
+                <tr *ngFor="let staff of employees">
+                    <!--有数据-->
+                    <td>{{ staff.userName }}</td>
+                    <td>{{ staff.loginName }}</td>
+                    <td>{{ staff.phone }}</td>
+                    <td>{{ staff.dept }}</td>
+                    <td>
+                        <p *ngIf="staff.role == 1 ">
+                            管理人员
+                        </p>
+                        <p *ngIf="staff.role == 2 ">
+                            业务人员
+                        </p>
+                        <p *ngIf="staff.role == 3 ">
+                            财务人员
+                        </p>
+                        <p *ngIf="staff.role == 4 ">
+                            客服人员
+                        </p>
+                        <p *ngIf="staff.role == 5 ">
+                            平台管理员
+                        </p>
+                    </td>
+                    <td>
+                        <p *ngIf="staff.disabled == false ">
+                            正常
+                        </p>
+                        <p *ngIf="staff.disabled == true ">
+                            已禁用
+                        </p>
+                    </td>
+                    <td>
+                        {{ staff.createDate}}
+                    </td>
+                    <td>
+                        <a [routerLink] ="['/staff/staffEdit',staff._id]" class="editBtn">编辑</a>
+                        <a href="javascript:void(0)" class="disabledBtn" *ngIf="staff.disabled == false" (click)="disabledBtn(staff._id)">停用</a>
+                        <a href="javascript:void(0)" class="openBtn" *ngIf="staff.disabled == true" (click)="openBtn(staff._id)">启用</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="paginationWrap">
+            <ngb-pagination [collectionSize]="page.total"  [pageSize] ="page.pageSize" [(page)]="page.currentPageNo" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="searchStaff()"></ngb-pagination>
+        </div>
+
+    </div>
+</div>

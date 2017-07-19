@@ -1,0 +1,101 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">账户安全</li>
+    <li class="breadcrumb-item active">修改手机</li>
+</ol>
+
+
+<div id="account">
+    <!--<div class="mainContentTitle">修改手机</div>-->
+    <form [formGroup]="stepOneForm" class="accountManage" *ngIf="stepOne" >
+        <div class="form-group row"  class="{{stepOneFormErrors['mobile'] ?'form-group row has-danger':'form-group row'}}">
+            <label class="col-2 col-form-label">手机号码:</label>
+            <label class="col-6 col-form-label">{{currentUser.phone | hidePartialMobile}}</label>
+            <div class="col-4">
+                <div class="form-control-feedback">{{ stepOneFormErrors['mobile'] }}</div>
+            </div>
+        </div>
+        <div class="form-group row" class="{{stepOneFormErrors['verifyCode']?'form-group row has-danger':'form-group row'}}">
+            <label for="verifyCode" class="col-2 col-form-label">图形验证码:</label>
+            <div class="col-4">
+                <input type="text" [readonly]="disablePhoneInput" class="{{stepOneFormErrors['verifyCode']?'form-control form-control-danger':'form-control '}}" name="verifyCode" formControlName="verifyCode" id="verifyCode">
+            </div>
+            <div class="col-2 h38">
+                <img [src]="imageSrcCaptcha" alt="" class="CaptchaImage" width="100%" (click)="changeCaptchaImage($event)" >
+            </div>
+            <div class="col-4">
+                <div class="form-control-feedback">{{ stepOneFormErrors['verifyCode'] }}</div>
+                <div class="form-control-feedback red" *ngIf="stepOneForm.controls.verifyCode.hasError('checkImgVerify')">图形验证码错误</div>
+            </div>
+        </div>
+        <div class="form-group row" class="{{stepOneFormErrors['code']?'form-group row has-danger':'form-group row'}}">
+            <label for="code" class="col-2 col-form-label" >短信验证码:</label>
+            <div class="col-4">
+                <input type="text" class="{{stepOneFormErrors['code']?'form-control form-control-danger':'form-control '}}" name="code" id="code" formControlName="code">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn clickBtn" [disabled]="stepOneForm.get('verifyCode').status!='VALID' || disablePhoneInput" (click)="getSmsCode('old')">{{ countDownTimer ? countDownTimer + 's后重新获取' : '获取验证码' }} </button>
+            </div>
+            <div class="col-4">
+                <div class="form-control-feedback">{{ stepOneFormErrors['code'] }}</div>
+                <div class="form-control-feedback" class="red">{{ errMessage }}</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="code" class="col-2 col-form-label" ></label>
+            <div class="col-6">
+                <button type="submit" class="btn clickBtn" [disabled]='!stepOneForm.valid' (click)="nextStep()">下一步</button>
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </form>
+
+    <form [formGroup]="stepTwoForm" class="accountManage" *ngIf="stepTwo" >
+        <div class="form-group row"  class="{{stepTwoFormErrors['mobile'] ?'form-group row has-danger':'form-group row'}}">
+            <label class="col-2 col-form-label">手机号码:</label>
+            <label class="col-6">
+                <input type="text" [readonly]="disablePhoneInput" class="{{stepTwoFormErrors['mobile']?'form-control form-control-danger':'form-control '}}" name="mobile" formControlName="mobile" id="mobile">
+            </label>
+            <div class="col-4">
+                <div class="form-control-feedback">{{ stepTwoFormErrors['mobile'] }}</div>
+            </div>
+        </div>
+        <div class="form-group row" class="{{stepTwoFormErrors['verifyCode']?'form-group row has-danger':'form-group row'}}">
+            <label for="verifyCode" class="col-2 col-form-label">图形验证码:</label>
+            <div class="col-4">
+                <input type="text" [readonly]="disablePhoneInput" class="{{stepTwoFormErrors['verifyCode']?'form-control form-control-danger':'form-control '}}" name="verifyCode" formControlName="verifyCode" id="verifyCode">
+            </div>
+            <div class="col-2 h38">
+                <img [src]="imageSrcCaptcha" alt="" class="CaptchaImage" width="100%" (click)="changeCaptchaImage($event)" >
+            </div>
+            <div class="col-4">
+                <div class="form-control-feedback">{{ stepTwoFormErrors['verifyCode'] }}</div>
+                <div class="form-control-feedback red" *ngIf="stepTwoForm.controls.verifyCode.hasError('checkImgVerify')">图形验证码错误</div>
+            </div>
+        </div>
+        <div class="form-group row" class="{{stepTwoFormErrors['code']?'form-group row has-danger':'form-group row'}}">
+            <label for="code" class="col-2 col-form-label" >短信验证码:</label>
+            <div class="col-4">
+                <input type="text" class="{{stepTwoFormErrors['code']?'form-control form-control-danger':'form-control '}}" name="code" formControlName="code">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn clickBtn" [disabled]="stepTwoForm.get('mobile').status!='VALID' || stepTwoForm.get('verifyCode').status!='VALID' || disablePhoneInput" (click)="getSmsCode('new')">{{ countDownTimer ? countDownTimer + 's后重新获取' : '获取验证码' }} </button>
+            </div>
+            <div class="col-4">
+                <div class="form-control-feedback">{{ stepTwoFormErrors['code'] }}</div>
+                <div class="form-control-feedback" class="red">{{ getNewPhoneMessage }}</div>
+                <div class="form-control-feedback" class="red">{{ errMessage }}</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="code" class="col-2 col-form-label" ></label>
+            <div class="col-6">
+                <button type="submit" class="btn clickBtn" [disabled]='!stepTwoForm.valid' (click)="updateComplete()">完成</button>
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </form>
+    <div *ngIf="stepThree" class="successWrap">
+        <i class="fa fa-check"></i>您已绑定新手机号 {{stepTwoForm.get('mobile').value}}
+    </div>
+</div>
+

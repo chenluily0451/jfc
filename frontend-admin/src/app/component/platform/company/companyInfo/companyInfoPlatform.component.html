@@ -1,0 +1,45 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">企业信息管理</li>
+    <li class="breadcrumb-item active">企业信息详情审核</li>
+</ol>
+<div class="border px-5">
+    <h5 class="py-3">企业信息详情审核</h5>
+
+    <company-info-detail [company]="companyInfo" ></company-info-detail>
+
+
+    <form  [formGroup]="companyInfoAuditForm" *ngIf="companyInfo.companyStatus === 1">
+        <div class="row mb-4">
+            <div class="col-2 text-right">
+                审核意见
+            </div>
+            <div class="col-4">
+                <textarea name="" class="form-control" rows="5" formControlName="auditComment"></textarea>
+            </div>
+        </div>
+
+        <!--提交按钮-->
+        <div class="row my-5">
+            <div class="col-10 offset-1  mb-5">
+                <button class="btn btn-blue mr-5" (click)="platformAuditCompany(10, successModal)">初步通过，进入准入审查</button>
+                <button class="btn btn-blue mr-5" (click)="platformAuditCompany(1, successModal)">审核不通过，重新修改信息</button>
+                <button class="btn btn-blue " (click)="platformAuditCompany(0, successModal)">审核不通过，结束</button>
+            </div>
+
+        </div>
+
+        <ng-template #successModal let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">提示：</h4>
+            </div>
+            <div class="modal-body">
+                <p>提交成功</p>
+            </div>
+            <div class="modal-footer">
+                <a *ngIf="successLink === '/company/companyInvestigation'" [routerLink]="[ successLink, companyInfo._id]" (click)="c('Close click')" class="btn btn-blue">确认</a>
+                <a *ngIf="successLink === '/company'" [routerLink]="[ successLink ]" (click)="c('Close click')" class="btn btn-blue">确认</a>
+            </div>
+        </ng-template>
+    </form>
+    <simple-notifications [options]="notifyOptions"></simple-notifications>
+</div>

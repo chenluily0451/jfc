@@ -1,0 +1,29 @@
+<!--审核信息-->
+
+<div class="my-4" *ngIf="auditList">
+
+    <div  *ngFor="let audit of auditList">
+
+        <div class="row mb-3">
+            <h6 class="col-3">{{ audit.systemId | systemType}}审核信息 </h6>
+            <div class="col-9 text-right">操作用户:{{audit.checkPersonName}} - 操作时间:{{audit.createDate}} </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">审核结果</div>
+            <div class="col-8">{{audit.checkResult | auditStatus}}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">审核意见</div>
+            <div class="col-8">{{audit.opinion || '无'}}</div>
+        </div>
+
+        <div class="row mb-3" *ngIf="audit.auditFile">
+            <div class="col-2 text-right">风控报告</div>
+            <div class="col-8">
+                <image-show *ngFor="let file of audit.auditFile"  [sourcePath]="file" [class]="'pb-3'"></image-show>
+            </div>
+        </div>
+
+    </div>
+
+</div>

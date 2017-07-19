@@ -1,0 +1,70 @@
+@import "./base";
+
+//fileUpload
+.fileUpload{
+    .imgShow{
+        display: inline-block;
+        position: relative;
+        margin-right: 0.5rem;
+        vertical-align: bottom;
+    }
+    .upload{
+        display: inline-block;
+        width: 108px;
+        height: 108px;
+        text-align: center;
+        border: 1px dashed $border-color;
+        background: url("#{$assetPath}/assets/platform/uploadIco.png") no-repeat;
+        &:hover{cursor: pointer;}
+
+        input{
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+    }
+    img{
+        width: 108px;
+        height: 108px;
+        margin: 0;
+    }
+    i.deleteImg{
+        font-size: 20px;
+        color: #999999;
+        position: absolute;
+        left: 88px;
+        top: 1px;
+        height: 20px;
+        line-height: 18px;
+        background: rgba(0,0,0,.2);
+        padding: 0 4px;
+        cursor: pointer;
+    }
+}
+.uploadDoc{
+    a{
+        line-height: 28px;
+    }
+    i.deleteDoc{
+        color: #0275d8;
+        font-size: 24px;
+        cursor: pointer;
+        margin-left: 40px;
+        cursor: pointer;
+    }
+}
+
+//审核信息图片
+img.uploadImg{
+    width: 108px;
+    height: 108px;
+    margin-right: 0.5rem;
+    vertical-align: top;
+}
+
+
+.imgShow{
+    display: inline-block;
+    position: relative;
+    margin-right: 0.5rem;
+}

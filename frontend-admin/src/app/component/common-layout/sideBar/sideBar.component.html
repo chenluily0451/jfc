@@ -1,0 +1,24 @@
+
+<!--<ul class="sidebarMenu">-->
+        <!--<li *ngFor="let menu of menuList" [hidden]="menu.hidden && companyStatus !== '4'" >-->
+            <!--<p (click)="toggleMenu(menu)">-->
+                <!--<i class="fa iconColor  {{menu.icoFa}}"></i>-->
+                <!--<a href="javascript:void(0)">{{menu.name}}</a>-->
+                <!--<i class="fa iconColor fa-angle-up" [ngClass]="{'fa-angle-up': menu.status,'fa-angle-down': !menu.status}"></i>-->
+            <!--</p>-->
+            <!--<ul class="subMenu" [hidden]="!menu.status" >-->
+                <!--<li *ngFor="let subMenu of menu.subMenu" (click)="sendMessage(menu, subMenu)" routerLinkActive="active" [hidden]="subMenu.hidden && companyStatus !== '4'">-->
+                    <!--<a routerLink="{{subMenu.routerLink}}" >{{subMenu.name}}</a>-->
+                <!--</li>-->
+            <!--</ul>-->
+        <!--</li>-->
+
+
+<!--</ul>-->
+<ul class="sidebarMenu">
+    <li *ngFor="let menu of menuList" [hidden]="menu.hidden && companyStatus !== '4'"  >
+        <p routerLink="{{menu.routerLink}}" routerLinkActive="active">
+            <i class="fa iconColor {{menu.icoFa}}"></i>{{menu.name}}
+        </p>
+    </li>
+</ul>

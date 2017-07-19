@@ -1,0 +1,28 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">企业信息管理</li>
+    <li class="breadcrumb-item active">企业信息准入审查</li>
+</ol>
+<div class="border px-5 font14">
+    <h5 class="py-4">企业信息准入审查</h5>
+    <div class=" tabNav">
+        <ul>
+            <li><a class="{{currentTab === 'companyQualifications' ? 'active' : ''}}" (click)="changeTab('companyQualifications')" >企业资质</a></li>
+            <li><a class="{{currentTab === 'industryInfo' ? 'active' : ''}}" (click)="changeTab('industryInfo')" >工商注册信息</a></li>
+            <li><a class="{{currentTab === 'companyPartner' ? 'active' : ''}}" (click)="changeTab('companyPartner')" >企业股东</a></li>
+            <!--<li><a class="{{currentTab === 'companyTrust' ? 'active' : ''}}" (click)="changeTab('companyTrust')" >企业信用</a></li>-->
+            <li><a class="{{currentTab === 'actualController' ? 'active' : ''}}" (click)="changeTab('actualController')" >实际控制人</a></li>
+            <li><a class="{{currentTab === 'fieldResearch' ? 'active' : ''}}" (click)="changeTab('fieldResearch')" >实地调查</a></li>
+            <li><a class="{{currentTab === 'cooperationRecord' ? 'active' : ''}}" (click)="changeTab('cooperationRecord')" >合作记录</a></li>
+        </ul>
+    </div>
+
+
+    <company-qualifications *ngIf="currentTab === 'companyQualifications' " [company]="company" [companyInvestigation]="companyInvestigation"></company-qualifications>
+    <industry-info *ngIf="currentTab === 'industryInfo' " [company]="company" [companyInvestigation]="companyInvestigation"></industry-info>
+    <company-partner *ngIf="currentTab === 'companyPartner' " [company]="company" [companyInvestigation]="companyInvestigation"></company-partner>
+    <!--<company-trust *ngIf="currentTab === 'companyTrust' " [company]="company" [companyInvestigation]="companyInvestigation"></company-trust>-->
+    <actual-controller *ngIf="currentTab === 'actualController' " [company]="company" [companyInvestigation]="companyInvestigation"></actual-controller>
+    <field-research *ngIf="currentTab === 'fieldResearch' " [company]="company" [companyInvestigation]="companyInvestigation"></field-research>
+    <cooperation-record *ngIf="currentTab === 'cooperationRecord' " [company]="company" [companyInvestigation]="companyInvestigation"></cooperation-record>
+
+</div>

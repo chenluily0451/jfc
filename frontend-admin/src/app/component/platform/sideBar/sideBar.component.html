@@ -1,0 +1,29 @@
+<ul class="">
+    <li  *ngFor="let menu of sideBarItem; let i = index">
+
+        <a class="itemLink" [routerLink]="[menu.routerLink]" routerLinkActive="active">
+            <i class="{{menu.icoFa}}"></i>
+            <span>{{menu.name}}</span>
+        </a>
+    </li>
+</ul>
+
+
+
+
+<!--<ul class="pt-3">-->
+    <!--<li  *ngFor="let menu of sideBarItem" >-->
+
+        <!--<p class="mb-0 ml-4" (click)="toggleMenu(menu)">-->
+            <!--<i class="fa  mr-2 {{menu.icoFa}}"></i>-->
+            <!--<a [href]="menu.routerLink">{{menu.name}}</a>-->
+            <!--<i class="fa pull-right m-3 " [ngClass]="{'fa-angle-up': menu.status, 'fa-angle-down': !menu.status}"></i>-->
+        <!--</p>-->
+
+        <!--<ul [hidden]="!menu.status" >-->
+        <!--<li *ngFor="let subMenu of menu.subMenu" (click)="sendMessage(menu, subMenu)">-->
+        <!--<a [routerLink]="[subMenu.routerLink]" routerLinkActive="active" class="secCatalogP ">{{subMenu.name}}</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+    <!--</li>-->
+<!--</ul>-->

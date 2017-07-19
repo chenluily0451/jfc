@@ -1,0 +1,567 @@
+@import "../../helpers/_variables.scss";
+@import "../../mainUpstream.scss";
+
+
+// 注册样式
+.regContainer{
+    background: #fff;
+    width:1280px;
+    min-width: 1280px;
+    margin:0 auto;
+    padding: 60px 0;
+
+    .form-group{margin-top:0;}
+    .processWrap{
+        text-align: center;
+        ul{
+            li{
+                display: inline-block;
+                vertical-align: middle;
+                font-size: 14px;
+                color:#666;
+                div{
+                    width:65px;
+                    height:65px;
+                    border:2px solid #ddd;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 60px;
+                    font-size: 30px;
+                    color:#00b7ec;
+                    margin-bottom: 10px;
+                }
+                img{
+                    position: relative;
+                    top:-10px;
+                }
+                &.selected{
+                    div{
+                        background: #00b7ec;
+                        border:1px solid transparent;
+                        color:#fff;
+
+                    }
+                }
+            }
+        }
+    }
+    .regWrap{
+        width:680px;
+        margin:0 auto;
+        margin-top: 50px;
+        font-size: 14px;
+
+        label{
+            color:#666;
+            text-align: right;
+        }
+        .h38{
+            height:38px;
+        }
+        .info{
+            color:#ff7632;
+            font-size: 14px;
+            padding-left: 30px;
+            margin-bottom: 10px;
+            text-align: right;
+            img{
+                vertical-align: middle;
+                margin-right: 10px;
+                position: relative;
+                top:-1px;
+            }
+            a{
+                color:#0b6ae0;
+                &:hover{
+                    color:#ff7632
+                }
+            }
+        }
+        .btnType{
+            width:100%;
+            color:#00b7ec;
+            border:1px solid #00b7ec;
+            text-align: center;
+            background: #fff;
+
+            &:disabled{
+                background: grey;
+                color:#fff;
+                border:1px solid transparent;
+            }
+        }
+        .codeImg{
+            height:100%;
+        }
+        .agreement{
+            font-size: 12px;
+            color: #333;
+        }
+        a.agreementBtn{
+            color:#ff4208;
+            font-size: 12px;
+        }
+        .form-check-input{
+            position: relative;
+            margin:0;
+
+        }
+        .form-check-label{
+            padding:0;
+        }
+        .passwordInfo{font-size: 12px;color:#999}
+        .mb5{margin-bottom: 5px;}
+    }
+    .regSuccess{
+        text-align: center;
+        font-size: 32px;
+        padding:120px 0;
+    }
+    .modalWrap{
+        width:100%;
+        height:100%;
+        position: fixed;
+        background: #000;
+        left:0;
+        top:0;
+        opacity: 0.6;
+        z-index: 10;
+    }
+    .modalContentWrap{
+        width:80%;
+        position: fixed;
+        left:50%;
+        margin-left: -40%;
+        top:30px;
+        max-height: 80%;
+        background: #fff;
+        z-index: 11;
+        padding:50px;
+        overflow-y: auto;
+        line-height: 1.8;
+
+        h1{
+            margin: 30px 0;
+            font-size: 30px;
+            text-align: center;
+        }
+        h3{
+            margin:20px 0;
+        }
+    }
+
+}
+
+//登录样式
+#loginContain{
+    .form-group{margin-top:0;}
+    .loginContainWrap{
+        width:1280px;
+        background: #fff;
+        margin: 0 auto;
+        padding:70px 0;
+
+        .loginWrap{
+            width:490px;
+            margin:0 auto;
+            font-size: 16px;
+            color:#666;
+
+            .loginTitle{
+                text-align: center;
+                background: url("#{$assetPath}/assets/upstream/loginLine.png") no-repeat center center;
+                color:#333;
+                font-size: 22px;
+                margin-bottom: 34px;
+            }
+            .formWrap{
+                background: #fbfbfb;
+                border:1px solid #ddd;
+                padding:58px 30px;
+
+                .forgetWrap{
+                    text-align: right;
+                    font-size:12px;
+                    padding-right:24px;
+                    margin-bottom: 10px;
+                    a{
+                        color:#0076f1;
+                        text-decoration: underline;
+                    }
+                }
+                label{
+                    color:#666;
+                    font-size: 14px;
+                    display: inline-block;
+                    min-width: 105px;
+                    text-align: right;
+                    vertical-align: middle;
+                    line-height: 38px;
+                    padding-right: 15px;
+                }
+                input{
+                    width:300px;
+                }
+                button{
+                    width:300px;
+                    font-size: 14px;
+                    cursor: pointer;
+                }
+                .noAccount{
+                    font-size: 12px;
+                    color:#666;
+                    text-align: right;
+                    padding-right: 24px;
+                }
+            }
+        }
+    }
+    .form-control-feedback{
+        color:#d9534f;
+        font-size: 14px;
+    }
+}
+
+
+
+
+
+
+div.header span {
+    text-decoration: none;
+}
+.next-step{
+    background: blue;
+    border:none;
+    color:#fff;
+    padding:10px 20px;
+}
+.form-group{
+    margin:10px 0;
+}
+.alert-danger{
+    color:red;
+}
+.error{
+    color:#ff0000;
+}
+button:disabled{
+    background: grey;
+}
+.form-group{
+    margin-bottom:20px;
+}
+.red{
+    color:#d9534f;
+}
+.btn100{
+    width:100%;
+}
+form .btn-primary:disabled{
+    color:#fff;
+    border:1px solid transparent;
+    background-color: grey;
+}
+.container{
+    min-width: 1200px;
+    margin-top: 100px;
+
+}
+
+#pageHome{
+    .pageWrap{
+        width:1280px;
+        min-width: 1280px;
+        margin:0 auto;
+        overflow: hidden;
+        background: #1b1e2c;
+
+        //sidebar
+        .sidebarMenu{
+            width:200px;
+            background: #1b1e2c;
+            font-size: 18px;
+            padding:10px 0;
+            p{
+                display: inline-block;
+                height:70px;
+                line-height: 70px;
+                width:100%;
+                color:#fff;
+                font-size: 16px;
+                i{
+                    display: inline-block;
+                    margin-left: 25px;
+                    margin-right: 10px;
+                    width: 32px;
+                    height: 31px;
+                    vertical-align: middle;
+                }
+                i.ico_1{
+                    background: url("#{$assetPath}/assets/menu/01.png") no-repeat;
+                }
+                i.ico_2{
+                    background: url("#{$assetPath}/assets/menu/02.png") no-repeat;
+                }
+                i.ico_3{
+                    background: url("#{$assetPath}/assets/menu/03.png") no-repeat;
+                }
+                i.ico_4{
+                    background: url("#{$assetPath}/assets/menu/04.png") no-repeat;
+                }
+                i.ico_5{
+                    background: url("#{$assetPath}/assets/menu/05.png") no-repeat;
+                }
+                i.ico_6{
+                    background: url("#{$assetPath}/assets/menu/06.png") no-repeat;
+                }
+
+                &:hover{
+                    background: #00b7ec;
+                    cursor: pointer;
+                    i.ico_1{
+                        background: url("#{$assetPath}/assets/menu/011.png") no-repeat!important;
+                    }
+                    i.ico_2{
+                        background: url("#{$assetPath}/assets/menu/012.png") no-repeat!important;
+                    }
+                    i.ico_3{
+                        background: url("#{$assetPath}/assets/menu/013.png") no-repeat!important;
+                    }
+                    i.ico_4{
+                        background: url("#{$assetPath}/assets/menu/014.png") no-repeat!important;
+                    }
+                    i.ico_5{
+                        background: url("#{$assetPath}/assets/menu/015.png") no-repeat!important;
+                    }
+                    i.ico_6{
+                        background: url("#{$assetPath}/assets/menu/016.png") no-repeat!important;
+                    }
+                }
+                &.active{
+                    background: #00b7ec;
+                    cursor: pointer;
+
+                    i.iconColor{
+                        color:#fff;
+                    }
+                }
+            }
+            .displayN{display: none;}
+            .active{
+                i.ico_1{
+                    background: url("#{$assetPath}/assets/menu/011.png") no-repeat!important;
+                }
+                i.ico_2{
+                    background: url("#{$assetPath}/assets/menu/012.png") no-repeat!important;
+                }
+                i.ico_3{
+                    background: url("#{$assetPath}/assets/menu/013.png") no-repeat!important;
+                }
+                i.ico_4{
+                    background: url("#{$assetPath}/assets/menu/014.png") no-repeat!important;
+                }
+                i.ico_5{
+                    background: url("#{$assetPath}/assets/menu/015.png") no-repeat!important;
+                }
+                i.ico_6{
+                    background: url("#{$assetPath}/assets/menu/016.png") no-repeat!important;
+                }
+            }
+        }
+        .contentLeft{
+            width:200px;
+            float: left;
+        }
+        .mainContent{
+            width:1080px;
+            float: left;
+            background: #fff;
+            min-height: 580px;
+            padding-left: 30px;
+            padding-bottom:60px;
+            .breadcrumb{
+                background: #fff;
+                padding:0;
+                padding-bottom: 10px;
+                border-bottom:1px solid #ccc;
+                border-radius: 0;
+            }
+            .btn-blue{
+                padding:5px;
+            }
+        }
+    }
+    // 公共标题样式
+
+    .mainContentTitle{
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+}
+
+//$color
+$main-blue: #00b7ec;
+$main-orange: #ff7632;
+$headerBack:#f0f0f0;
+.font-color-gray{color: #999999;};
+.btn-blue{ background-color: $main-blue; color: #ffffff;}
+.btn-orange{ background-color: $main-orange; color: #ffffff;}
+.bg-f8{background-color: #f8f8f8;}
+.alertLineH{line-height: 36px;}
+.font14{font-size: 14px;}
+.font20{font-size: 20px!important;}
+.border{ border:1px solid #dddddd;}
+input,select{font-size: 14px!important;}
+h6{font-size: 16px!important;}
+textarea{resize: none;}
+a.btn:hover{
+    color: #ffffff;
+    opacity: 0.8;
+}
+button.btn:hover{
+    color: #ffffff;
+    opacity: 0.8;
+    //cursor: pointer;
+}
+
+.companyInfoAddForm{
+    font-size: 16px;
+    .text-right{
+        line-height: 36px;
+    }
+    .lineH0{
+        line-height: 20px;
+    }
+}
+//table
+.table-bordered th{
+    background-color: #f8f9fa;
+}
+.tableCss{
+    width: 100%;
+    border: 1px solid #dddddd;
+    th{
+        background-color: #f8f9fa;
+        padding: 14px;
+    }
+    td{
+        padding: 14px;
+        border-top: 1px solid #dddddd;
+    }
+}
+
+//fileUpload
+.fileUpload{
+    .imgShow{
+        display: inline-block;
+        position: relative;
+        margin-right: 0.5rem;
+        vertical-align: bottom;
+    }
+    .upload{
+        display: inline-block;
+        width: 108px;
+        height: 108px;
+        text-align: center;
+        border: 1px dashed $border-color;
+        background: url("#{$assetPath}/assets/platform/uploadIco.png") no-repeat;
+        &:hover{cursor: pointer;}
+
+        input{
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+    }
+    img{
+        width: 108px;
+        height: 108px;
+        margin: 0;
+    }
+    i.deleteImg{
+        font-size: 20px;
+        color: #999999;
+        position: absolute;
+        left: 88px;
+        top: 1px;
+        height: 20px;
+        line-height: 18px;
+        background: rgba(0,0,0,.2);
+        padding: 0 4px;
+        cursor: pointer;
+    }
+
+}
+.uploadImg{
+    width: 108px;
+    height: 108px;
+    margin-right: 0.5rem;
+    vertical-align: top;
+}
+.uploadDoc{
+    a{
+        line-height: 28px;
+    }
+    i.deleteDoc{
+        color: #0275d8;
+        font-size: 24px;
+        cursor: pointer;
+        margin-left: 40px;
+        cursor: pointer;
+    }
+}
+//status
+.status{
+    h1{
+        font-size: 20px;
+
+        i.fa-exclamation-circle {
+            color: #ff2535;
+            font-size: 32px;
+            margin-right: 20px;
+            vertical-align: sub;
+        }
+
+        i.fa-check-circle {
+            color: $main-blue;
+            font-size: 32px;
+            margin-right: 20px;
+            vertical-align: sub;
+        }
+
+
+
+    }
+}
+
+
+//业务申请
+.addProvider{
+    i{
+        font-size: 26px;
+        line-height: 36px;
+        color: $main-blue;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+    span{
+        color: $main-orange;
+    }
+}
+
+.coalTable{
+    border: 1px solid #eceeef;
+    th{
+        border: 1px solid #eceeef;
+        background-color: #f8f9fa;
+    }
+    td{
+        border: 1px solid #eceeef;
+    }
+}
+
+
+

@@ -1,0 +1,97 @@
+.platformWrap{
+    padding:20px;
+    label{
+        font-size: 14px;
+        padding-left:0;
+        padding-right: 0;
+    }
+    .platformUserTable{
+        width:100%;
+        border:1px solid #ccc;
+        border-bottom:none;
+        border-collapse: collapse;
+        color:#999;
+
+        thead{
+            background:#f8f9fa;
+        }
+        td{
+            height:45px;
+            text-align: center;
+        }
+        tr{
+            border-bottom:1px solid #ccc;
+        }
+        p{
+            margin:0;
+        }
+        a{
+            display: inline-block;
+            background: #f8f9fa;
+            border:1px solid #ddd;
+            padding:3px 10px;
+            border-radius:2px;
+            margin-right: 5px;
+
+            &.editBtn{
+                color:#1fb8ea;
+            }
+            &.disabledBtn{
+                color:#ff0000;
+            }
+            &.openBtn{
+                color:#2d8303;
+            }
+            &:hover{
+                opacity: .8;
+            }
+        }
+    }
+
+
+}
+.staffWrap{
+    margin-right:30px;
+    margin-top:30px;
+    .clickBtn{
+        color: #00b7ec;
+        border: 1px solid #00b7ec;
+        text-align: center;
+        background: #fff;
+        &:hover{
+            color: #00b7ec;
+        }
+
+    }
+    button{
+        width:100%;
+        &:disabled{
+            color:#fff;
+            cursor: not-allowed;
+            background: grey;
+            border:1px solid transparent;
+        }
+        &:focus{
+            outline:none;
+        }
+    }
+    .red{
+        color:#d9534f;
+    }
+    .successWrap{
+        text-align: center;
+        padding-top:60px;
+        font-size: 30px;
+
+        i{
+            color: green;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        a{
+            display: block;
+            width:100%;
+            margin-top: 30px;
+        }
+    }
+}

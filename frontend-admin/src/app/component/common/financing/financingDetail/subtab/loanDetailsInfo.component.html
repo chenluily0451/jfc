@@ -1,0 +1,174 @@
+<!--融资-->
+<div class="font14">
+    <h6 class="py-3">融资信息</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right w20 font-weight-normal" >债权实际货值(元)</th>
+            <td class="text-left" >{{financing.capitalRaise.debtActualValue}}</td>
+            <th class="text-right w20 font-weight-normal" >融资金额(元)</th>
+            <td class="text-left" >{{financing.capitalRaise.capitalRaisingAmount}}</td>
+
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >单据是否获取</th>
+            <td class="text-left" >{{financing.capitalRaise.receiptAcquired ? '是' : '否'}}</td>
+            <th class="text-right font-weight-normal" >是否开票</th>
+            <td class="text-left" >{{financing.capitalRaise.invoiced ? '是' : '否'}}</td>
+
+        </tr>
+        <tr *ngIf="financing.capitalRaise.invoiced">
+            <th class="text-right font-weight-normal" >发票号</th>
+            <td class="text-left" >{{financing.capitalRaise.invoiceNo}}</td>
+            <th class="text-right font-weight-normal" >发票金额</th>
+            <td class="text-left" >{{financing.capitalRaise.invoiceAmount}}</td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >融资起始日</th>
+            <td class="text-left" >{{financing.capitalRaise.capitalRaisingBegin}}</td>
+            <th class="text-right font-weight-normal" >融资截止</th>
+            <td class="text-left" >{{financing.capitalRaise.capitalRaisingEnd}}</td>
+
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >发票扫描件</th>
+            <td class="text-left pb-0" colspan="3" *ngIf="financing.capitalRaise.invoicePic.length !== 0 ">
+                <image-show *ngFor="let file of financing.capitalRaise.invoicePic"  [sourcePath]="file" [class]="'pb-3'"></image-show>
+            </td>
+            <td class="text-left" colspan="3" *ngIf="financing.capitalRaise.invoicePic.length === 0 ">
+                无
+            </td>
+
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >所有权转移证明</th>
+            <td class="text-left pb-0" colspan="3" *ngIf="financing.capitalRaise.goodTransferPic.length !== 0">
+                <image-show *ngFor="let file of financing.capitalRaise.goodTransferPic"  [sourcePath]="file" [class]="'pb-3'"></image-show>
+            </td>
+            <td class="text-left" colspan="3" *ngIf="financing.capitalRaise.goodTransferPic.length === 0 ">
+                无
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<!--债权-->
+<div class="font14">
+    <h6 class="py-3">债权信息</h6>
+    <div *ngFor="let debt of financing.debtList">
+        <h6 class="py-3 ml-5">货物数量单据</h6>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th class="text-center font-weight-normal">单据日期</th>
+                <th class="text-center font-weight-normal">车/船数量</th>
+                <th class="text-center font-weight-normal">单据数量(吨)</th>
+                <th class="text-center font-weight-normal">单据图片</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let quantity of debt.quantity">
+                <td class="text-center">{{quantity.receiptsBeginDate}}至{{quantity.receiptsEndDate}}</td>
+                <td class="text-center">{{quantity.carAmount}}</td>
+                <td class="text-center">{{quantity.receiptAmount}}</td>
+                <td class="text-center">
+                    <a *ngFor="let file of quantity.receiptFile" [href]="aliOss.host + file.filePath">{{file.fileName}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h6 class="py-3 ml-5">货物质量单据</h6>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th class="text-center font-weight-normal">单据日期</th>
+                <th class="text-center font-weight-normal">煤炭报告呈现形式</th>
+                <th class="text-center font-weight-normal">是否从下游获取</th>
+                <th class="text-center font-weight-normal">计量数量(吨)</th>
+                <th class="text-center font-weight-normal">验收数量(吨)</th>
+                <th class="text-center font-weight-normal">验收质量煤炭指标(热值)</th>
+                <th class="text-center font-weight-normal">单据图片</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let quality of debt.quality">
+                <td class="text-center">{{quality.receiptsBeginDate}}至{{quality.receiptsEndDate}}</td>
+                <td class="text-center">{{quality.coalReportPresetWay}}</td>
+                <td class="text-center">{{quality.isFromDownstreamObtain === false ? '否' : '是'}}</td>
+                <td class="text-center">{{quality.calculateAmount}}</td>
+                <td class="text-center">{{quality.checkAmount}}</td>
+                <td class="text-center">{{quality.coalIndex.NCV?.begin}}-{{quality.coalIndex.NCV?.end}}</td>
+                <td class="text-center">
+                    <a *ngFor="let file of quality.receiptFile" [href]="aliOss.host + file.filePath">{{file.fileName}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--放款信息-->
+<div class="font14" *ngIf="lending.businessId !== ''">
+    <h6 class="py-3">放款信息</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right font-weight-normal w20" >放款企业名称</th>
+            <td class="text-left" >{{lending.payCompanyName || '无'}}</td>
+            <th class="text-right font-weight-normal w20" >放款公司开户行</th>
+            <!--<td class="text-left" >{{lending.payCompanyBankName || '无'}}</td>-->
+            <td class="text-left" >
+                <span>{{lending.payCompanyBankProvince}} {{lending.payCompanyBankCity}} {{lending.payCompanyBankDistrict}} {{lending.payCompanyBankName}}</span>
+                <span *ngIf="!lending.payCompanyBankProvince && !lending.payCompanyBankCit && !lending.payCompanyBankDistrict && !lending.payCompanyBankName">无</span>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >放款金额</th>
+            <td class="text-left" >{{lending.payAmount}}</td>
+            <th class="text-right font-weight-normal" >放款日期</th>
+            <td class="text-left" >{{lending.payDate}}</td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >放款账号</th>
+            <td class="text-left" >{{lending.payAccount || '无'}}</td>
+            <th class="text-right font-weight-normal" >放款方式</th>
+            <td class="text-left" >{{lending.payMode | payMode}}</td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >付款凭证</th>
+            <td class="text-left pb-0" colspan="3">
+                <image-show  [sourcePath]="lending.payCertificatePic" [class]="'pb-3'"></image-show>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right font-weight-normal w20" >收款企业名称</th>
+            <td class="text-left" >{{lending.recvCompanyName || '无'}}</td>
+            <th class="text-right font-weight-normal w20" >收款公司开户行</th>
+            <!--<td class="text-left" >{{lending.recvBankName || '无'}}</td>-->
+            <td class="text-left" >
+                <span>{{lending.recvBankProvince}} {{lending.recvBankName}} {{lending.recvBankDistrict}} {{lending.recvBankAddr}}</span>
+                <span *ngIf="lending.recvBankAddr === '' && !lending.recvBankProvince && !lending.recvBankDistrict && lending.recvBankName === ''">无</span>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right font-weight-normal" >收款账号</th>
+            <td class="text-left" >{{lending.recvAccount || '无'}}</td>
+            <th class="text-right font-weight-normal" >收款公司开户行地址</th>
+            <td class="text-left" >{{lending.recvBankAddr || '无'}}</td>
+        </tr>
+        <!--<tr>-->
+            <!--<th class="text-right font-weight-normal" >收款金额</th>-->
+            <!--<td class="text-left" colspan="3">{{lending.recvAmount || '无'}}</td>-->
+        <!--</tr>-->
+        </tbody>
+    </table>
+</div>
+
+
+

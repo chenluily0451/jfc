@@ -1,0 +1,34 @@
+<div id="upstreamHeader">
+    <div class="subHeader">
+        <div class="upstreamSubHeader">
+            <span>客服热线：<b>400-960-1180</b></span>
+            <ul class="menuRight">
+                <li>
+                    <a href="/web/upstream/index/accountHome" class="haveLogin" >你好, {{ currentUser.userName}}</a>
+                </li>
+                <li><a (click)="quit()" href="javascript:void(0)" >退出</a></li>
+                <!--<li>-->
+                    <!--<img src="/static/assets/upstreamHeader/wxLogo.png" alt="">-->
+                <!--</li>-->
+            </ul>
+        </div>
+    </div>
+    <div class="mainHeader">
+        <div class="upstreamSubHeader">
+            <a href="/web/index">
+                <img src="/static/assets/upstreamHeader/upstreamHeader.png" alt="">
+            </a>
+            <ul class="menuRight">
+                <li>
+                    <a href="/web/index">首页</a>
+                </li>
+                <li>
+                    <a href="/web/financing">企业金融</a>
+                </li>
+                <li >
+                    <a [routerLink]="['/accountHome']" class="businessCenter">企业中心</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

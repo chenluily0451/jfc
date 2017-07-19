@@ -1,0 +1,111 @@
+<form [formGroup]="companyQualificationsForm">
+    <!--企业资质审查-->
+    <div>
+        <h6 class="p-2 my-4 bg-f8">企业资质审查</h6>
+        <div class="row mb-3">
+            <label class="col-3 text-right">
+                <input type="checkbox"  formControlName="operationLicensePicChecked"/>
+                营业执照
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.license.operationLicensePic"></image-show>
+            </div>
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="organLicensePicChecked"/>
+                组织机构代码证
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.license.organLicensePic"></image-show>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="unionLicensePicChecked"/>
+                信用代码证
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.license.unionLicensePic"></image-show>
+            </div>
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="bankLicensePicChecked"/>
+                其他证件
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.license.bankLicensePic"></image-show>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-3 text-right">
+                企业资质审查意见
+            </div>
+            <div class="col-4">
+                <textarea name="" rows="5" class="form-control" formControlName="licenseAuditOpinion"></textarea>
+            </div>
+        </div>
+
+    </div>
+    <!--其他资质审查-->
+    <div>
+        <h6 class="p-2 my-5 bg-f8">其他资质审查</h6>
+        <div class="row mb-3">
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="legalPersonIdFrontSidePicChecked"/>
+                法人身份证正面
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.legalPerson.legalPersonIdFrontSidePic"></image-show>
+            </div>
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="legalPersonIdReverseSidePicChecked"/>
+                法人身份证背面
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.legalPerson.legalPersonIdFrontSidePic"></image-show>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="authPersonIdFrontSidePicChecked"/>
+                授权委托人身份证正面
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.authPerson.authPersonIdFrontSidePic"></image-show>
+            </div>
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="authPersonIdReverseSidePicChecked"/>
+                授权委托人身份证背面
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.authPerson.authPersonIdReverseSidePic"></image-show>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-3 text-right">
+                <input type="checkbox" formControlName="authDocumentPicChecked"/>
+                授权委托书复印件
+            </label>
+            <div class="col-3">
+                <image-show  [sourcePath]="company.authPerson.authDocumentPic"></image-show>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-3 text-right">
+                其他资质审查意见
+            </div>
+            <div class="col-4">
+                <textarea name="" rows="5" class="form-control" formControlName="otherLicenseAuditOpinion"></textarea>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-7 offset-3">
+            <button class="btn btn-blue px-5" (click)="saveLicenseSurveyDocument()">保存</button>
+        </div>
+    </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

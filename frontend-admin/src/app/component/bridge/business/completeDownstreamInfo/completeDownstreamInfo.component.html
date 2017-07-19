@@ -1,0 +1,192 @@
+
+<form class="companyInfoAddForm" [formGroup]="completeDownstreamInfoForm">
+    <h1 class="my-4">补充下游信息（<span class="main-orange mx-2 font-weight-bold">*</span>为必填项）</h1>
+    <!--交易主体项-->
+    <div>
+        <!--<h5 class="p-2 mt-4 mb-5 bg-f8">交易主体项</h5>-->
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>下游签约方</div>
+            <div class="col-3 text-left">
+                <select class="form-control" formControlName="departments" (change)="getDropDownDownstreamCompanies()">
+                    <option value="">请选择</option>
+                    <option *ngFor="let department of allDSCompanies; let i = index" [value]="i">{{department.department}}</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <select class="form-control" formControlName="downstreamCompanyName">
+                    <option value="">请选择</option>
+                    <option *ngFor="let company of selectedDepartment.companies" [value]="company">{{company}}</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.downstreamCompanyName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.downstreamCompanyName}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>资金方</div>
+            <div class="col-3 text-left">
+                <select class="form-control" formControlName="capitalCompanyId">
+                    <option value="">请选择</option>
+                    <option *ngFor="let capital of capitalCompanies" [value]="capital._id">{{capital.companyName}}</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.capitalCompanyId" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.capitalCompanyId}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>合同量(吨)</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="contractAmount" />
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.contractAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.contractAmount}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>合同单价(元)</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="contractUnitPrice" />
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.contractUnitPrice" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.contractUnitPrice}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>供货期间</div>
+            <div class="col-3 text-left">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择" name="dp"  ngbDatepicker #deliveryBegin="ngbDatepicker" formControlName="deliveryBegin" (click)="deliveryBegin.toggle()">
+                    <div class="input-group-addon" (click)="deliveryBegin.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            至
+            <div class="col-3 text-left">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择" name="dp"  ngbDatepicker #deliveryEnd="ngbDatepicker" formControlName="deliveryEnd" (click)="deliveryEnd.toggle()" [minDate]="completeDownstreamInfoForm.get('deliveryBegin').value">
+                    <div class="input-group-addon" (click)="deliveryEnd.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.deliveryBegin || !formErrors.deliveryEnd" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.deliveryBegin || formErrors.deliveryEnd}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>下游回款周期(天)</div>
+            <div class="col-3 text-left">
+                <input type="text" class="form-control" formControlName="returnedMoneyPeriod">
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.returnedMoneyPeriod" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.returnedMoneyPeriod}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>检测机构</div>
+            <div class="col-3 text-left">
+                <input type="text" class="form-control" formControlName="detectionOrganization">
+            </div>
+            <div class="col-3">
+                <div [hidden]="!formErrors.detectionOrganization" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.detectionOrganization}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>是否下游缴纳保证金</div>
+            <div class="col-3 text-left">
+                <input type="checkbox" class="form-control mt-2" formControlName="hasDeposit">
+                <!--<div [hidden]="!formErrors.hasDeposit" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">-->
+                    <!--{{formErrors.hasDeposit}}-->
+                <!--</div>-->
+            </div>
+        </div>
+        <div class="row mb-4" *ngIf="completeDownstreamInfoForm.get('hasDeposit').value">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>保证金金额(元)</div>
+            <div class="col-3 text-left">
+                <input type="text" class="form-control" formControlName="depositAmount">
+                <div [hidden]="!formErrors.depositAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.depositAmount}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4" *ngIf="completeDownstreamInfoForm.get('hasDeposit').value">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>保证金付款凭证</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="submitData.depositPayCertificatePic" [isShowDelButton]="true" (onDelete)="deleteFile('depositPayCertificatePic')"></image-show>
+                <file-upload (onFinished)="uploadFinished($event, 'depositPayCertificatePic')"></file-upload>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">数量考核</div>
+            <div class="col-8 ">
+                <textarea class="form-control" rows="6" placeholder="不超过300字" formControlName="numberInspection"></textarea>
+                <div [hidden]="!formErrors.numberInspection" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.numberInspection}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">质量考核</div>
+            <div class="col-8 ">
+                <textarea class="form-control" rows="6" placeholder="不超过300字" formControlName="qualityInspection"></textarea>
+                <div [hidden]="!formErrors.qualityInspection" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.qualityInspection}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>合同影印件</div>
+            <div class="col-8 fileUpload"  >
+                <image-show *ngFor="let file of submitData.contractFiles"  [sourcePath]="file" [isShowDelButton]="true" (onDelete)="deleteMoreImg($event, 'contractFiles')"></image-show>
+                <file-upload (onFinished)="uploadMoreFinished($event, 'contractFiles')"></file-upload>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-8 offset-3  mb-5">
+            <button class="btn btn-blue mr-5 px-5 py-1" (click)="bridgeSaveDownstreamBusiness(successModal)">保存</button>
+            <button type="submit" class="btn btn-blue px-5 py-1" (click)="bridgeSubmitDownstreamBusiness(successModal)">提交</button>
+            <span class="main-orange" *ngIf="submitAll">有未填的必填项或合同未上传</span>
+        </div>
+    </div>
+    <ng-template #successModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+        </div>
+        <div class="modal-body">
+            <p>提交成功</p>
+        </div>
+        <div class="modal-footer">
+            <a [routerLink]="['/business']" (click)="c('Close click')" class="btn btn-blue">确认</a>
+        </div>
+    </ng-template>
+
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>
+

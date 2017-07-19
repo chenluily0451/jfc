@@ -1,0 +1,22 @@
+
+
+    <div class="col-4 text-left pr-0">
+        <select class="form-control" (change)="selectProvince($event.target.value)" >
+            <option value="" >{{currentProvince.province || '请选择省' }}</option>
+            <option  *ngFor="let province of provinceList; let provinceIndex = index " [value]="provinceIndex">{{province.province}}</option>
+        </select>
+    </div>
+
+    <div class="col-4 text-left p-0 px-2">
+        <select class="form-control" (change)="selectCity($event.target.value)">
+            <option value="">{{currentCity.city || '请选择市' }}</option>
+            <option  *ngFor="let city of currentProvince.cities; let cityIndex = index " [value]="cityIndex">{{city.city}}</option>
+        </select>
+    </div>
+
+    <div class="col-4 text-left pl-0" *ngIf="isShowDistrict">
+        <select class="form-control" (change)="selectDistrict($event.target.value)">
+            <option value="">{{currentDistrict.county || '请选择区' }}</option>
+            <option *ngFor="let district of currentCity.counties; let districtIndex = index " [value]="districtIndex">{{district.county}}</option>
+        </select>
+    </div>

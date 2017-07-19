@@ -1,0 +1,19 @@
+
+@import "../../components/_sidebar";
+@import "../../components/_loading";
+@import "../../components/_tab";
+@import "../../components/_globle";
+@import "../../components/_pagination";
+@import "../../components/_fileUpload";
+
+
+@import './header';
+
+//@import "../../helpers/_variables.scss";
+
+//账户模块
+@import '../../components/account';
+
+//平台用户管理
+@import 'platformUserManage';
+

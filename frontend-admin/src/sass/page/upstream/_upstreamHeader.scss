@@ -1,0 +1,116 @@
+#upstreamHeader{
+    position: relative;
+    &:after{
+        content: '';
+        height:7px;
+        position: absolute;
+        width:100%;
+        background: url("../../../assets/upstreamHeader/headerShadow.png") repeat-x center bottom;
+    }
+    .subHeader{
+        background: #323647;
+        height:34px;
+
+        .upstreamSubHeader{
+            width:1280px;
+            min-width:1280px;
+            margin: 0 auto;
+            color: #999;
+            font-size: 12px;
+            padding-top:7px;
+
+
+
+            .menuRight{
+                float: right;
+                font-size: 0;
+
+                li{
+                    list-style: none;
+                    display: inline-block;
+                    vertical-align: middle;
+                    padding:0 8px;
+                    font-size: 12px;
+
+                    a{
+                        color:#999;
+                        &.haveLogin{
+                            color:#00b7ec;
+                        }
+                        &:focus{
+                            text-decoration: none;
+                        }
+                        &:hover{
+                             color:#00b7ec
+                        }
+                    }
+                    &.borderR{
+                        background: url("../../../assets/upstreamHeader/borderR.png") no-repeat right center;
+                    }
+                    img{
+                        vertical-align: top;
+                    }
+                }
+
+            }
+        }
+    }
+
+    .mainHeader{
+        background: #fff;
+        height:90px;
+
+        .upstreamSubHeader{
+            width:1280px;
+            min-width:1280px;
+            margin: 0 auto;
+            color: #999;
+            font-size: 12px;
+            padding-top: 23px;
+            .menuRight{
+                float: right;
+                font-size: 0;
+                padding-top: 18px;
+
+                li{
+                    list-style: none;
+                    display: inline-block;
+                    vertical-align: middle;
+                    padding:0 22px;
+                    font-size: 16px;
+
+                    a{
+                        color:#333;
+                        padding-bottom: 22px;
+
+                        &.active{
+                            border-bottom:2px solid #00b7ec;
+                        }
+                        &.businessCenter{
+                            background: #f9f9f9 url("../../../assets/upstreamHeader/btnIcon.png") no-repeat 10px center;
+                            display: inline-block;
+                            border:1px solid #e8e8e8;
+                            border-radius:5px;
+                            font-size: 14px;
+                            color:#666;
+                            padding:5px 5px;
+                            padding-left: 30px;
+                            &:hover{
+                                border:1px solid #e8e8e8;
+                                text-decoration: none;
+                            }
+
+                        }
+                        &:hover{
+                            border-bottom:2px solid #00b7ec;
+                            text-decoration: none;
+                        }
+                    }
+                    img{
+                        vertical-align: top;
+                    }
+                }
+            }
+        }
+    }
+}

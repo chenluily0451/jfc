@@ -1,0 +1,92 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">员工管理</li>
+    <li class="breadcrumb-item active">编辑</li>
+</ol>
+<div id="staff">
+    <div class="staffWrap">
+        <form [formGroup]="staffEditForm" class="accountManage" *ngIf="stepOne">
+            <!--<div class="mainContentTitle">编辑员工</div>-->
+            <div class="form-group row"  class="form-group row">
+                <label class="col-2 col-form-label">用户名:</label>
+                <label class="col-4 col-form-label">{{userName}}</label>
+                <div class="col-6"></div>
+            </div>
+            <div class="form-group row"  class="{{staffEditFormErrors['loginName'] ?'form-group row has-danger':'form-group row'}}">
+                <label for="loginName" class="col-2 col-form-label" >姓名:</label>
+                <div class="col-4">
+                    <input type="text" [(ngModel)]="loginName" class="{{staffEditFormErrors['loginName']?'form-control form-control-danger':'form-control '}}" name="loginName" id="loginName" formControlName="loginName">
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ staffEditFormErrors['loginName'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row"  class="{{staffEditFormErrors['mobile'] ?'form-group row has-danger':'form-group row'}}">
+                <label for="mobile" class="col-2 col-form-label" >手机号:</label>
+                <div class="col-4">
+                    <input type="text" [(ngModel)]="mobile" class="{{staffEditFormErrors['mobile']?'form-control form-control-danger':'form-control '}}" name="mobile" id="mobile" formControlName="mobile">
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ staffEditFormErrors['mobile'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row"  class="{{staffEditFormErrors['department'] ?'form-group row has-danger':'form-group row'}}">
+                <label for="department" class="col-2 col-form-label" >部门:</label>
+                <div class="col-4">
+                    <input type="text" [(ngModel)]="department" class="{{staffEditFormErrors['department']?'form-control form-control-danger':'form-control '}}" name="department" id="department" formControlName="department">
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ staffEditFormErrors['department'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row"  class="{{staffEditFormErrors['userType'] ?'form-group row has-danger':'form-group row'}}">
+                <label for="department" class="col-2 col-form-label" >用户类型:</label>
+                <div class="col-4">
+                    <select formControlName="userType" class="form-control"[(ngModel)]="userType" >
+                        <option value="" selected>请选择用户类型</option>
+                        <option value="2" [selected]="userType==2" *ngIf="identity !== 'platform'">业务人员</option>
+                        <option value="3" [selected]="userType==3" *ngIf="identity !== 'platform'">财务人员</option>
+                        <option value="4" [selected]="userType==4" *ngIf="identity === 'platform'">客服人员</option>
+                        <option value="5" [selected]="userType==5" *ngIf="identity === 'platform'">平台管理员</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ staffEditFormErrors['userType'] }}</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-2 col-form-label" ></label>
+                <div class="col-2">
+                    <button type="submit" class="btn clickBtn" [disabled]='!staffEditForm.valid' (click)="save()">保存</button>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn clickBtn"  (click)="reset(content)">重置密码</button>
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback red">{{ errMessage }}</div>
+                </div>
+            </div>
+        </form>
+        <div *ngIf="stepTwo" class="successWrap">
+            <i class="fa fa-check"></i>保存成功！
+        </div>
+        <div *ngIf="stepThree" class="successWrap">
+            <i class="fa fa-check"></i>重置短信已发送！
+        </div>
+    </div>
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>确认重置该员工的密码，并向员工发送新密码短信？</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" aria-label="Close" (click)="resetPasswordSms();c('Close click')">确认</button>
+            <button type="button" class="btn btn-secondary" (click)="c('Close click')">取消</button>
+        </div>
+    </ng-template>
+</div>

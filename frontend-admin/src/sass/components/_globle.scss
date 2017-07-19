@@ -1,0 +1,49 @@
+@import "./base";
+
+
+//coalTable
+.coalTable{
+    border: 1px solid #eceeef;
+    th{
+        border: 1px solid #eceeef;
+        background-color: #f8f9fa;
+    }
+    td{
+        border: 1px solid #eceeef;
+    }
+}
+
+
+//table
+.table-bordered th{
+    background-color: #f8f9fa;
+}
+.table th, .table td,.verticalMiddle{
+    vertical-align: middle;
+}
+.tableCss{
+    width: 100%;
+    border: 1px solid #dddddd;
+    th{
+        background-color: #f8f9fa;
+        padding: 14px;
+        font-weight: normal;
+    }
+    td{
+        padding: 14px;
+        border-top: 1px solid #dddddd;
+    }
+}
+
+//address
+select.address{
+    width: 100px;
+}
+
+.breadcrumb {
+    background: #fff;
+    padding: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+}

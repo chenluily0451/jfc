@@ -1,0 +1,37 @@
+<app-header >Loading...</app-header>
+
+<div id="loginContain">
+    <div class="loginContainWrap">
+        <div class="loginWrap">
+            <div class="loginTitle">
+                登录
+            </div>
+            <form [formGroup]="loginForm" class="formWrap" >
+                <div class="form-group" class="{{loginFormErrors['username'] ?'form-group row has-danger':'form-group row'}}">
+                    <label for="username">用户名/手机号:</label>
+                    <input type="text" (focus)="pwdChange()" class="{{loginFormErrors['username']?'form-control form-control-danger':'form-control '}}"  name="username" id="username" formControlName="username">
+                </div>
+
+                <div class="form-group" class="{{loginFormErrors['password'] ?'form-group row has-danger':'form-group row'}}">
+                    <label for="password">密码:</label>
+                    <input type="password" (focus)="pwdChange()" class="{{loginFormErrors['password']?'form-control form-control-danger':'form-control '}}" name="password" id="password" formControlName="password">
+                </div>
+                <div class="forgetWrap">
+                    <!--<a href="">忘记密码</a>-->
+                </div>
+                <div class="form-group" class="form-group row">
+                    <label></label>
+                    <button type="submit" class="btn btn-primary btn-lg" (click)="login()">登录</button>
+                </div>
+
+                <p class="noAccount" *ngIf="userIdentity !== 'platform'">没有账号?<a [href]="'/web/' + userIdentity + '/register'">立即注册</a> </p>
+                <div class="form-control-feedback">{{ loginFormErrors['username'] }}</div>
+                <div class="form-control-feedback">{{ loginFormErrors['password'] }}</div>
+                <div class="form-control-feedback">{{ errMessage }}</div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<app-footer>Loading...</app-footer>

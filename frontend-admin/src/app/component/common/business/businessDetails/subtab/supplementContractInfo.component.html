@@ -1,0 +1,21 @@
+<!--补充协议-->
+<div class="my-4">
+    <h6 class="mb-4">补充协议</h6>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th class="text-right verticalMiddle w30" >融资合同协议(上游企业与资金方)</th>
+            <td  colspan="3">
+                <image-show *ngFor="let file of business.financingProtocol?.financingProtocolPic"  [sourcePath]="file" ></image-show>
+            </td>
+        </tr>
+        <tr>
+            <th class="text-right verticalMiddle w30" >代还款委托协议(核心与上游企业)</th>
+            <td  colspan="3">
+                <image-show *ngFor="let file of business.financingProtocol?.repayProtocolPic"  [sourcePath]="file" ></image-show>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+

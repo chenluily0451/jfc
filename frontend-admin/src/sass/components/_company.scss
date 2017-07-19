@@ -1,0 +1,40 @@
+.companyAdminWrap{
+    .clickBtn{
+        color: #00b7ec;
+        border: 1px solid #00b7ec;
+        text-align: center;
+        background: #fff;
+
+    }
+    button{
+        width:100%;
+        &:disabled{
+            color:#fff;
+            cursor: not-allowed;
+            background: grey;
+            border:1px solid transparent;
+        }
+        &:focus{
+            outline:none;
+        }
+    }
+    .red{
+        color:#d9534f;
+    }
+    .successWrap{
+        text-align: center;
+        padding-top:60px;
+        font-size: 30px;
+
+        i{
+            color: green;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        a{
+            display: block;
+            width:100%;
+            margin-top: 30px;
+        }
+    }
+}

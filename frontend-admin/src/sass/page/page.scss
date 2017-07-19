@@ -1,0 +1,84 @@
+@import "upstream/upstreamHeader";
+@import "upstream/upstreamFooter";
+
+//覆盖图片路径
+.businessCenter{
+    background: #f9f9f9 url("../../assets/upstreamHeader/btnIcon.png") no-repeat 10px center !important;
+}
+.borderR{
+    background: url("../../assets/upstreamHeader/borderR.png") no-repeat right center !important;
+}
+#upstreamHeader{
+    &:after{
+        background: url("../../assets/upstreamHeader/headerShadow.png") repeat-x center bottom !important;
+    }
+}
+body{
+    font-size: 16px;
+}
+#pageIndex{
+    background: #e9e9e9;
+    .pageIndexWrap{
+        width: 1280px;
+        background: #fff url('../../assets/page/pageIndexImg.png') no-repeat center;
+        height:690px;
+        margin: 0 auto;
+        padding:0 20px;
+        padding-top:566px;
+
+        .btnWrap{
+            text-align:center;
+
+            a{
+                display:inline-block;
+                width:160px;
+                height:45px;
+                line-height:45px;
+                texx-align:center;
+                font-size:18px;
+                color:#fff;
+                border-radius:2px;
+                font-weight:bold;
+
+                &.login{
+                    background:#00b7ec;
+                    margin-right:40px;
+                }
+                &.registor{
+                    background:#ff7632;
+                }
+                &:hover{
+                    text-decoration:none;
+                    opacity:0.8;
+                }
+            }
+        }
+    }
+}
+#pageFinance{
+    .financePic1{
+        height: 602px;
+        background:url('../../assets/page/finance/financePic_01.png') no-repeat center ;
+    }
+    .financePic2{
+        height: 233px;
+        background:url('../../assets/page/finance/financePic_02.png') no-repeat center ;
+    }
+    .financePic3{
+        height: 491px;
+        background:url('../../assets/page/finance/financePic_03.png') no-repeat center ;
+    }
+    .financePic4{
+        height: 296px;
+        background:url('../../assets/page/finance/financePic_04.png') no-repeat center ;
+    }
+    .financePic5{
+        height: 199px;
+        background:url('../../assets/page/finance/financePic_05.png') no-repeat center ;
+    }
+    .financePic6{
+        height: 569px;
+        background:url('../../assets/page/finance/financePic_06.png') no-repeat center ;
+    }
+
+}

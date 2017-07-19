@@ -1,0 +1,27 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item active">账户安全</li>
+</ol>
+
+<!--<div class="mainContentTitle">账户管理</div>-->
+<div class="row m-3 p-5 border">
+    <div class="col-sm-2">修改手机</div>
+    <div class="col-sm-6">当前绑定号码为：{{currentUser.phone | hidePartialMobile}}若已丢失或停用，请立即更换</div>
+    <div class="col-sm-2">
+        <a [routerLink]="['/accountPhone']" routerLinkActive="active" class="btn btn-blue">修改</a>
+    </div>
+</div>
+<div class="row m-3 p-5 border">
+    <div class="col-2">修改密码</div>
+    <div class="col-6">该密码为登录系统使用的密码，建议您定期更换密码</div>
+    <div class="col-2">
+        <a [routerLink]="['/accountPassword']" routerLinkActive="active" class="btn btn-blue">修改</a>
+    </div>
+</div>
+<div class="row m-3 p-5 border" *ngIf="companyStatus ==='4'">
+    <div class="col-2">更换管理员</div>
+    <div class="col-6">此处可以更换管理员账号</div>
+    <div class="col-2">
+        <a routerLink="companyAdmin" class="btn btn-blue">更换</a>
+    </div>
+</div>
+

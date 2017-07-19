@@ -1,0 +1,63 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">平台用户管理</li>
+    <li class="breadcrumb-item active">创建新员工</li>
+</ol>
+
+<div id="staff">
+    <div class="staffWrap">
+        <form [formGroup]="platformCreateUsersForm" class="craftCreate" *ngIf="stepOne">
+            <div class="form-group row"  class="{{platformCreateUsersFormErrors['loginName'] ?'form-group row has-danger':'form-group row'}}">
+                <label class="col-2 col-form-label">姓名:</label>
+                <label class="col-4">
+                    <input type="text" class="{{platformCreateUsersFormErrors['loginName']?'form-control form-control-danger':'form-control '}}" name="loginName" formControlName="loginName">
+                </label>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ platformCreateUsersFormErrors['loginName'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row"  class="{{platformCreateUsersFormErrors['mobile'] ?'form-group row has-danger':'form-group row'}}">
+                <label class="col-2 col-form-label">手机号:</label>
+                <label class="col-4">
+                    <input type="text" class="{{platformCreateUsersFormErrors['mobile']?'form-control form-control-danger':'form-control '}}" name="mobile" formControlName="mobile" >
+                </label>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ platformCreateUsersFormErrors['mobile'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row"  class="{{platformCreateUsersFormErrors['userName'] ?'form-group row has-danger':'form-group row'}}">
+                <label class="col-2 col-form-label">用户名:</label>
+                <label class="col-4">
+                    <input type="text" class="{{platformCreateUsersFormErrors['userName']?'form-control form-control-danger':'form-control '}}" name="userName" formControlName="userName" >
+                </label>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ platformCreateUsersFormErrors['userName'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row"  class="{{platformCreateUsersFormErrors['userType'] ?'form-group row has-danger':'form-group row'}}">
+                <label class="col-2 col-form-label">用户类型:</label>
+                <label class="col-4">
+                    <select name="" id="" class="form-control" name="userType" formControlName="userType" >
+                        <option value="">请选择用户类型</option>
+                        <option value="4">平台客服</option>
+                        <option value="5">平台管理员</option>
+                    </select>
+                </label>
+                <div class="col-6">
+                    <div class="form-control-feedback">{{ platformCreateUsersFormErrors['userType'] }}</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label" ></label>
+                <div class="col-4">
+                    <button type="submit" class="btn clickBtn" [disabled]='!platformCreateUsersForm.valid' (click)="create()">创建</button>
+                </div>
+                <div class="col-6">
+                    <div class="form-control-feedback" class="red">{{ errMessage }}</div>
+                </div>
+            </div>
+        </form>
+        <div *ngIf="stepTwo" class="successWrap">
+            <i class="fa fa-check"></i>创建成功！
+        </div>
+    </div>
+</div>

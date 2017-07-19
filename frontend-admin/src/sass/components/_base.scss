@@ -1,0 +1,73 @@
+$assetPath : "/static";
+
+//color
+$headerBack:#f0f0f0;
+
+$sideBarBack:#323537;
+
+$main-blue: #00b7ec;
+$main-orange: #ff7632;
+
+$hover:#00abff;
+
+$border-color:#dddddd;
+
+$fontColor-b0:#b0b0b0;
+$fontColor-6:#666666;
+
+*{ margin: 0; padding: 0; list-style: none;}
+html{ min-width: 1200px;}
+textarea{ resize: none;}
+input,textarea{outline: none;}
+input,select{font-size: 14px!important;}
+
+
+a:hover{ text-decoration: none;}
+a:visited{ text-decoration: none;}
+a:active{ text-decoration: none;}
+a:focus{ text-decoration: none;}
+
+
+
+.fontWeight{ font-weight: normal;}
+.font16 {font-size: 16px!important;}
+.font14 {font-size: 14px!important;}
+
+.main-orange{color: $main-orange;}
+.main-blue{color: $main-blue;}
+
+.width16{width: 16%;}
+.w20{width: 20%;}
+.w30{width: 30%;}
+
+.verticalTop{vertical-align: text-top!important;}
+
+.lineH20{line-height: 0!important;}
+.lineH36{ line-height: 36px;}
+.alertLineH{line-height: 36px;}
+
+.bg-blue{background-color: #e5f6fd;}
+.bg-orange{background-color: #ffeee5;}
+.bg-f8{background-color: #f8f8f8;}
+.opacity-bg{opacity: 0.3;}
+.bg{ background-color: #f0f0f0; }
+
+
+.border{ border:1px solid $border-color;}
+
+//btn
+.btn-blue{ background-color: $main-blue; color: #ffffff;}
+.btn-orange{ background-color: $main-orange; color: #ffffff;}
+.btn-gray{ background-color: #dedede; color: #000000;}
+a.btn:hover{
+    color: #ffffff;
+    opacity: 0.8;
+}
+button.btn:hover{
+    color: #ffffff;
+    opacity: 0.8;
+    //cursor: pointer;
+}
+
+
+

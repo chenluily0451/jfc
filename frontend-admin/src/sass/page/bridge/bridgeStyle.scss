@@ -1,0 +1,341 @@
+@import "../../helpers/_variables.scss";
+@import "../upstream/upstreamStyle.scss";
+
+// 添加债权
+
+#creditorRights{
+    padding:10px;
+    .red{
+        color:#d9534f;
+    }
+    .creditorInfo{
+        display: flex;
+        flex-direction: row;
+        font-size: 20px;
+        margin-bottom: 20px;
+
+        .status{
+            margin-left: 30px;
+            span{color:#dc544b}
+        }
+    }
+    .addMenu{
+        display: table;
+        flex-direction: row;
+        justify-content: space-between;
+        width:100%;
+
+        div{
+            display: table-cell;
+            &.btnWrap{text-align: right}
+        }
+
+        .addBtn{
+            background: $web-blue;
+            color:#fff;
+            width:110px;
+            height: 40px;
+            display: inline-block;
+            border-radius: 2px;
+            line-height: 40px;
+            text-align: center;
+            &:hover{
+                opacity:.8;
+            }
+        }
+    }
+    table{
+        border:1px solid #ccc;
+        border-bottom:none;
+        width:100%;
+        border-collapse: collapse;
+        color:#999;
+        margin-top:10px;
+        margin-bottom:60px;
+        td{
+            height:45px;
+            text-align: center;
+            a.imageName{
+                display: block;
+            }
+        }
+        tr{
+            border-bottom:1px solid #ccc;
+        }
+        thead{
+            background:#f8f9fa;
+        }
+    }
+    .quantityInputWrap{
+        width:100%;
+
+        .closeBtn{
+            float: right;
+        }
+    }
+    .creditorRightsFormWrap{
+        background: #fbfbfb;
+        border:1px solid #ddd;
+        padding:30px;
+        margin-top:5px;
+        margin-bottom: 30px;
+
+        .forgetWrap{
+            text-align: right;
+            font-size:12px;
+            padding-right:24px;
+            margin-bottom: 10px;
+            a{
+                color:#0076f1;
+                text-decoration: underline;
+            }
+        }
+        label{
+            color:#666;
+            font-size: 16px;
+            display: inline-block;
+            min-width: 150px;
+            text-align: right;
+            vertical-align: middle;
+            line-height: 38px;
+            padding-right: 15px;
+
+            &.radioSelect{
+                min-width: 100px;
+            }
+        }
+        input{
+            max-width:300px;
+        }
+        button.btn-primary{
+            width:300px;
+            font-size: 14px;
+            cursor: pointer;
+            border:none;
+
+            &:disabled{
+                background: grey;
+                color:#fff;
+            }
+        }
+        .noAccount{
+            font-size: 12px;
+            color:#666;
+            text-align: right;
+            padding-right: 24px;
+        }
+        ul.fileLists{
+            li{
+                display: inline-block;
+                border-radius:2px;
+                margin-right: 10px;
+                margin-bottom: 5px;
+                width:108px;
+                height: 108px;
+                position: relative;
+                img{
+                    width:100%;
+                    height:100%;
+                }
+
+                i{
+                    position: absolute;
+                    top:5px;
+                    right:5px;
+                }
+            }
+
+        }
+        .listStyle{
+            width:280px;
+            margin-bottom: 5px;
+                .upload{
+                    display: inline-block;
+                    width: 108px;
+                    height: 108px;
+                    text-align: center;
+                    border: 1px dashed #ddd;
+                    background: url("#{$assetPath}/assets/platform/uploadIco.png") no-repeat;
+                    cursor: pointer;
+                }
+
+            input{
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+            }
+            .border{
+                border:1px solid #ccc;
+            }
+        }
+        .w260{max-width:260px;}
+        .m120{min-width: 120px;}
+        .lh38{line-height: 38px;}
+        .ml30{margin-left: 30px;}
+        .noborder{border:none;background:#fbfbfb;}
+        .fd{flex-direction: row;}
+
+    }
+    .btnWrap{
+        text-align: center;
+        a{
+            background: $web-blue;
+            color:#fff;
+            text-align: center;
+            height:50px;
+            width: 240px;
+            border-radius:2px;
+            line-height: 50px;
+            display: inline-block;
+            font-size: 18px;
+
+            &:hover{
+                opacity:.8;
+            }
+        }
+    }
+
+}
+
+#initiateNewFinancing{
+    .financingWrap{
+        padding:10px;
+
+        .financingHeader{
+            font-size: 0;
+            color:#333;
+
+            p{
+                display: inline-block;
+                font-size: 16px;
+                width:50%;
+                color:#292b2c;
+            }
+        }
+        .financingBody{
+            margin-top:30px;
+            font-size: 18px;
+
+            .financingBodyTtitle{
+                margin-bottom: 30px;
+            }
+            .financingForm{
+                font-size: 16px;
+
+                .financingInfo{
+                    background: #f0f0f0;
+                    color:#999;
+                    padding: 0 20px;
+                    line-height: 38px;
+
+                    span{
+                        color:#de5700;
+                        font-weight: bold;
+                        font-size: 20px;
+                        padding: 0 10px;
+                    }
+                }
+                ul.fileLists{
+                    li{
+                        display: inline-block;
+                        border-radius:2px;
+                        margin-right: 10px;
+                        margin-bottom: 5px;
+                        width:108px;
+                        height: 108px;
+                        position: relative;
+                        img{
+                            width:100%;
+                            height:100%;
+                        }
+
+                        i{
+                            position: absolute;
+                            top:5px;
+                            right:5px;
+                        }
+                    }
+
+                }
+                .listStyle{
+                    width:280px;
+                    margin-bottom: 5px;
+                    .upload{
+                        display: inline-block;
+                        width: 108px;
+                        height: 108px;
+                        text-align: center;
+                        border: 1px dashed #ddd;
+                        background: url("#{$assetPath}/assets/platform/uploadIco.png") no-repeat;
+                        cursor: pointer;
+                    }
+
+                    input{
+                        width: 100%;
+                        height: 100%;
+                        opacity: 0;
+                    }
+                    .border{
+                        border:1px solid #ccc;
+                    }
+                }
+                table{
+                    border:1px solid #ccc;
+                    border-bottom:none;
+                    width:100%;
+                    border-collapse: collapse;
+                    color:#999;
+                    margin-top:10px;
+                    margin-bottom:60px;
+                    td{
+                        height:45px;
+                        text-align: center;
+                        a.imageName{
+                            display: block;
+                        }
+                    }
+                    tr{
+                        border-bottom:1px solid #ccc;
+                    }
+                    thead{
+                        background:#f8f9fa;
+                    }
+                }
+                .btnWrap{
+                    text-align: center;
+                    button{
+                        display: inline-block;
+                        background: $web-blue;
+                        color:#fff;
+                        text-align: center;
+                        height:50px;
+                        width: 240px;
+                        border-radius:2px;
+                        line-height: 47px;
+                        display: inline-block;
+                        font-size: 18px;
+                        margin-right: 20px;
+                        border:none;
+                        outline: none;
+
+                        &:disabled{
+                            background: grey;
+                            color:#fff;
+                        }
+                    }
+                }
+                .red{
+                    color:#d9534f;
+                }
+            }
+            .invoiceWrap{
+                .fa{
+                    font-size: 24px;
+                    line-height: 35px;
+                    width: 30px;
+                    height:30px;
+                }
+            }
+        }
+    }
+}

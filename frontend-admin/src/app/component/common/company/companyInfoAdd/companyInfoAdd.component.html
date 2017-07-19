@@ -1,0 +1,312 @@
+
+<form class="companyInfoAddForm" [formGroup]="companyInfoAddForm">
+    <!--<h4 class="py-4">企业信息详情审核</h4>-->
+    <!--公司基本信息-->
+    <div >
+        <h5 class="py-4">企业基本信息 <span class="main-orange">（*为必填项）</span></h5>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>企业全称</div>
+            <div class="col-3 text-left">
+                <!--{{companyName}}-->
+                <input type="text" class="form-control" name="companyName" formControlName="companyName">
+                <div [hidden]="!formErrors.companyName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.companyName}}
+                </div>
+            </div>
+            <div class="col-2 text-right lineH0"><span class="main-orange mr-2 font-weight-bold">*</span>注册号<br/>(统一社会信用代码)</div>
+            <div class="col-3 text-left">
+                <!--{{unionLicenseCode}}-->
+                <input type="text" class="form-control" formControlName="unionLicenseCode">
+                <div [hidden]="!formErrors.unionLicenseCode" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.unionLicenseCode}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>注册资本(万元)</div>
+            <div class="col-3 text-left">
+                <!--{{registerCapital}}-->
+
+                <input type="text" class="form-control" formControlName="registerCapital">
+                <div [hidden]="!formErrors.registerCapital" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.registerCapital}}
+                </div>
+            </div>
+
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>企业性质</div>
+            <div class="col-3 text-left">
+                <select  class="form-control" formControlName="companyType">
+                    <option value="">请选择</option>
+                    <option *ngFor="let type of companyType" [value]="type.id">{{type.value}}</option>
+                </select>
+                <div [hidden]="!formErrors.companyType" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.companyType}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>成立时间</div>
+            <div class="col-3 text-left">
+                <div class="input-group">
+                    <input class="form-control" name="founded"  ngbDatepicker #founded="ngbDatepicker" (click)="founded.toggle()" formControlName="founded">
+                    <div class="input-group-addon" (click)="founded.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+                <div [hidden]="!formErrors.founded" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.founded}}
+                </div>
+            </div>
+
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>登记机关</div>
+            <div class="col-3 text-left">
+                <!--{{registerOrgan}}-->
+                <input type="text" class="form-control" formControlName="registerOrgan">
+                <div [hidden]="!formErrors.registerOrgan" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.registerOrgan}}
+                </div>
+            </div>
+        </div>
+        <!--<div class="row mb-4">-->
+
+            <!--<div class="col-2 text-right">最近年检</div>-->
+            <!--<div class="col-3 text-left">-->
+                <!--&lt;!&ndash;{{lastCheck}}&ndash;&gt;-->
+                <!--<div class="input-group">-->
+                    <!--<input class="form-control" name="lastCheck"  ngbDatepicker #lastCheck="ngbDatepicker" (click)="lastCheck.toggle()" formControlName="lastCheck">-->
+                    <!--<div class="input-group-addon" (click)="lastCheck.toggle()" >-->
+                        <!--<i class="fa fa-calendar"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div [hidden]="!formErrors.lastCheck" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">-->
+                    <!--{{formErrors.lastCheck}}-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="row mb-4">
+
+            <div class="col-2 text-right">经营范围</div>
+            <div class="col-5 text-left">
+                <!--{{scope}}-->
+                <textarea rows="5" class="form-control" formControlName="scope"></textarea>
+                <div [hidden]="!formErrors.scope" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.scope}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>注册地址</div>
+            <div class="col-6 text-left pr-0 row" province-dropdown [province]="newCompanyInfo.province" [city]="newCompanyInfo.city" [district]="newCompanyInfo.district" (onChange)="chooseProvince($event)"></div>
+        </div>
+        <div class="row mb-4 ">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>详细地址</div>
+            <div class="col-6 text-left pr-4">
+                <!--{{registerAddress}}-->
+                <input type="text" class="form-control" formControlName="registerAddress">
+                <div [hidden]="!formErrors.registerAddress" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.registerAddress}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>营业期限</div>
+            <div class="col-3">
+                <select class="form-control"  formControlName="operationType">
+                    <option value="">请选择</option>
+                    <option value="1">有期限</option>
+                    <option value="2">无期限</option>
+                </select>
+                <div [hidden]="!formErrors.operationType" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.operationType}}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4" *ngIf="companyInfoAddForm.value.operationType * 1 === 1">
+            <div class="col-3 offset-2">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #operationBegin="ngbDatepicker" (click)="operationBegin.toggle()" formControlName="operationBegin">
+                    <div class="input-group-addon" (click)="operationBegin.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+            至
+            <div class="col-3">
+                <div class="input-group">
+                    <input class="form-control" ngbDatepicker placeholder="请选择" #operationEnd="ngbDatepicker"  (click)="operationEnd.toggle()" formControlName="operationEnd" [maxDate]="maxDate" [minDate]="companyInfoAddForm.get('operationBegin').value">
+                    <div class="input-group-addon" (click)="operationEnd.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right lineH0"><span class="main-orange mr-2 font-weight-bold">*</span>营业执照<br/><span class="main-orange font14">(若三证合一请上传统一组织机构代码证)</span></div>
+            <div class="col-3 fileUpload">
+                <image-show  [sourcePath]="newCompanyInfo.license?.operationLicensePic" [isShowDelButton]="true" (onDelete)="deleteFile('license', 'operationLicensePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'license', 'operationLicensePic')"></file-upload>
+            </div>
+
+            <div class="col-2  text-right"><span class="main-orange mr-2 font-weight-bold">*</span>组织机构代码证</div>
+            <div class="col-3 fileUpload">
+                <image-show  [sourcePath]="newCompanyInfo.license?.organLicensePic" [isShowDelButton]="true" (onDelete)="deleteFile('license', 'organLicensePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'license', 'organLicensePic')"></file-upload>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>信用代码证</div>
+            <div class="col-3 fileUpload" >
+                <image-show  [sourcePath]="newCompanyInfo.license?.unionLicensePic" [isShowDelButton]="true" (onDelete)="deleteFile('license', 'unionLicensePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'license', 'unionLicensePic')"></file-upload>
+            </div>
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>其他证件</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="newCompanyInfo.license?.bankLicensePic" [isShowDelButton]="true" (onDelete)="deleteFile('license', 'bankLicensePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'license', 'bankLicensePic')"></file-upload>
+            </div>
+        </div>
+    </div>
+
+    <!--法人信息-->
+    <div >
+        <h5 class="py-4">法人信息</h5>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>法人代表</div>
+            <div class="col-3 text-left">
+                <!--{{legalPerson}}-->
+                <input type="text" class="form-control"formControlName="legalPersonName">
+                <div [hidden]="!formErrors.legalPersonName" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.legalPersonName}}
+                </div>
+            </div>
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>身份证号</div>
+            <div class="col-3 text-left">
+                <!--{{legalPersonId}}-->
+                <input type="text" class="form-control" formControlName="legalPersonId">
+                <div [hidden]="!formErrors.legalPersonId" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.legalPersonId}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>手机</div>
+            <div class="col-3 text-left">
+                <!--{{legalPersonPhone}}-->
+                <input type="text" class="form-control" formControlName="legalPersonPhone">
+                <div [hidden]="!formErrors.legalPersonPhone" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.legalPersonPhone}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>身份证正面</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="newCompanyInfo.legalPerson?.legalPersonIdFrontSidePic" [isShowDelButton]="true" (onDelete)="deleteFile('legalPerson', 'legalPersonIdFrontSidePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'legalPerson', 'legalPersonIdFrontSidePic')"></file-upload>
+            </div>
+
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>身份证背面</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="newCompanyInfo.legalPerson?.legalPersonIdReverseSidePic" [isShowDelButton]="true" (onDelete)="deleteFile('legalPerson', 'legalPersonIdReverseSidePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'legalPerson', 'legalPersonIdReverseSidePic')"></file-upload>
+            </div>
+        </div>
+    </div>
+
+    <!--委托人信息-->
+    <div >
+        <h5 class="py-4">委托人信息</h5>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">姓名</div>
+            <div class="col-3 text-left">
+                <!--{{authPerson}}-->
+                <input type="text" class="form-control"  formControlName="authPersonName">
+                <div [hidden]="!formErrors.authPersonName" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.authPersonName}}
+                </div>
+            </div>
+            <div class="col-2 text-right">身份证号</div>
+            <div class="col-3 text-left">
+                <!--{{authPersonId}}-->
+                <input type="text" class="form-control" formControlName="authPersonId">
+                <div [hidden]="!formErrors.authPersonId" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.authPersonId}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">手机</div>
+            <div class="col-3 text-left">
+                <!--{{authPersonPhone}}-->
+                <input type="text" class="form-control" formControlName="authPersonPhone"/>
+                <div [hidden]="!formErrors.authPersonPhone" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.authPersonPhone}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">身份证正面</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="newCompanyInfo.authPerson?.authPersonIdFrontSidePic" [isShowDelButton]="true" (onDelete)="deleteFile('authPerson', 'authPersonIdFrontSidePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'authPerson', 'authPersonIdFrontSidePic')"></file-upload>
+            </div>
+            <div class="col-2 text-right">身份证背面</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="newCompanyInfo.authPerson?.authPersonIdReverseSidePic" [isShowDelButton]="true" (onDelete)="deleteFile('authPerson', 'authPersonIdReverseSidePic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'authPerson', 'authPersonIdReverseSidePic')"></file-upload>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">委托书复印件<br/><span class="main-orange">(需加盖公司公章)</span></div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="newCompanyInfo.authPerson?.authDocumentPic" [isShowDelButton]="true" (onDelete)="deleteFile('authPerson', 'authDocumentPic')"></image-show>
+
+                <file-upload (onFinished)="uploadFinished($event, 'authPerson', 'authDocumentPic')"></file-upload>
+            </div>
+        </div>
+    </div>
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-10 offset-3  mb-5">
+            <button class="btn btn-blue mr-5 px-5 py-1" (click)="saveUpstreamCompanyInfo()">保存</button>
+            <button type="submit" class="btn btn-blue px-5 py-1" (click)="auditUpstreamCompanyInfo(successModal)">提交</button>
+            <span class="main-orange" *ngIf="submitAll">有未填的必填项或文件未上传</span>
+        </div>
+    </div>
+
+    <ng-template #successModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+        </div>
+        <div class="modal-body">
+            <p>提交成功</p>
+        </div>
+        <div class="modal-footer">
+            <a [routerLink]="['/company']" (click)="c('Close click')" class="btn btn-blue">确认</a>
+        </div>
+    </ng-template>
+
+
+</form>
+

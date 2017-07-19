@@ -1,0 +1,24 @@
+@import "./base";
+
+//tabNav
+.tabNav{
+    ul{
+        li{
+            display: inline-block;
+            text-align: center;
+            margin-bottom: 5px;
+            a{
+                display: inline-block;
+                width:120px;
+                line-height: 36px;
+                color: #ffffff!important;
+                background-color: $main-blue;
+                cursor: pointer;
+            }
+            a.active{
+                background-color: $main-orange;
+            }
+
+        }
+    }
+}

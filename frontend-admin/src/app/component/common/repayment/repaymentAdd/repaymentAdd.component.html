@@ -1,0 +1,187 @@
+<div class="row pt-4 " *ngIf="business">
+    <div class="col-6"><h5 class="">上游业务详情&nbsp;-&nbsp;编号：{{business._id}}</h5></div>
+    <div class="col-6"><h5 class="">状态：{{business.status | businessStatus}}</h5></div>
+</div>
+<!--<div class="row pt-4 " *ngIf="financing">-->
+    <!--<div class="col-6"><h5 class="">融资编号：{{financing.capitalRaise._id}}</h5></div>-->
+    <!--<div class="col-6"><h5 class="">状态：{{financing.capitalRaise.status | financingStatus}}</h5></div>-->
+<!--</div>-->
+<form class="companyInfoAddForm" [formGroup]="repayAddForm">
+    <h1 class=" my-3">还款信息 （<span class="main-orange mx-2 font-weight-bold">*</span>为必填项）</h1>
+    <!--交易主体项-->
+    <div>
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>还款金额(元)</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="payAmount" />
+                <div [hidden]="!formErrors.payAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payAmount}}
+                </div>
+            </div>
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>还款日期</div>
+            <div class="col-3 text-left">
+                <div class="input-group">
+                    <input class="form-control" placeholder="请选择"  ngbDatepicker #payDate="ngbDatepicker" formControlName="payDate" (click)="payDate.toggle()">
+                    <div class="input-group-addon" (click)="payDate.toggle()" >
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">还款公司名称</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="payCompanyName" />
+                <div [hidden]="!formErrors.payCompanyName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payCompanyName}}
+                </div>
+            </div>
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>还款方式</div>
+            <div class="col-3 text-left">
+                <select class="form-control" required formControlName="payMode">
+                    <option value="">请选择</option>
+                    <option *ngFor="let mode of payMode" [value]="mode.id">{{mode.value}}</option>
+                </select>
+                <div [hidden]="!formErrors.payMode" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payMode}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">还款公司开户行</div>
+            <div class="col-6 text-left pr-0 row" province-dropdown [province]="submitData.payInfo.payCompanyBankProvince" [city]="submitData.payInfo.payCompanyBankCity" [district]="submitData.payInfo.payCompanyBankDistrict" (onChange)="choosePayBankProvince($event)"></div>
+            <div class="col-3">
+                <input class="form-control" formControlName="payCompanyBankName" />
+                <div [hidden]="!formErrors.payCompanyBankName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payCompanyBankName}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">还款账号</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="payAccount" />
+                <div [hidden]="!formErrors.payAccount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.payAccount}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>还款凭证</div>
+            <div class="col-3 fileUpload"  >
+                <image-show  [sourcePath]="submitData.payInfo.payCertificatePic" [isShowDelButton]="true" (onDelete)="deleteFile('payInfo','payCertificatePic')"></image-show>
+                <file-upload (onFinished)="uploadFinished($event, 'payInfo', 'payCertificatePic')"></file-upload>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款公司名称</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="recvCompanyName" />
+                <div [hidden]="!formErrors.recvCompanyName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvCompanyName}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款公司开户行</div>
+            <div class="col-6 text-left pr-0 row" province-dropdown [province]="submitData.recvInfo.recvBankProvince" [city]="submitData.recvInfo.recvBankCity" [district]="submitData.recvInfo.recvBankDistrict" (onChange)="chooseRecvBankProvince($event)"></div>
+            <div class="col-3">
+                <input class="form-control" formControlName="recvBankName" />
+                <div [hidden]="!formErrors.recvBankName" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvBankName}}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款公司开户行地址</div>
+            <div class="col-3">
+                <input class="form-control" formControlName="recvBankAddr" />
+                <div [hidden]="!formErrors.recvBankAddr" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvBankAddr}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-2 text-right">收款账号</div>
+            <div class="col-3 text-left">
+                <input class="form-control" formControlName="recvAccount" />
+                <div [hidden]="!formErrors.recvAccount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.recvAccount}}
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="row mb-4">-->
+            <!--<div class="col-2 text-right">收款金额</div>-->
+            <!--<div class="col-3 text-left">-->
+                <!--<input class="form-control" formControlName="recvAmount" />-->
+                <!--<div [hidden]="!formErrors.recvAmount" class=" alert alert-danger mb-0 py-0 mt-1 alertLineH">-->
+                    <!--{{formErrors.recvAmount}}-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+    </div>
+
+    <h1 class="my-3">对应融资信息</h1>
+    <div class="pr-4">
+        <table class="tableCss my-4">
+            <tr>
+                <th>融资编号</th>
+                <th>申请日期</th>
+                <th>放款日期</th>
+                <th>所属业务编号</th>
+                <th>上游企业名称</th>
+                <th>放款企业</th>
+                <th>融资金额(元)</th>
+                <th>申请状态</th>
+                <th>操作</th>
+            </tr>
+            <tr *ngFor="let item of repaymentsListObj;">
+                <td class="text-center" >
+                    {{item._id | substringId}}
+                </td>
+                <td class="text-center" >{{item.createDate}}</td>
+                <td class="text-center" >{{item.capitalRaisingBegin}}至{{item.capitalRaisingEnd}}</td>
+                <td class="text-center" >{{item.businessId | substringId}}</td>
+                <td class="text-center" >{{item.upstreamCompanyName}}</td>
+                <td class="text-center" >{{item.capitalCompanyName}}</td>
+                <td class="text-center" >{{item.capitalRaisingAmount}}</td>
+                <td class="text-center" >{{item.status | financingStatus}}</td>
+                <td class="text-center" >
+                    <a [routerLink]="['/business', item.businessId, 'financing', item._id]" type="edit" class="btn btn-blue btn-sm mb-2">查看</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="row">
+        <div class="col-5">
+            <button class="btn btn-blue px-5 py-2" [disabled]="!repayAddForm.valid" (click)="bridgeSubmitNewRepayment(successModal)">发起还款</button>
+            <span class="main-orange" *ngIf="ifUpload">请上传还款凭证</span>
+        </div>
+    </div>
+
+    <ng-template #successModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">提示：</h4>
+        </div>
+        <div class="modal-body">
+            <p>提交成功</p>
+        </div>
+        <div class="modal-footer">
+            <a [routerLink]="['/business', business._id]" (click)="c('Close click')" class="btn btn-blue">确认</a>
+        </div>
+    </ng-template>
+
+</form>
+

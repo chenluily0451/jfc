@@ -1,0 +1,111 @@
+<!--债权信息-->
+<form class="my-4" [formGroup]="financingQueryForm" (ngSubmit)="searchFinancingQuery()">
+    <div class="row">
+        <h6 class="col-3">融资信息</h6>
+        <div class="col-9 text-right">
+
+        </div>
+    </div>
+
+    <div class="form-group row pb-2">
+        <div class="col-2 text-right">融资状态</div>
+        <div class="col-3">
+            <select class="form-control" formControlName="status">
+                <option value="">全部</option>
+                <option *ngFor="let status of financingStatusList" [value]="status.id">{{status.name}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row pb-2">
+        <div class="col-2 text-right">创建日期</div>
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" placeholder="请选择"  ngbDatepicker #beginDate="ngbDatepicker" formControlName="beginDate" (click)="beginDate.toggle()">
+                <div class="input-group-addon" (click)="beginDate.toggle()" >
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+        </div>
+        至
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" placeholder="请选择"  ngbDatepicker #endDate="ngbDatepicker" formControlName="endDate" (click)="endDate.toggle()" [minDate]="financingQueryForm.get('beginDate').value">
+                <div class="input-group-addon" (click)="endDate.toggle()" >
+                    <i class="fa fa-calendar"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col-2 offset-2">
+            <button class="btn btn-blue px-5" type="submit">查询</button>
+        </div>
+    </div>
+
+</form>
+
+
+<div>
+    <table class="tableCss mb-5">
+        <thead>
+        <tr>
+            <th>融资编号</th>
+            <th>申请日期</th>
+            <th>放款日期</th>
+            <th>所属业务编号</th>
+            <th>上游企业名称</th>
+            <th>放款企业</th>
+            <th>融资金额(元)</th>
+            <th>申请状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of financingList;let i = index">
+            <td class="text-center" >
+                <input *ngIf="userIdentity ==='bridge' && item.status === 7 && !item.repaymentId" type="checkbox" class="mr-3" [checked] = "item.checked" (click)="changeStatus(i)">
+                <span>{{item._id | substringId}}</span>
+            </td>
+            <td class="text-center" >{{item.createDate}}</td>
+            <td class="text-center" >{{item.capitalRaisingBegin}}至{{item.capitalRaisingEnd}}</td>
+            <td class="text-center" >{{item.businessId | substringId}}</td>
+            <td class="text-center" >{{item.upstreamCompanyName}}</td>
+            <td class="text-center" >{{item.capitalCompanyName}}</td>
+            <td class="text-center" >{{item.capitalRaisingAmount}}</td>
+            <td class="text-center" >{{item.status | financingStatus}}</td>
+            <td class="text-center" >
+                <a *ngIf="userIdentity === 'platform' && item.status === 1" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-orange btn-sm mb-2">审核</a>
+                <a *ngIf="userIdentity === 'platform' && item.status !== 1" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-blue btn-sm mb-2">查看</a>
+                <a *ngIf="userIdentity === 'capital' && item.status === 3" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-orange btn-sm mb-2">审核</a>
+                <a *ngIf="userIdentity === 'capital' && item.status === 5" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-orange btn-sm mb-2">放款</a>
+                <a *ngIf="userIdentity === 'capital' && item.status !== 3 && item.status !== 5" [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-blue btn-sm mb-2">查看</a>
+                <a *ngIf="userIdentity === 'bridge' && item.status !== 2 && item.status !== 4 " [routerLink]="['/business', item.businessId, 'financing', item._id]"  class="btn btn-blue btn-sm mb-2">查看</a>
+                <a *ngIf="userIdentity === 'bridge' && item.status === 2 || userIdentity === 'bridge' && item.status === 4 " [routerLink]="['/business', item.businessId, 'financing', 'edit', item._id]"  class="btn btn-orange btn-sm mb-2">编辑</a>
+
+                <a *ngIf="userIdentity === 'upstream' && item.status === 6" [routerLink]="['/business', item.businessId, 'financing', item._id]" type="edit" class="btn btn-blue btn-sm">确认收款</a>
+                <a *ngIf="userIdentity === 'upstream' && item.status !== 6" [routerLink]="['/business', item.businessId, 'financing', item._id]" type="edit" class="btn btn-blue btn-sm">查看</a>
+            </td>
+        </tr>
+        <tr *ngIf="financingList.length === 0">
+            <td class="text-center" colspan="9">
+                <i class="fa fa-times"></i>
+                暂无数据
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row mb-3" *ngIf="userIdentity ==='bridge'">
+        <div class="col-2">
+            <a  class="btn btn-blue px-4" href="javascript:void(0)" (click)="repaymentAdd()">发起新还款</a>
+        </div>
+        <div class="col-3">
+            <div class="text-danger"> {{errorMessage}} </div>
+        </div>
+    </div>
+    <div class="row col-5 offset-6">
+        <ngb-pagination [collectionSize]="page.total" [(page)]="page.currentPageNo" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="searchFinancingQuery()"></ngb-pagination>
+    </div>
+
+</div>
+

@@ -1,0 +1,114 @@
+
+<!--企业员工访谈-->
+<form [formGroup]="fieldResearchForm">
+    <div>
+        <h6 class="p-2 my-4 bg-f8">企业员工访谈</h6>
+        <div class="row mb-3">
+            <div class="col-2 text-right">
+                被调查人
+            </div>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="person">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">
+                职位
+            </div>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="title">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">
+                联系方式
+            </div>
+            <div class="col-3 text-right">
+                <input type="text" class="form-control" formControlName="phone">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">
+                访谈录音记录
+            </div>
+            <div class="col-6 fileUpload">
+                <!--<image-show  [sourcePath]="companyInvestigation.fieldInvestigationSurvey?.recordingFile" (onDelete)="deleteFile('recordingFile')" [isShowDelButton]="true"></image-show>-->
+
+                <file-upload (onFinished)="uploadFinished($event, 'recordingFile')"></file-upload>
+                <div class="mt-2" *ngIf="companyInvestigation.fieldInvestigationSurvey?.recordingFile">
+                    <p class="uploadDoc">
+                        <a [href]="aliOss.host + companyInvestigation.fieldInvestigationSurvey?.recordingFile?.filePath">{{companyInvestigation.fieldInvestigationSurvey?.recordingFile?.fileName}}</a>
+                        <i class="deleteDoc" (click)="deleteFile( 'recordingFile')">×</i>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--企业经营情况实地调查-->
+    <div>
+        <h6 class="p-2 my-4 bg-f8">企业经营情况实地调查</h6>
+        <div class="row mb-3">
+            <label class="col-2 text-right">企业注册地</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="registerAddress">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-2 text-right">企业经营地</label>
+            <div class="col-6 text-left pr-0 row" province-dropdown [province]="companyInvestigation.fieldInvestigationSurvey?.operationProvince" [city]="companyInvestigation.fieldInvestigationSurvey?.operationCity" [district]="companyInvestigation.fieldInvestigationSurvey?.operationDistrict" (onChange)="chooseProvince($event)">
+            </div>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="operationAddress">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-2 text-right">业务履行地</label>
+            <div class="col-3">
+                <input type="text" class="form-control" formControlName="businessFulfilAddress">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-2 text-right">
+                企业经营实地调查
+            </div>
+            <div class="col-6 fileUpload">
+                <image-show  [sourcePath]="companyInvestigation.fieldInvestigationSurvey?.businessStateFile" (onDelete)="deleteFile('businessStateFile')" [isShowDelButton]="true"></image-show>
+                <file-upload (onFinished)="uploadFinished($event, 'businessStateFile')"></file-upload>
+            </div>
+        </div>
+    </div>
+
+    <!--补充材料-->
+    <div>
+        <h6 class="p-2 my-4 bg-f8">补充材料</h6>
+        <div class="row mb-3">
+            <div class="col-2 text-right">
+                补充材料
+            </div>
+            <div class="col-6 fileUpload">
+                <image-show  [sourcePath]="companyInvestigation.fieldInvestigationSurvey?.supplementFile" (onDelete)="deleteFile('supplementFile')" [isShowDelButton]="true"></image-show>
+                <file-upload (onFinished)="uploadFinished($event, 'supplementFile')"></file-upload>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-2 text-right">
+                审核意见
+            </div>
+            <div class="col-4">
+                <textarea name="" rows="5" class="form-control" formControlName="auditOpinion"></textarea>
+            </div>
+        </div>
+
+    </div>
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-2 offset-2">
+            <button class="btn btn-blue px-5" (click)="saveFieldInvestigationSurvey()">保存</button>
+        </div>
+    </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

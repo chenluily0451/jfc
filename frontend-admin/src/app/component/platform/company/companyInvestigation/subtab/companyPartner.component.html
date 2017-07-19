@@ -1,0 +1,201 @@
+
+<!--企业股东组成-->
+<form class="" [formGroup]="addPartnerForm">
+    <div>
+        <h6 class="p-2 my-4 bg-f8">企业股东组成</h6>
+        <div class="row mb-4">
+            <div class="col-2 text-right">
+                执行董事
+            </div>
+            <div class="col-2">
+                <input type="text" class="form-control" formControlName="executiveDirector">
+                <div [hidden]="!formErrors.executiveDirector" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.executiveDirector}}
+                </div>
+            </div>
+            <div class="col-1 text-right">
+                监事
+            </div>
+            <div class="col-2">
+                <input type="text" class="form-control" formControlName="supervisors">
+                <div [hidden]="!formErrors.supervisors" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.supervisors}}
+                </div>
+            </div>
+            <div class="col-1 text-right">
+                经理
+            </div>
+            <div class="col-2">
+                <input type="text" class="form-control" formControlName="manager">
+                <div [hidden]="!formErrors.manager" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                    {{formErrors.manager}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--股东信息-->
+    <div>
+        <h6 class="p-2 mt-5 mb-3 bg-f8">股东信息</h6>
+        <div class="row">
+            <div class="col-12 text-right">
+                <button class="btn btn-blue px-5 mb-2" [hidden]="isShowShareholderForm" (click)="showShareholderForm()">添加</button>
+            </div>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th class="text-center" >股东名称</th>
+                <th class="text-center" >出资比例</th>
+                <th class="text-center" >认缴金额</th>
+                <th class="text-center" >实缴金额</th>
+                <th class="text-center" >认缴出资日期</th>
+                <th class="text-center" >股东类型</th>
+                <th class="text-center" >操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--<tr *ngFor="let partner of companyInvestigation.shareHolderSurvey.shareHolderList;let i=index">-->
+                <!--<td class="text-center" >{{partner.name}}</td>-->
+                <!--<td class="text-center" >{{partner.ratio}}</td>-->
+                <!--<td class="text-center" >{{partner.subscribedAmount}}</td>-->
+                <!--<td class="text-center" >{{partner.actualSubscribedAmount}}</td>-->
+                <!--<td class="text-center" >{{partner.subscribedAmountDate}}</td>-->
+                <!--<td class="text-center" >{{partner.type}}</td>-->
+                <!--<td class="text-center" >-->
+                    <!--<button class="btn btn-orange btn-sm" (click)="deletePartner(i)">删除</button>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <tr *ngFor="let partner of holders; let i=index">
+                <td class="text-center" >{{partner.name}}</td>
+                <td class="text-center" >{{partner.ratio}}</td>
+                <td class="text-center" >{{partner.subscribedAmount}}</td>
+                <td class="text-center" >{{partner.actualSubscribedAmount}}</td>
+                <td class="text-center" >{{partner.subscribedAmountDate}}</td>
+                <td class="text-center" >{{partner.type}}</td>
+                <td class="text-center" >
+                    <button class="btn btn-orange btn-sm" (click)="deletePartner(partner)">删除</button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table >
+
+
+        <div *ngIf="isShowShareholderForm" formGroupName="shareHolderNew" >
+            <div class="row mb-3">
+                <label class="col-2 text-right">股东名称 {{formErrors.shareHolderNew.name}}</label>
+                <div class="col-3" >
+                    <input type="text" class="form-control" formControlName="name">
+                </div>
+                <div class="col-3" >
+                    <div [hidden]="!formErrors.shareHolderNew.name" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                        {{formErrors.shareHolderNew.name}}
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mb-3">
+                <label class="col-2 text-right">出资比例(%)</label>
+                <div class="col-3" >
+                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" formControlName="ratio">
+                </div>
+                <div class="col-3" >
+                    <div [hidden]="!formErrors.shareHolderNew.ratio" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                        {{formErrors.shareHolderNew.ratio}}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-2 text-right">认缴金额(万元)</label>
+                <div class="col-3" >
+                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" formControlName="subscribedAmount">
+                </div>
+                <div class="col-3" >
+                    <div [hidden]="!formErrors.shareHolderNew.subscribedAmount" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                        {{formErrors.shareHolderNew.subscribedAmount}}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-2 text-right">认缴出资日期</label>
+                <div class="col-3">
+
+                    <div class="input-group">
+                        <input class="form-control" ngbDatepicker #d="ngbDatepicker"  formControlName="subscribedAmountDate" (click)="d.toggle()">
+                        <div class="input-group-addon" (click)="d.toggle()" >
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3" >
+                    <div [hidden]="!formErrors.shareHolderNew.subscribedAmountDate" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                        {{formErrors.shareHolderNew.subscribedAmountDate}}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-2 text-right">实缴金额(万元)</label>
+                <div class="col-3" >
+                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" formControlName="actualSubscribedAmount">
+                </div>
+                <div class="col-3" >
+                    <div [hidden]="!formErrors.shareHolderNew.actualSubscribedAmount" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                        {{formErrors.shareHolderNew.actualSubscribedAmount}}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-2 text-right">股东类型</label>
+                <div class="col-3" >
+                    <input type="text" class="form-control" formControlName="type">
+                </div>
+                <div class="col-3" >
+                    <div [hidden]="!formErrors.shareHolderNew.type" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                        {{formErrors.shareHolderNew.type}}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-2 text-right">备注</label>
+                <div class="col-3" >
+                    <input type="text" class="form-control" formControlName="remark">
+                </div>
+                <div class="col-3" >
+                    <div [hidden]="!formErrors.shareHolderNew.remark" class="alert alert-danger mb-0 py-0 mt-1 alertLineH">
+                        {{formErrors.shareHolderNew.remark}}
+                    </div>
+                </div>
+            </div>
+            <div class="my-5">
+                <div class="col-7 offset-1">
+                    <button class="btn btn-blue px-5 mr-5" (click)="addPartner()" [disabled]="addPartnerForm.get('shareHolderNew').invalid">添加</button>
+                    <button class="btn btn-gray px-5 ml-5" (click)="showShareholderForm()">取消</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row mb-4">
+        <div class="col-2 text-left">
+            企业股东审查意见
+        </div>
+        <div class="col-4">
+            <textarea name="" rows="5" class="form-control" formControlName="auditOpinion"></textarea>
+        </div>
+    </div>
+
+
+    <!--提交按钮-->
+    <div class="row my-5">
+        <div class="col-7 offset-2">
+            <button class="btn btn-blue px-5"  (click)="saveShareHolderSurvey()">保存 </button>
+        </div>
+    </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>
+

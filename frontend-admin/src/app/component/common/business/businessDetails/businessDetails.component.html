@@ -1,0 +1,167 @@
+<ol class="breadcrumb mt-3">
+    <li class="breadcrumb-item">业务管理</li>
+    <li class="breadcrumb-item active">业务详情</li>
+</ol>
+<!--<div class="mainContentTitle">业务详情</div>-->
+<div class="pr-4 font14">
+    <div class="row">
+        <div class="col-5"><h6 class="py-3">业务编号: {{business._id}}</h6></div>
+        <div class="col-5"><h6 class="py-3">状态：{{business.status | businessStatus}}</h6></div>
+    </div>
+    <div class="row" *ngIf="business.status === 3 || business.status === 7">
+        <div class="col-10"><h3>不通过原因: {{ businessAuditList[businessAuditList.length -1 ].opinion ? businessAuditList[businessAuditList.length -1 ].opinion : "无"}}</h3></div>
+    </div>
+    <div class="my-3 border">
+        <table class="table border-0 mb-0" >
+            <tbody>
+            <tr>
+                <th class="text-right" >上游供货商</th>
+                <td class="text-left" >{{business.upstreamCompanyName}}</td>
+                <th class="text-right" >收货单位</th>
+                <td class="text-left" >{{business.upstreamBusiness.receiveCompanyName}}</td>
+                <th class="text-right" >业务合同量</th>
+                <td class="text-left" >{{business.upstreamBusiness.payInfo.contractAmount}}吨</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tabNav">
+        <ul>
+            <li><a class="{{currentTab === 'upstream' ? 'active' : ''}}" (click)="changeTab('upstream')">上游合同信息</a></li>
+            <li *ngIf="business.status > 5"><a class="{{currentTab === 'downstream' ? 'active' : ''}}" (click)="changeTab('downstream')">下游合同信息</a></li>
+            <li *ngIf="business.status > 10"><a class="{{currentTab === 'supplementContract' ? 'active' : ''}}" (click)="changeTab('supplementContract')">补充协议</a></li>
+            <li *ngIf="business.status > 1"><a class="{{currentTab === 'checkInfo' ? 'active' : ''}}" (click)="changeTab('checkInfo')" >审核信息</a></li>
+            <li *ngIf="business.status >= 13"><a class="{{currentTab === 'creditorRightList' ? 'active' : ''}}" (click)="changeTab('creditorRightList')">债权信息</a></li>
+            <li *ngIf="business.status >= 13"><a class="{{currentTab === 'financingInfo' ? 'active' : ''}}" (click)="changeTab('financingInfo')">融资信息</a></li>
+            <li *ngIf="business.status >= 13"><a class="{{currentTab === 'downstreamPaymentInfo' ? 'active' : ''}}" (click)="changeTab('downstreamPaymentInfo')">下游回款信息</a></li>
+            <li *ngIf="business.status >= 13"><a class="{{currentTab === 'repaymentInfo' ? 'active' : ''}}" (click)="changeTab('repaymentInfo')">还款信息</a></li>
+        </ul>
+    </div>
+
+
+
+    <upstream-info *ngIf="currentTab === 'upstream' " [business]="business" [coal]="coal"> </upstream-info>
+    <downstream-info *ngIf="currentTab === 'downstream' " [business]="business"></downstream-info>
+    <supplement-agreement *ngIf="currentTab === 'supplementContract' " [business]="business"></supplement-agreement>
+    <audit-list *ngIf="currentTab === 'checkInfo' " [business]="business" [coal]="coal" ></audit-list>
+    <creditor-right-list *ngIf="currentTab === 'creditorRightList' " [business]="business" [coal]="coal"></creditor-right-list>
+    <financing-info *ngIf="currentTab === 'financingInfo' " [business]="business" ></financing-info>
+    <downstream-payment *ngIf="currentTab === 'downstreamPaymentInfo' " [business]="business"></downstream-payment>
+    <repayment-info *ngIf="currentTab === 'repaymentInfo' " [business]="business"></repayment-info>
+
+
+
+
+    <!--核心企业审核-->
+    <form [formGroup]="bridgeAuditUpstreamBusinessForm" *ngIf="userIdentity === 'bridge' && business.status ===2" >
+        <div class="row" >
+            <div class="col-2 text-right">审核意见</div>
+            <div class="col-4">
+                <textarea class="form-control" rows="5" formControlName="auditOpinion"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 my-5 offset-2">
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="bridgeAuditUpstream(10)">审核通过</button>
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="bridgeAuditUpstream(1)">审核不通过</button>
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="bridgeAuditUpstream(0)">审核不通过，放弃该业务</button>
+            </div>
+        </div>
+    </form>
+
+    <form *ngIf="userIdentity === 'bridge' && business.status ===10  || userIdentity === 'bridge' && business.status ===12" >
+        <div class="row my-5">
+            <div class="col-2 text-right">上传融资协议<br/>(上游与资金端)</div>
+            <div class="col-8 fileUpload">
+                <image-show *ngFor="let file of business.financingProtocol?.financingProtocolPic"  [sourcePath]="file" [isShowDelButton]="true" (onDelete)="deleteMoreImg($event, 'financingProtocol', 'financingProtocolPic')"></image-show>
+                <file-upload (onFinished)="uploadMoreFinished($event, 'financingProtocol', 'financingProtocolPic')"></file-upload>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 text-right">上传代还款委托协议<br/>(核心与上游企业)</div>
+            <div class="col-8 fileUpload">
+                <image-show *ngFor="let file of business.financingProtocol?.repayProtocolPic"  [sourcePath]="file" [isShowDelButton]="true" (onDelete)="deleteMoreImg($event, 'financingProtocol', 'repayProtocolPic')"></image-show>
+                <file-upload (onFinished)="uploadMoreFinished($event, 'financingProtocol', 'repayProtocolPic')"></file-upload>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 my-5 offset-2">
+                <button class="btn btn-blue mr-5 px-5 py-2" (click)="bridgeSaveFinancingProtocol()">保存</button>
+                <button class="btn btn-blue mr-5 px-5 py-2" (click)="bridgeSubmitFinancingProtocol()">提交</button>
+            </div>
+        </div>
+    </form>
+
+
+
+    <!--平台审核-->
+    <form [formGroup]="platformAuditUpstreamBusinessForm" *ngIf="userIdentity === 'platform' && business.status ===4" >
+        <div class="row" >
+            <div class="col-2 text-right">审核意见</div>
+            <div class="col-4">
+                <textarea class="form-control" rows="5" formControlName="auditOpinion"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 my-5 offset-2">
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="platformAuditUpstream(10)">审核通过</button>
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="platformAuditUpstream(1)">审核不通过</button>
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="platformAuditDownstreamBusinessForm" *ngIf="userIdentity === 'platform' && business.status ===6" >
+        <div class="row my-5" >
+            <div class="col-2 text-right">风险评估审核意见</div>
+            <div class="col-4">
+                <textarea class="form-control" rows="5" formControlName="auditOpinion"></textarea>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col-2 text-right"><span class="main-orange mr-2 font-weight-bold">*</span>上传风控报告评估<br/><span class="main-orange">（必填）</span></div>
+            <div class="col-6 fileUpload">
+                <image-show *ngFor="let file of auditFile"  [sourcePath]="file" [isShowDelButton]="true" (onDelete)="deleteAuditFileFile($event)"></image-show>
+                <file-upload (onFinished)="uploadAuditFileFinished($event, 'auditFile')"></file-upload>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 my-5 offset-2">
+                <button class="btn btn-blue mr-5 px-3 py-2" [disabled]="!auditFile" (click)="platformAuditDownstream(10)">审核通过</button>
+                <button class="btn btn-blue mr-5 px-3 py-2" [disabled]="!auditFile" (click)="platformAuditDownstream(1)">审核不通过</button>
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="platformAuditFinancingProtocolForm" *ngIf="userIdentity === 'platform' && business.status ===11" >
+        <div class="row" >
+            <div class="col-2 text-right">审核意见</div>
+            <div class="col-4">
+                <textarea class="form-control" rows="5" formControlName="auditOpinion"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 my-5 offset-2">
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="platformAuditFinancingProtocol(10)">审核通过</button>
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="platformAuditFinancingProtocol(1)">审核不通过</button>
+            </div>
+        </div>
+    </form>
+
+    <form [formGroup]="capitalAuditDownstreamBusinessForm" *ngIf="userIdentity === 'capital' && business.status ===8" >
+        <div class="row my-5" >
+            <div class="col-2 text-right">审核意见</div>
+            <div class="col-4">
+                <textarea class="form-control" rows="5" formControlName="auditOpinion"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-10 my-5 offset-2">
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="capitalAuditDownstream(10)">审核通过</button>
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="capitalAuditDownstream(1)">审核不通过</button>
+                <button class="btn btn-blue mr-5 px-3 py-2" (click)="capitalAuditDownstream(0)">审核不通过,放弃该业务</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<simple-notifications [options]="notifyOptions"></simple-notifications>
+
